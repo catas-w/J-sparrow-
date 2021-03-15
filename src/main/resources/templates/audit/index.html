@@ -56,7 +56,7 @@
                     <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
                 </li>
                 <li class="layui-nav-item layuimini-setting">
-                    <a href="javascript:; " th:text="${session.user.getName()}"></a>
+                    <a href="javascript:; " th:text="${user}"></a>
                     <dl class="layui-nav-child">
                         <dd>
                             <a href="javascript:;" layuimini-content-href="/resources/page/user-setting.html" data-title="基本资料" data-icon="fa fa-gears">基本资料<span class="layui-badge-dot"></span></a>
@@ -73,7 +73,7 @@
                     </dl>
                 </li>
                 <li class="layui-nav-item layuimini-select-bgcolor" lay-unselect>
-                    <a href="javascript:;" data-bgcolor="配色方案"><i class="fa fa-ellipsis-v"></i></a>
+                    <a href="#" data-bgcolor="配色方案"><i class="fa fa-ellipsis-v"></i></a>
                 </li>
             </ul>
         </div>
@@ -132,11 +132,34 @@
             miniAdmin = layui.miniAdmin,
             miniTongji = layui.miniTongji;
 
+        var bgColorConfig = [
+            {
+                headerRightBg: '#ffffff',                           //头部右侧背景色
+                headerRightBgThis: '#e4e4e4',                       //头部右侧选中背景色,
+                headerRightColor: 'rgba(107, 107, 107, 0.7)',       //头部右侧字体颜色,
+                headerRightChildColor: 'rgba(107, 107, 107, 0.7)',  //头部右侧下拉字体颜色,
+                headerRightColorThis: '#565656',                    //头部右侧鼠标选中,
+                headerRightNavMore: 'rgba(160, 160, 160, 0.7)',     //头部右侧更多下拉颜色,
+                headerRightNavMoreBg: '#1E9FFF',                    //头部右侧更多下拉列表选中背景色,
+                headerRightNavMoreColor: '#ffffff',                 //头部右侧更多下拉列表字体色,
+                headerRightToolColor: '#565656',                    //头部缩放按钮样式,
+                headerLogoBg: '#192027',                            //logo背景颜色,
+                headerLogoColor: 'rgb(191, 187, 187)',              //logo字体颜色,
+                leftMenuNavMore: 'rgb(191, 187, 187)',              //左侧菜单更多下拉样式,
+                leftMenuBg: '#28333E',                              //左侧菜单背景,
+                leftMenuBgThis: '#1E9FFF',                          //左侧菜单选中背景,
+                leftMenuChildBg: '#0c0f13',                         //左侧菜单子菜单背景,
+                leftMenuColor: 'rgb(191, 187, 187)',                //左侧菜单字体颜色,
+                leftMenuColorThis: '#ffffff',                       //左侧菜单选中字体颜色,
+                tabActiveColor: '#1e9fff',                          //tab选项卡选中颜色,
+            },
+        ];
+
         var options = {
-            iniUrl: "/resources/api/init.json",    // 初始化接口
+            iniUrl: "/resources/api/init_bak.json",    // 初始化接口
             clearUrl: "/resources/api/clear.json", // 缓存清理接口
             urlHashLocation: true,      // 是否打开hash定位
-            bgColorDefault: false,      // 主题默认配置
+            // bgColorDefault: true,      // 主题默认配置
             multiModule: true,          // 是否开启多模块
             menuChildOpen: false,       // 是否默认展开菜单
             loadingTime: 0,             // 初始化加载时间
@@ -145,15 +168,15 @@
         };
         miniAdmin.render(options);
 
-        // 百度统计代码，只统计指定域名
-        miniTongji.render({
-            specific: true,
-            domains: [
-                '99php.cn',
-                'layuimini.99php.cn',
-                'layuimini-onepage.99php.cn',
-            ],
-        });
+        // // 百度统计代码，只统计指定域名
+        // miniTongji.render({
+        //     specific: true,
+        //     domains: [
+        //         '99php.cn',
+        //         'layuimini.99php.cn',
+        //         'layuimini-onepage.99php.cn',
+        //     ],
+        // });
 
         $('.login-out').on("click", function () {
             layer.msg('退出登录成功', function () {

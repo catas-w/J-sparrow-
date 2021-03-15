@@ -1,0 +1,223 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "/index/home"
+  },
+  "logoInfo": {
+    "title": "Sparrow",
+    "image": "/resources/images/main_logo.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "NAVIGATION",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "首页",
+          "href": "/index/home",
+          "icon": "fa fa-home",
+          "target": "_self"
+        },
+        {
+          "title": "我的主机",
+          "href": "/hosts",
+          "icon": "fa fa-window-maximize",
+          "target": "_self"
+        },
+        {
+          "title": "审计",
+          "href": "/resources/page/setting.html",
+          "icon": "fa fa-gears",
+          "target": "_self"
+        },
+        {
+          "title": "管理",
+          "href": "",
+          "icon": "fa fa-calendar",
+          "target": "_self",
+          "child": [
+            {
+              "title": "用户",
+              "href": "/resources/page/form.html",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "主机信息",
+              "href": "/resources/page/form-step.html",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "SSH账户",
+              "href": "/resources/page/form-step.html",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "IDC",
+              "href": "/resources/page/form-step.html",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "权限",
+              "href": "/resources/page/form-step.html",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "批量任务",
+          "href": "",
+          "icon": "fa fa-flag-o",
+          "target": "_self",
+          "child": [
+            {
+              "title": "批量命令",
+              "href": "/resources/page/login-1.html",
+              "icon": "fa fa-stumbleupon-circle",
+              "target": "_blank"
+            },
+            {
+              "title": "文件传输",
+              "href": "/resources/page/login-2.html",
+              "icon": "fa fa-viacoin",
+              "target": "_blank"
+            },
+            {
+              "title": "任务日志",
+              "href": "/resources/page/login-3.html",
+              "icon": "fa fa-tags",
+              "target": "_blank"
+            }
+          ]
+        },
+        {
+          "title": "定时任务",
+          "href": "",
+          "icon": "fa fa-home",
+          "target": "_self",
+          "child": [
+            {
+              "title": "任务设置",
+              "href": "/resources/page/404.html",
+              "icon": "fa fa-hourglass-end",
+              "target": "_self"
+            },
+            {
+              "title": "任务日志",
+              "href": "/resources/page/404.html",
+              "icon": "fa fa-hourglass-end",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "组件管理",
+      "icon": "fa fa-lemon-o",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "图标列表",
+          "href": "/resources/page/icon.html",
+          "icon": "fa fa-dot-circle-o",
+          "target": "_self"
+        },
+        {
+          "title": "图标选择",
+          "href": "/resources/page/icon-picker.html",
+          "icon": "fa fa-adn",
+          "target": "_self"
+        },
+        {
+          "title": "颜色选择",
+          "href": "/resources/page/color-select.html",
+          "icon": "fa fa-dashboard",
+          "target": "_self"
+        },
+        {
+          "title": "下拉选择",
+          "href": "/resources/page/table-select.html",
+          "icon": "fa fa-angle-double-down",
+          "target": "_self"
+        },
+        {
+          "title": "文件上传",
+          "href": "/resources/page/upload.html",
+          "icon": "fa fa-arrow-up",
+          "target": "_self"
+        },
+        {
+          "title": "富文本编辑器",
+          "href": "/resources/page/editor.html",
+          "icon": "fa fa-edit",
+          "target": "_self"
+        },
+        {
+          "title": "省市县区选择器",
+          "href": "/resources/page/area.html",
+          "icon": "fa fa-rocket",
+          "target": "_self"
+        }
+      ]
+    },
+    {
+      "title": "其它管理",
+      "icon": "fa fa-slideshare",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "多级菜单",
+          "href": "",
+          "icon": "fa fa-meetup",
+          "target": "",
+          "child": [
+            {
+              "title": "按钮1",
+              "href": "/resources/page/button.html?v=1",
+              "icon": "fa fa-calendar",
+              "target": "_self",
+              "child": [
+                {
+                  "title": "按钮2",
+                  "href": "/resources/page/button.html?v=2",
+                  "icon": "fa fa-snowflake-o",
+                  "target": "_self",
+                  "child": [
+                    {
+                      "title": "按钮3",
+                      "href": "/resources/page/button.html?v=3",
+                      "icon": "fa fa-snowflake-o",
+                      "target": "_self"
+                    },
+                    {
+                      "title": "表单4",
+                      "href": "/resources/page/form.html?v=1",
+                      "icon": "fa fa-calendar",
+                      "target": "_self"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "失效菜单",
+          "href": "/resources/page/error.html",
+          "icon": "fa fa-superpowers",
+          "target": "_self"
+        }
+      ]
+    }
+  ]
+}

@@ -69,7 +69,7 @@ public class ShiroAutoConfig {
         // 设置cookie名称，对应login.html页面的<input type="checkbox" name="rememberMe"/>
         SimpleCookie cookie = new SimpleCookie("rememberMe");
         // 设置cookie的过期时间，单位为秒，这里为一天
-        cookie.setMaxAge(86400);
+        cookie.setMaxAge(864000);
         return cookie;
     }
 

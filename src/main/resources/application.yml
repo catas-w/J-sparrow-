@@ -53,12 +53,16 @@ shiro:
     - /static/**
     - /error/**
   login-url: /toLogin
-  log-out-url: /login/logout*
+  log-out-url: /logout*
   authc-urls:
     - /**
 
 #修改端口号为8088
 server:
   port: 8080
+  servlet:
+    session:
+      persistent: true
+      timeout: 36000
 
 

@@ -27,7 +27,7 @@ import java.util.Date;
 public class LoginController {
 
     @Autowired
-    IUserInfoService userInfoService;
+    private IUserInfoService userInfoService;
 
     @PostMapping("")
     public ResultObj login(UserVo userVo, HttpSession session) {

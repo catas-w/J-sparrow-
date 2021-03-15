@@ -35,7 +35,7 @@
 
 /**头部右侧更多下拉配置色 headerRightNavMoreBg headerRightNavMoreColor */
 .layui-header .layui-nav .layui-nav-child dd.layui-this a, .layui-header .layui-nav-child dd.layui-this, .layui-layout-admin .layui-header .layui-nav .layui-nav-item .layui-nav-child .layui-this a {
-    background-color: #d7d7d7 !important;
+    background-color: #1E9FFF !important;
     color: #ffffff !important;
 }
 
@@ -46,7 +46,7 @@
 
 /*logo背景颜色 headerLogoBg */
 .layui-layout-admin .layuimini-logo {
-    background-color: #ffffff !important;
+    background-color: #192027 !important;
 }
 
 /*logo字体颜色 headerLogoColor */
@@ -66,30 +66,30 @@
 
 /*左侧菜单背景 leftMenuBg */
 .layui-side.layui-bg-black, .layui-side.layui-bg-black > .layuimini-menu-left > ul, .layuimini-menu-left-zoom > ul {
-    background-color: #ffffff !important;
+    background-color: #28333E !important;
 }
 
 /*左侧菜单选中背景 leftMenuBgThis */
 .layuimini-menu-left .layui-nav-tree .layui-this, .layuimini-menu-left .layui-nav-tree .layui-this > a, .layuimini-menu-left .layui-nav-tree .layui-nav-child dd.layui-this, .layuimini-menu-left .layui-nav-tree .layui-nav-child dd.layui-this a, .layuimini-menu-left-zoom.layui-nav-tree .layui-this, .layuimini-menu-left-zoom.layui-nav-tree .layui-this > a, .layuimini-menu-left-zoom.layui-nav-tree .layui-nav-child dd.layui-this, .layuimini-menu-left-zoom.layui-nav-tree .layui-nav-child dd.layui-this a {
-    background-color: #d4d4d4 !important
+    background-color: #1E9FFF !important
 }
 
 /*左侧菜单子菜单背景 leftMenuChildBg */
 .layuimini-menu-left .layui-nav-itemed > .layui-nav-child {
-    background-color: #e8e8e8 !important;
+    background-color: #0c0f13 !important;
 }
 
 /*左侧菜单字体颜色 leftMenuColor */
 .layuimini-menu-left .layui-nav .layui-nav-item a, .layuimini-menu-left-zoom.layui-nav .layui-nav-item a {
-    color: rgb(116, 116, 116) !important;
+    color: rgb(191, 187, 187) !important;
 }
 
 /*左侧菜单选中字体颜色 leftMenuColorThis */
 .layuimini-menu-left .layui-nav .layui-nav-item a:hover, .layuimini-menu-left .layui-nav .layui-this a, .layuimini-menu-left-zoom.layui-nav .layui-nav-item a:hover, .layuimini-menu-left-zoom.layui-nav .layui-this a {
-    color: #2d2d2d !important;
+    color: #ffffff !important;
 }
 
 /**tab选项卡选中颜色 tabActiveColor */
 .layuimini-tab .layui-tab-title .layui-this .layuimini-tab-active {
-    background-color: #d5d5d5;
+    background-color: #1e9fff;
 }
