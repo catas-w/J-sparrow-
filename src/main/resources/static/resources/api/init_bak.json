@@ -1,7 +1,7 @@
 {
   "homeInfo": {
     "title": "首页",
-    "href": "/index/home"
+    "href": "/home"
   },
   "logoInfo": {
     "title": "Sparrow",
@@ -17,13 +17,13 @@
       "child": [
         {
           "title": "首页",
-          "href": "/index/home",
+          "href": "/home",
           "icon": "fa fa-home",
           "target": "_self"
         },
         {
-          "title": "我的主机",
-          "href": "/hosts",
+          "title": "SSH",
+          "href": "/host",
           "icon": "fa fa-window-maximize",
           "target": "_self"
         },

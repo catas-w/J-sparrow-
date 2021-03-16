@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.catas.audit.mapper.BindhostMapper">
+
+
+    <resultMap id="bindHostsMap" type="com.catas.audit.dto.RelatedHostDto">
+        <result column="host_name" property="hostName"/>
+        <result column="ip_address" property="ipAddress"/>
+        <result column="port" property="port"/>
+        <result column="enabled" property="enabled"/>
+        <result column="username" property="userName"/>
+        <result column="auth_type" property="authType"/>
+        <association property="idc" column="idc_id" javaType="string" select="getIdcById"/>
+        <!--<association property="authType" column="auth_type" javaType="string" select="getAuthTypeById"/>-->
+    </resultMap>
+    
+    <select id="queryBindHostsByUserId" resultMap="bindHostsMap" parameterType="com.catas.audit.vo.RelatedHostVo">
+        SELECT
+        c.host_name as host_name,
+        c.ip_address as ip_address,
+        c.idc_id as idc_id,
+        c.`port` as port,
+        c.enabled as enabled,
+        d.username as username,
+        d.auth_type as auth_type
+        FROM
+            audit_user_info_bind_hosts as a
+                JOIN audit_bindhost AS b ON a.bind_host_id = b.id
+                JOIN audit_host AS c on b.host_id = c.id
+                JOIN audit_hostuser AS d on b.host_user_id = d.id
+        <where>
+            <if test="userId != null">
+                AND a.user_info_id = #{userId}
+            </if>
+            <if test="hostName != null">
+                AND c.host_name like concat('%', #{hostName, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="idcId != null">
+                AND c.idc_id = #{idcId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getIdcById" resultType="string">
+        select
+          name
+        from audit_idc where id = #{id}
+    </select>
+
+</mapper>

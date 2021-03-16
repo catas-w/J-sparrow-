@@ -24,6 +24,11 @@ public class SysController {
         return "audit/index";
     }
 
+    @RequestMapping("/home")
+    public String home() {
+        return "audit/home";
+    }
+
     @RequestMapping("/toLogin")
     public String toLogin() {
         return "audit/login";
@@ -36,4 +41,8 @@ public class SysController {
         return "redirect:/toLogin";
     }
 
+    @RequestMapping("/host")
+    public String myHosts() {
+        return "audit/host_list";
+    }
 }

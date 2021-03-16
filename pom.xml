@@ -90,6 +90,7 @@
             <version>${mybatisplus.version}</version>
         </dependency>
 
+
         <!--mybatisplus代码生成器-->
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -175,6 +176,8 @@
 
     </dependencies>
 
+
+
     <build>
         <plugins>
             <plugin>
@@ -189,6 +192,16 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
+
 
 </project>

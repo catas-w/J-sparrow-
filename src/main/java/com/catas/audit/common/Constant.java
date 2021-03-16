@@ -8,5 +8,6 @@ public class Constant {
     public static final Integer USER_ACTIVE = 1;
     public static final Integer USER_LOCKED = 0;
 
-
+    public static final Integer AUTH_PASSWORD = 0;
+    public static final Integer AUTH_SSL = 1;
 }
