@@ -8,9 +8,9 @@ WSSHClient.prototype._generateEndpoint = function () {
         var protocol = 'ws://';
     }
     // 内嵌应用可直接获取host
-    // var host = window.location.host;
-    // var endpoint = protocol+host+'/race/webssh';
-    var endpoint = protocol+'127.0.0.1:8080/webssh';
+    var host = window.location.host;
+    var endpoint = protocol+host+'/webssh';
+    // var endpoint = protocol+'127.0.0.1:8080/webssh';
     return endpoint;
 };
 

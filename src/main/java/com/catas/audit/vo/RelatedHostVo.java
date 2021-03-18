@@ -13,13 +13,13 @@ public class RelatedHostVo {
     private Integer page = 1;
     private Integer limit = 10;
 
-    private Integer idcId;
+
+    private String idc;
 
     private String hostName;
 
     private Integer userId;
 
-    // private Integer groupId;
+    private Integer groupId;
 
-    // public String
 }

@@ -1,12 +1,9 @@
 package com.catas.audit.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.catas.audit.common.ActiveUser;
 import com.catas.audit.common.DataGridView;
-import com.catas.audit.common.MyPage;
 import com.catas.audit.dto.RelatedHostDto;
 import com.catas.audit.entity.Hostgroup;
 import com.catas.audit.service.IBindhostService;
@@ -14,7 +11,6 @@ import com.catas.audit.service.IHostgroupService;
 import com.catas.audit.service.IUserInfoService;
 import com.catas.audit.vo.RelatedHostVo;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,8 +43,7 @@ public class HostController {
     public DataGridView getHostList(RelatedHostVo relatedHostVo) {
         ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
         relatedHostVo.setUserId(activeUser.getUserInfo().getId());
-        // Page<RelatedHostDto> page = new Page<>(relatedHostVo.getPage(), relatedHostVo.getLimit());
-        MyPage<RelatedHostDto> page = new MyPage<>(1, 10);
+        Page<RelatedHostDto> page = new Page<>(relatedHostVo.getPage(), relatedHostVo.getLimit());
 
         bindhostService.queryRelatedHosts(page, relatedHostVo);
 

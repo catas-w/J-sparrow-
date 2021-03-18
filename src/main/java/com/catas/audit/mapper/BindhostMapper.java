@@ -10,6 +10,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -26,6 +28,18 @@ public interface BindhostMapper extends BaseMapper<Bindhost> {
             Page<RelatedHostDto> page,
          @Param("userId") Integer userId,
          @Param("hostName") String hostName,
-         @Param("idcId") Integer idcId
+         @Param("idc") String idc
             );
+
+    // 根据用户id获取直接关联的 bindHost id
+    List<Integer> queryRelatedHostIds(@Param("userId")  Integer userId);
+
+    // 根据用户id获取通过主机组关联的 bindHost id
+    List<Integer> queryRelatedHostIdsFromGroup(@Param("userId") Integer userId, @Param("groupId") Integer groupId);
+
+    // 获取用户全部关联 bindHost id
+    Set<Integer> queryAllRelatedHostIds(@Param("userId") Integer userId, @Param("groupId") Integer groupId);
+
+    // 获取主机登录信息
+    Map<String, String> getHostLoginInfo(@Param("id") Integer bindHostId);
 }

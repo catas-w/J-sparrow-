@@ -1,35 +1,42 @@
 package com.catas.webssh.interceptor;
 
+import com.catas.audit.common.ActiveUser;
 import com.catas.webssh.constant.ConstantPool;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
 import java.util.Map;
 import java.util.UUID;
 
+@Component
 public class WebSocketInterceptor implements HandshakeInterceptor {
-    /**
-     * @Description: Handler处理前调用
-     * @Param: [serverHttpRequest, serverHttpResponse, webSocketHandler, map]
-     * @return: boolean
-     * @Author: NoCortY
-     * @Date: 2020/3/1
-     */
+
+
     @Override
     public boolean beforeHandshake(ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse, WebSocketHandler webSocketHandler, Map<String, Object> map) throws Exception {
-        if (serverHttpRequest instanceof ServletServerHttpRequest) {
-            ServletServerHttpRequest request = (ServletServerHttpRequest) serverHttpRequest;
-            //生成一个UUID
-            String uuid = UUID.randomUUID().toString().replace("-","");
-            //将uuid放到websocketsession中
-            map.put(ConstantPool.USER_UUID_KEY, uuid);
-            return true;
-        } else {
+
+
+        // 获取当前用户信息
+        ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
+        if (activeUser == null) {
             return false;
         }
+
+        Integer userId = activeUser.getUserInfo().getId();
+
+        //生成一个UUID
+        String uuid = UUID.randomUUID().toString() + "-" + userId;
+        //将uuid放到websocketsession中
+        map.put(ConstantPool.USER_UUID_KEY, uuid);
+        return true;
+
     }
 
     @Override

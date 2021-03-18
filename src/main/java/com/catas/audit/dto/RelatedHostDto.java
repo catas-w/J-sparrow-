@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RelatedHostDto {
 
+    // bindHost id
+    private Integer id;
+
     private String hostName;
 
     private String ipAddress;

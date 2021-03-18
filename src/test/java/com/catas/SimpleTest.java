@@ -9,6 +9,8 @@ public class SimpleTest {
     @Test
     public void tset1() {
         Byte a =23;
+        // Integer.par
+        // Arrays.sort;
         System.out.println(Integer.toString(5, 2));
     }
 

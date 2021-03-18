@@ -20,12 +20,15 @@ public class WebSSHWebSocketConfig implements WebSocketConfigurer{
     @Autowired
     WebSSHWebSocketHandler webSSHWebSocketHandler;
 
+    @Autowired
+    WebSocketInterceptor webSocketInterceptor;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
         //socket通道
         //指定处理器和路径
         webSocketHandlerRegistry.addHandler(webSSHWebSocketHandler, "/webssh")
-                .addInterceptors(new WebSocketInterceptor())
+                .addInterceptors(webSocketInterceptor)
                 .setAllowedOrigins("*");
     }
 }

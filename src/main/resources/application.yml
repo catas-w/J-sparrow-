@@ -52,6 +52,7 @@ shiro:
     - /resources/**
     - /static/**
     - /error/**
+    - /webssh
   login-url: /toLogin
   log-out-url: /logout*
   authc-urls:

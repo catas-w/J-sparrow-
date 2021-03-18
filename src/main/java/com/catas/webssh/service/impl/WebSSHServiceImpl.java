@@ -1,5 +1,6 @@
 package com.catas.webssh.service.impl;
 
+import com.catas.audit.service.IBindhostService;
 import com.catas.webssh.constant.ConstantPool;
 import com.catas.webssh.pojo.SSHConnectInfo;
 import com.catas.webssh.pojo.WebSSHData;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jcraft.jsch.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -15,9 +17,11 @@ import org.springframework.web.socket.WebSocketSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,6 +33,9 @@ import java.util.concurrent.Executors;
 */
 @Service
 public class WebSSHServiceImpl implements WebSSHService {
+
+    @Autowired
+    private IBindhostService bindhostService;
 
     //存放ssh连接信息的map
     private static Map<String, Object> sshMap = new ConcurrentHashMap<>();
@@ -74,17 +81,41 @@ public class WebSSHServiceImpl implements WebSSHService {
             logger.error("异常信息:{}", e.getMessage());
             return;
         }
-        String userId = String.valueOf(session.getAttributes().get(ConstantPool.USER_UUID_KEY));
+        String uuId = String.valueOf(session.getAttributes().get(ConstantPool.USER_UUID_KEY));
+        String[] splits = uuId.split("-");
+        Integer userId = Integer.valueOf(splits[splits.length - 1]);
+
+        // // 验证bindHost
+        // Set<Integer> relatedHostIds = bindhostService.queryAllRelatedHostIds(userId);
+        // Integer bindHostId = webSSHData.getBindHostId();
+        // if (!relatedHostIds.contains(bindHostId)) {
+        //     String msg = "用户没有访问权限!";
+        //     logger.error(msg);
+        //     try {
+        //         sendMessage(session, msg.getBytes(StandardCharsets.UTF_8));
+        //     } catch (IOException e) {
+        //         e.printStackTrace();
+        //     }
+        //     close(session);
+        //     return;
+        // }
+        // // 获取当前主机登录信息
+        // Map<String, String> loginInfo = bindhostService.getHostLoginInfo(bindHostId);
+        // webSSHData.setPassword(loginInfo.get("password"));
+        // webSSHData.setIpAddress(loginInfo.get("ip_address"));
+        // webSSHData.setPort(Integer.valueOf(loginInfo.get("port")));
+        // webSSHData.setUsername(loginInfo.get("username"));
+
         if (ConstantPool.WEBSSH_OPERATE_CONNECT.equals(webSSHData.getOperate())) {
             //找到刚才存储的ssh连接对象
-            SSHConnectInfo sshConnectInfo = (SSHConnectInfo) sshMap.get(userId);
+            SSHConnectInfo sshConnectInfo = (SSHConnectInfo) sshMap.get(uuId);
             //启动线程异步处理
             WebSSHData finalWebSSHData = webSSHData;
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        connectToSSH(sshConnectInfo, finalWebSSHData, session);
+                        connectToSSH(sshConnectInfo, finalWebSSHData, session, userId);
                         if (sshConnectInfo.getChannel().isClosed()) {
                             close(session);
                         }
@@ -104,7 +135,7 @@ public class WebSSHServiceImpl implements WebSSHService {
             });
         } else if (ConstantPool.WEBSSH_OPERATE_COMMAND.equals(webSSHData.getOperate())) {
             String command = webSSHData.getCommand();
-            SSHConnectInfo sshConnectInfo = (SSHConnectInfo) sshMap.get(userId);
+            SSHConnectInfo sshConnectInfo = (SSHConnectInfo) sshMap.get(uuId);
             if (sshConnectInfo != null) {
                 try {
                     ChannelShell channel = (ChannelShell) sshConnectInfo.getChannel();
@@ -130,7 +161,7 @@ public class WebSSHServiceImpl implements WebSSHService {
             }
         } else if (ConstantPool.WEBSSH_OPERATE_HEARTBEAT.equals(webSSHData.getOperate())) {
             //检查心跳
-            SSHConnectInfo sshConnectInfo = (SSHConnectInfo) sshMap.get(userId);
+            SSHConnectInfo sshConnectInfo = (SSHConnectInfo) sshMap.get(uuId);
             if (sshConnectInfo != null) {
                 try {
                     //处于连接状态则发送健康数据，不能为空，空则断开连接。
@@ -176,12 +207,28 @@ public class WebSSHServiceImpl implements WebSSHService {
      * @Author: NoCortY
      * @Date: 2020/3/7
      */
-    private void connectToSSH(SSHConnectInfo sshConnectInfo, WebSSHData webSSHData, WebSocketSession webSocketSession) throws JSchException, IOException {
+    private void connectToSSH(SSHConnectInfo sshConnectInfo, WebSSHData webSSHData, WebSocketSession webSocketSession, Integer userId) throws JSchException, IOException {
+
+        // 验证bindHost
+        Set<Integer> relatedHostIds = bindhostService.queryAllRelatedHostIds(userId);
+        Integer bindHostId = webSSHData.getBindHostId();
+        if (!relatedHostIds.contains(bindHostId)) {
+            String msg = "用户没有访问权限!";
+            throw new IOException(msg);
+        }
+        // 获取当前主机登录信息
+        Map<String, String> loginInfo = bindhostService.getHostLoginInfo(bindHostId);
+        webSSHData.setPassword(loginInfo.get("password"));
+        webSSHData.setIpAddress(loginInfo.get("ip_address"));
+        webSSHData.setPort(Integer.valueOf(loginInfo.get("port")));
+        webSSHData.setUsername(loginInfo.get("username"));
+
+
         Session session = null;
         Properties config = new Properties();
         config.put("StrictHostKeyChecking", "no");
         //获取jsch的会话
-        session = sshConnectInfo.getjSch().getSession(webSSHData.getUsername(), webSSHData.getHost(), webSSHData.getPort());
+        session = sshConnectInfo.getjSch().getSession(webSSHData.getUsername(), webSSHData.getIpAddress(), webSSHData.getPort());
         session.setConfig(config);
         //设置密码
         session.setPassword(webSSHData.getPassword());

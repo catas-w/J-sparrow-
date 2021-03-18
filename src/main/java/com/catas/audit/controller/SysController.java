@@ -2,16 +2,13 @@ package com.catas.audit.controller;
 
 
 import com.catas.audit.common.ActiveUser;
-import com.catas.audit.common.WebUtils;
-import com.catas.audit.entity.UserInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/")
@@ -29,11 +26,13 @@ public class SysController {
         return "audit/home";
     }
 
+    // 登录页面
     @RequestMapping("/toLogin")
     public String toLogin() {
         return "audit/login";
     }
 
+    // 登出
     @GetMapping("/logout")
     public String logout(){
         Subject subject = SecurityUtils.getSubject();
@@ -41,8 +40,16 @@ public class SysController {
         return "redirect:/toLogin";
     }
 
+    // 主机列表
     @RequestMapping("/host")
     public String myHosts() {
         return "audit/host_list";
+    }
+
+    // SSH登录页面
+    @RequestMapping("/connect/{id}")
+    public String connect(@PathVariable("id") Integer bindHostId, Model model) {
+        model.addAttribute("bindHostId", bindHostId);
+        return "connect/webssh";
     }
 }

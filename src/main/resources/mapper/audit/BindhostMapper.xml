@@ -2,32 +2,69 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.catas.audit.mapper.BindhostMapper">
 
+    <sql id="getRelatedHostIds">
+        select
+            bind_host_id
+        from
+            audit_user_info_bind_hosts
+        where user_info_id = #{userId}
+    </sql>
+
+    <sql id="getRelatedHostIdsFromGroup">
+        SELECT
+        b.bindhost_id
+        FROM
+        audit_user_info_groups AS a
+        JOIN
+        audit_hostgroup_bind_hosts AS b ON a.group_id = b.hostgroup_id
+        <where>
+            <if test="userId != null">
+                AND a.user_info_id = #{userId}
+            </if>
+            <if test="groupId != null">
+                AND a.group_id = #{groupId}
+            </if>
+        </where>
+    </sql>
+
+    <resultMap id="hostLoginInfo" type="hashmap">
+        <result column="auth_type" property="authType" javaType="String"/>
+        <!--<result column="ip_address" property="ipAddress"/>-->
+        <!--<result column="host_name" property="hostName"/>-->
+        <!--<result column="username" property="userName"/>-->
+        <result column="port" property="port" javaType="String"/>
+    </resultMap>
 
     <resultMap id="bindHostsMap" type="com.catas.audit.dto.RelatedHostDto">
+        <result column="id" property="id"/>
         <result column="host_name" property="hostName"/>
         <result column="ip_address" property="ipAddress"/>
         <result column="port" property="port"/>
         <result column="enabled" property="enabled"/>
         <result column="username" property="userName"/>
         <result column="auth_type" property="authType"/>
-        <association property="idc" column="idc_id" javaType="string" select="getIdcById"/>
+        <result column="idc" property="idc"/>
+        <!--<association property="idc" column="idc_id" javaType="string" select="getIdcById"/>-->
         <!--<association property="authType" column="auth_type" javaType="string" select="getAuthTypeById"/>-->
     </resultMap>
     
     <select id="queryBindHostsByUserId" resultMap="bindHostsMap" parameterType="com.catas.audit.vo.RelatedHostVo">
         SELECT
-        c.host_name as host_name,
-        c.ip_address as ip_address,
-        c.idc_id as idc_id,
-        c.`port` as port,
-        c.enabled as enabled,
-        d.username as username,
-        d.auth_type as auth_type
+            b.id as id,
+            c.host_name as host_name,
+            c.ip_address as ip_address,
+            c.idc_id as idc_id,
+            c.`port` as port,
+            c.enabled as enabled,
+            d.username as username,
+            d.auth_type as auth_type,
+            e.name as idc
         FROM
             audit_user_info_bind_hosts as a
-                JOIN audit_bindhost AS b ON a.bind_host_id = b.id
-                JOIN audit_host AS c on b.host_id = c.id
-                JOIN audit_hostuser AS d on b.host_user_id = d.id
+            JOIN audit_bindhost AS b ON a.bind_host_id = b.id
+            JOIN audit_host AS c on b.host_id = c.id
+            JOIN audit_hostuser AS d on b.host_user_id = d.id
+            join audit_idc as e on e.id = c.idc_id
         <where>
             <if test="userId != null">
                 AND a.user_info_id = #{userId}
@@ -35,8 +72,8 @@
             <if test="hostName != null">
                 AND c.host_name like concat('%', #{hostName, jdbcType=VARCHAR}, '%')
             </if>
-            <if test="idcId != null">
-                AND c.idc_id = #{idcId}
+            <if test="idc != null">
+                AND e.name like concat('%', #{idc, jdbcType=VARCHAR}, '%')
             </if>
         </where>
     </select>
@@ -47,4 +84,34 @@
         from audit_idc where id = #{id}
     </select>
 
+    <select id="queryRelatedHostIds" resultType="integer">
+        <include refid="getRelatedHostIds"/>
+    </select>
+
+    <select id="queryRelatedHostIdsFromGroup" resultType="integer">
+        <include refid="getRelatedHostIdsFromGroup"/>
+    </select>
+
+    <select id="queryAllRelatedHostIds" resultType="integer">
+        <include refid="getRelatedHostIds"/>
+        union
+        <include refid="getRelatedHostIdsFromGroup"/>
+    </select>
+
+    <select id="getHostLoginInfo" resultMap="hostLoginInfo">
+        SELECT
+            b.host_name,
+            b.ip_address,
+            b.`port`,
+            c.auth_type,
+            c.username,
+            c.`password`
+        FROM
+            audit_bindhost AS a
+                JOIN
+            audit_host as b ON a.host_id = b.id
+                JOIN
+            audit_hostuser AS c ON a.host_user_id = c.id
+        WHERE a.id = #{id}
+    </select>
 </mapper>
