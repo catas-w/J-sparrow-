@@ -33,6 +33,7 @@ public class HostController {
 
     @RequestMapping("/get-host-group")
     public DataGridView getHostGroup() {
+        // 用户绑定的主机组
         ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
         List<Integer> groupIds = userInfoService.queryGroupIdsByUserId(activeUser.getUserInfo().getId());
         Collection<Hostgroup> hostgroups = hostgroupService.listByIds(groupIds);
@@ -45,7 +46,11 @@ public class HostController {
         relatedHostVo.setUserId(activeUser.getUserInfo().getId());
         Page<RelatedHostDto> page = new Page<>(relatedHostVo.getPage(), relatedHostVo.getLimit());
 
-        bindhostService.queryRelatedHosts(page, relatedHostVo);
+        if (relatedHostVo.getGroupId() == null){
+            bindhostService.queryRelatedHosts(page, relatedHostVo);
+        }else {
+            bindhostService.queryBindHostsByUserGroup(page, relatedHostVo);
+        }
 
         return new DataGridView(page.getTotal(), page.getRecords());
     }

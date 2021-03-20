@@ -54,7 +54,7 @@ public class WebSSHWebSocketHandler implements WebSocketHandler{
         } else if (webSocketMessage instanceof PongMessage) {
 
         } else {
-            System.out.println("Unexpected WebSocket message type: " + webSocketMessage);
+            logger.info("Unexpected WebSocket message type: " + webSocketMessage);
         }
     }
 

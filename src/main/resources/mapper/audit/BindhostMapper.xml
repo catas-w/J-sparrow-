@@ -47,7 +47,8 @@
         <!--<association property="idc" column="idc_id" javaType="string" select="getIdcById"/>-->
         <!--<association property="authType" column="auth_type" javaType="string" select="getAuthTypeById"/>-->
     </resultMap>
-    
+
+    <!--查询用户未通过分组绑定的所有主机信息-->
     <select id="queryBindHostsByUserId" resultMap="bindHostsMap" parameterType="com.catas.audit.vo.RelatedHostVo">
         SELECT
             b.id as id,
@@ -84,6 +85,42 @@
         from audit_idc where id = #{id}
     </select>
 
+    <!-- 查询用户通过group 绑定的所有主机信息-->
+    <select id="queryBindHostsByUserGroup" parameterType="com.catas.audit.vo.RelatedHostVo" resultMap="bindHostsMap">
+        SELECT
+            b.id as id,
+            c.host_name as host_name,
+            c.ip_address as ip_address,
+            c.idc_id as idc_id,
+            c.`port` as port,
+            c.enabled as enabled,
+            d.username as username,
+            d.auth_type as auth_type,
+            e.name as idc
+        FROM
+            audit_user_info_groups AS f
+                JOIN audit_hostgroup_bind_hosts AS a on f.group_id = a.hostgroup_id
+                JOIN audit_bindhost AS b ON a.bindhost_id = b.id
+                JOIN audit_host AS c on b.host_id = c.id
+                JOIN audit_hostuser AS d on b.host_user_id = d.id
+                join audit_idc as e on e.id = c.idc_id
+        <where>
+            <if test="userId != null">
+                AND f.user_info_id = #{userId}
+            </if>
+            <if test="groupId != null">
+                AND f.group_id = #{groupId}
+            </if>
+            <if test="hostName != null">
+                AND c.host_name like concat('%', #{hostName, jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="idc != null">
+                AND e.name like concat('%', #{idc, jdbcType=VARCHAR}, '%')
+            </if>
+        </where>
+    </select>
+
+
     <select id="queryRelatedHostIds" resultType="integer">
         <include refid="getRelatedHostIds"/>
     </select>
@@ -92,6 +129,7 @@
         <include refid="getRelatedHostIdsFromGroup"/>
     </select>
 
+    <!--用户所有绑定主机的id-->
     <select id="queryAllRelatedHostIds" resultType="integer">
         <include refid="getRelatedHostIds"/>
         union

@@ -24,6 +24,9 @@ public interface IBindhostService extends IService<Bindhost> {
     // 根据条件查询直接绑定的主机信息
     IPage<RelatedHostDto> queryRelatedHosts(Page<RelatedHostDto> page, RelatedHostVo relatedHostVo);
 
+    // 查询用户绑定组中所有主机信息
+    IPage<RelatedHostDto> queryBindHostsByUserGroup(Page<RelatedHostDto> page, RelatedHostVo relatedHostVo);
+
     // 根据用户id获取直接关联的 bindHost id
     List<Integer> queryRelatedHostIds(Integer userId);
 

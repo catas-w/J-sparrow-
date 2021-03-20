@@ -1,5 +1,6 @@
 package com.catas.webssh.service;
 
+import com.catas.webssh.pojo.SSHConnectInfo;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ public interface WebSSHService {
      * @Author: NoCortY
      * @Date: 2020/3/7
      */
-    public void sendMessage(WebSocketSession session, byte[] buffer) throws IOException;
+    public void sendMessage(SSHConnectInfo sshConnectInfo, WebSocketSession session, byte[] buffer) throws IOException;
 
     /**
      * @Description: 关闭连接

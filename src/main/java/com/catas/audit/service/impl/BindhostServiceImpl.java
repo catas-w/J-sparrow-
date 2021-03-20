@@ -29,7 +29,15 @@ public class BindhostServiceImpl extends ServiceImpl<BindhostMapper, Bindhost> i
 
     @Override
     public IPage<RelatedHostDto> queryRelatedHosts(Page<RelatedHostDto> page, RelatedHostVo relatedHostVo) {
-        return this.getBaseMapper().queryBindHostsByUserId(page, relatedHostVo.getUserId(), relatedHostVo.getHostName(), relatedHostVo.getIdc());
+        return this.getBaseMapper().queryBindHostsByUserId(page, relatedHostVo.getUserId(),
+                relatedHostVo.getHostName(), relatedHostVo.getIdc());
+    }
+
+    @Override
+    public IPage<RelatedHostDto> queryBindHostsByUserGroup(Page<RelatedHostDto> page, RelatedHostVo relatedHostVo) {
+        BindhostMapper baseMapper = this.getBaseMapper();
+        return baseMapper.queryBindHostsByUserGroup(page, relatedHostVo.getUserId(),
+                relatedHostVo.getGroupId(), relatedHostVo.getHostName(), relatedHostVo.getIdc());
     }
 
     @Override

@@ -2,12 +2,9 @@ package com.catas.webssh.interceptor;
 
 import com.catas.audit.common.ActiveUser;
 import com.catas.webssh.constant.ConstantPool;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;

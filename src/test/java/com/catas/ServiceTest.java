@@ -6,10 +6,13 @@ import com.catas.audit.mapper.BindhostMapper;
 import com.catas.audit.service.IBindhostService;
 import com.catas.audit.service.IUserInfoService;
 import com.catas.audit.vo.RelatedHostVo;
+import com.catas.webssh.config.WebSSHWebSocketConfig;
+import com.catas.webssh.utils.LogUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,6 +28,9 @@ public class ServiceTest {
 
     @Autowired
     private IBindhostService bindhostService;
+
+    @Autowired
+    WebSSHWebSocketConfig webSocketConfig;
 
     @Test
     void test1() {
@@ -51,5 +57,19 @@ public class ServiceTest {
     void test4() {
         Map<String, String> info = bindhostService.getHostLoginInfo(1);
         System.out.println(info);
+    }
+
+    @Test
+    void test5() {
+        RelatedHostVo hostVo = new RelatedHostVo();
+        hostVo.setUserId(1);
+        // hostVo.setGroupId(1);
+        System.out.println(bindhostService.queryBindHostsByUserGroup(new Page<RelatedHostDto>(1,10), hostVo));
+    }
+
+    @Test
+    void test6() {
+        String logPath = webSocketConfig.logPath;
+        System.out.printf(logPath);
     }
 }

@@ -9,6 +9,7 @@ import com.catas.audit.vo.RelatedHostVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,6 +31,15 @@ public interface BindhostMapper extends BaseMapper<Bindhost> {
          @Param("hostName") String hostName,
          @Param("idc") String idc
             );
+
+    // 查询用户绑定组中所有主机信息
+    IPage<RelatedHostDto> queryBindHostsByUserGroup(
+            Page<RelatedHostDto> page,
+            @Param("userId") Integer userId,
+            @Param("groupId") Integer groupId,
+            @Param("hostName") String hostName,
+            @Param("idc") String idc
+    );
 
     // 根据用户id获取直接关联的 bindHost id
     List<Integer> queryRelatedHostIds(@Param("userId")  Integer userId);
