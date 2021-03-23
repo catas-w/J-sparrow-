@@ -146,10 +146,43 @@
             c.`password`
         FROM
             audit_bindhost AS a
-                JOIN
+        JOIN
             audit_host as b ON a.host_id = b.id
-                JOIN
+        JOIN
             audit_hostuser AS c ON a.host_user_id = c.id
         WHERE a.id = #{id}
     </select>
+
+    <select id="getAllHostInfo" resultType="hashmap">
+        SELECT
+            a.id as id,
+            CONCAT(b.host_name,'@',b.ip_address, ':', b.`port`) as hostInfo,
+            d.`name` as idc,
+            c.username as userName
+        FROM
+            audit_bindhost AS a
+        JOIN
+            audit_host as b ON a.host_id = b.id
+        JOIN
+            audit_hostuser AS c on a.host_user_id = c.id
+        JOIN
+            audit_idc AS d on b.idc_id = d.id
+    </select>
+
+    <delete id="deleteRelatedHostByUserId" >
+        DELETE
+        from
+            audit_user_info_bind_hosts
+        WHERE
+            user_info_id = #{userId};
+    </delete>
+
+    <insert id="saveRelatedHost" >
+        INSERT INTO
+            audit_user_info_bind_hosts (user_info_id, bind_host_id)
+        VALUES
+        <foreach collection="bindHostIdList" item="bId" separator=",">
+            (#{userId}, #{bId})
+        </foreach>
+    </insert>
 </mapper>

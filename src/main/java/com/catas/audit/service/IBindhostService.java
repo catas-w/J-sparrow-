@@ -27,11 +27,11 @@ public interface IBindhostService extends IService<Bindhost> {
     // 查询用户绑定组中所有主机信息
     IPage<RelatedHostDto> queryBindHostsByUserGroup(Page<RelatedHostDto> page, RelatedHostVo relatedHostVo);
 
-    // 根据用户id获取直接关联的 bindHost id
-    List<Integer> queryRelatedHostIds(Integer userId);
-
-    // 根据用户id获取通过主机组关联的 bindHost id
-    List<Integer> queryRelatedHostIdsFromGroup(Integer userId, Integer groupId);
+    // // 根据用户id获取直接关联的 bindHost id
+    // List<Integer> queryRelatedHostIds(Integer userId);
+    //
+    // // 根据用户id获取通过主机组关联的 bindHost id
+    // List<Integer> queryRelatedHostIdsFromGroup(Integer userId, Integer groupId);
 
     // 获取用户全部关联 bindHost id
     Set<Integer> queryAllRelatedHostIds(Integer userId, Integer groupId);
@@ -39,4 +39,10 @@ public interface IBindhostService extends IService<Bindhost> {
     Set<Integer> queryAllRelatedHostIds(Integer userId);
 
     Map<String, String> getHostLoginInfo(Integer bindHostId);
+
+    // 获取所有绑定主机信息
+    List<Map<String, Object>> getAllHostInfo();
+
+    // 更新用户绑定的主机
+    void updateUserBindHosts(Integer uId, List<Integer> bIds);
 }

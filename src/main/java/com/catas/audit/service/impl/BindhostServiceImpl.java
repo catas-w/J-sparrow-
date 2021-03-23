@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.catas.audit.vo.RelatedHostVo;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,12 +39,10 @@ public class BindhostServiceImpl extends ServiceImpl<BindhostMapper, Bindhost> i
                 relatedHostVo.getGroupId(), relatedHostVo.getHostName(), relatedHostVo.getIdc());
     }
 
-    @Override
     public List<Integer> queryRelatedHostIds(Integer userId) {
         return this.getBaseMapper().queryRelatedHostIds(userId);
     }
 
-    @Override
     public List<Integer> queryRelatedHostIdsFromGroup(Integer userId, Integer groupId) {
         return this.getBaseMapper().queryRelatedHostIdsFromGroup(userId, groupId);
     }
@@ -63,5 +60,17 @@ public class BindhostServiceImpl extends ServiceImpl<BindhostMapper, Bindhost> i
     @Override
     public Map<String, String> getHostLoginInfo(Integer bindHostId) {
         return this.getBaseMapper().getHostLoginInfo(bindHostId);
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllHostInfo() {
+        return this.getBaseMapper().getAllHostInfo();
+    }
+
+    @Override
+    public void updateUserBindHosts(Integer uId, List<Integer> bIds) {
+        BindhostMapper baseMapper = this.getBaseMapper();
+        baseMapper.deleteRelatedHostByUserId(uId);
+        baseMapper.saveRelatedHost(uId, bIds);
     }
 }

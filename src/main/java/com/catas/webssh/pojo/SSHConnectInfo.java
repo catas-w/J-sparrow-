@@ -34,6 +34,10 @@ public class SSHConnectInfo {
 
     private File logFile;
 
+    private Integer bindHostId;
+
+    private Integer userId;
+
     public SSHConnectInfo() {
         this.tabFlag = false;
         this.temp = new ArrayList<>();
@@ -41,7 +45,7 @@ public class SSHConnectInfo {
 
     public void initLog(String uuid) throws IOException {
         // this.logUtil = new LogUtil();
-        logFile = this.logUtil.init(uuid);
+        logFile = this.logUtil.init(uuid, bindHostId, userId);
     }
 
     public void logMsg(String msg) throws IOException {

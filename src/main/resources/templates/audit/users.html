@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Session Log</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/resources/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/resources/css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="" method="post">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="name" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="email" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添 加 </button>
+                <!--<button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs layui-btn-primary data-count-edit" lay-event="edit">编 辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-normal data-count-delete" lay-event="selectBindHost">绑定主机</a>
+            <a class="layui-btn layui-btn-xs layui-btn-warm data-count-delete" lay-event="selectHostGroup">绑定主机组</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删 除</a>
+        </script>
+
+        <!--修改弹出层-->
+        <div id="addOrUpdateDiv" style="display: none; padding: 10px 5% 10px 10px;">
+            <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
+                <div class="layui-form-item">
+                    <!--<label class="layui-form-label">Id</label>-->
+                    <div class="layui-input-block" id="parentDept">
+                        <input type="hidden" name="id" id="userId" disabled>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">用户名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入部门地址">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">邮箱</label>
+                        <div class="layui-input-block">
+                            <input type="email" name="email" lay-verify="required" autocomplete="off" class="layui-input input-radius" placeholder="请输入部门地址">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">激活</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="isActive" lay-skin="switch" lay-filter="encrypt">
+                            <!--<input type="radio" name="isActive" value="1" title="可用" checked="">-->
+                            <!--<input type="radio" name="isActive" value="0" title="不可用">-->
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">管理员</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="isAdmin" lay-skin="switch" lay-filter="encrypt">
+                            <!--<input type="radio" name="isAdmin" value="1" title="展开" checked="">-->
+                            <!--<input type="radio" name="isAdmin" value="0" title="不展开">-->
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="text-align: center;padding-right: 7%">
+                        <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
+                            class="layui-icon layui-icon-search layui-icon-normal"></i>提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
+                            class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div>
+
+        <!--给用户分配host的弹出层-->
+        <div style="display: none;padding: 10px;"  id="select-bind-hosts">
+            <table class="layui-hide" id="bind-hosts-table" lay-filter="roleTable"></table>
+        </div>
+
+        <!--给用户分配host group的弹出层-->
+        <div style="display: none;padding: 10px;"  id="select-host-group">
+            <table class="layui-hide" id="host-group-table" lay-filter="groupTable"></table>
+        </div>
+
+</div>
+<script src="/resources/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+        table.render({
+            elem: '#currentTableId',
+            url: '/users/get-user-list',
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [ [
+                {type: "checkbox", width: 50},
+                {field: 'id', width: 50, title: 'ID', sort: true},
+                {field: 'name', width: 120, title: '用户名'},
+                {field: 'email', width: 180, title: '邮箱', sort: true},
+                {field: 'lastLogin', width: 180, title: '上次登录', sort: true},
+                {field: 'isActive', width: 80, title: '已激活'},
+                {field: 'isAdmin', title: '管理员', Width: 80},
+                {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+            ] ],
+            limits: [5, 10, 15],
+            limit: 10,
+            page: true,
+            skin: 'line',
+            done: function (data, curr, count) {
+                //不是第一页时，如果当前返回的数据为0那么就返回上一页
+                if (data.data.length === 0 && curr !== 1) {
+                    tableIns.reload({
+                        page: {
+                            curr: curr - 1
+                        }
+                    })
+                }
+            }
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                },
+                where: data.field
+            }, 'data');
+
+            return false;
+        });
+
+        /**
+         * toolbar监听事件
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            switch(obj.event) {
+                case 'add':
+                    openAddLayer(data);
+                    break;
+            }
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            // console.log(obj)
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            // console.log(data);
+            switch (obj.event) {
+                case 'edit':
+                    updateDept(data);
+                    break;
+                case 'delete':
+                    deleteUser(data);
+                    break;
+                case 'selectBindHost':
+                    selectBindHost(data);
+                    break;
+                case 'selectHostGroup':
+                    selectHostGroup(data);
+                    break;
+            }
+        });
+        //删除
+        function deleteUser(data) {
+            layer.confirm('你确定要删除[' + data.name + ']这个用户吗？', {icon: 3, title: '提示'}, function (index) {
+                $.post("/users/delete/"+data.id, function (res) {
+                    if (res.code === 200) {
+                        table.reload('currentTableId');
+                    }
+                    layer.msg(res.msg);
+                });
+                layer.close(index);
+            });
+        }
+
+
+        //打开添加弹出层
+        function openAddLayer() {
+            mainIndex = layer.open({
+                type:1,
+                content:$("#addOrUpdateDiv"),
+                area:['600px','400px'],
+                title:'添加用户',
+                success:function () {
+                    $("#dataFrm")[0].reset();
+                    $("#userId").val("");
+                    url="/users/add";
+                }
+            });
+        }
+
+        //打开修改的弹出层
+        function updateDept(data) {
+            mainIndex = layer.open({
+                type:1,
+                content:$("#addOrUpdateDiv"),
+                area:['600px','350px'],
+                title:'修改用户信息',
+                success:function () {
+                    //清空原有的数据
+                    $("#dataFrm")[0].reset();
+                    //装载新的数据
+                    form.val("dataFrm",data);
+                    url="/users/update";
+                }
+            });
+        }
+
+        // 提交表单
+        form.on("submit(doSubmit)",function (data) {
+            // console.log(data.field);
+            var data_field = data.field;
+            if (data_field.hasOwnProperty('isActive')) {
+                data_field.isActive = 1;
+            }else {
+                data_field.isActive = 0;
+            }
+            if (data_field.hasOwnProperty('isAdmin')) {
+                data_field.isAdmin = 1;
+            }else {
+                data_field.isAdmin = 0;
+            }
+            $.post(url, data.field, function (res) {
+                if (res.code === 200){
+                    table.reload('currentTableId');
+                }
+                layer.msg(res.msg);
+                layer.close(mainIndex);
+            });
+            return false;
+        });
+
+
+        //打开分配 bind_host 的弹出层
+        function selectBindHost(data) {
+            mainIndex = layer.open({
+                type:1,
+                content:$("#select-bind-hosts"),
+                area:['650px','400px'],
+                title:'为'+data.name+'绑定主机',
+                btn: ['<span class=layui-icon>&#xe605;确认分配</span>','<span class=layui-icon>&#x1006;取消分配</span>'],
+                btnAlign:'c',
+                yes: function(index, layero){
+                    var checkStatus = table.checkStatus('bind-hosts-table');
+                    var params = "id="+data.id;
+                    $.each(checkStatus.data,function (index, item) {
+                        params+="&bindHostIds="+item.id;
+                    });
+                    $.post("/users/save-bind-hosts",params,function (res) {
+                        layer.msg(res.msg);
+                        layer.close(mainIndex);
+                    })
+                },
+                btn2: function(index, layero){
+                    //关闭弹出层
+                },
+                success:function () {
+                    initBindHostsTable(data);
+                }
+            });
+        }
+
+        var roleTableIns;
+        //初始化 bind_host 列表
+        function initBindHostsTable(data) {
+            console.log(data);
+            roleTableIns = table.render({
+                elem:'#bind-hosts-table',
+                url:'/users/get-bind-host-list/' + data.id,
+                //将用户id传到后台去
+                // where:{
+                //     id:data.id
+                // },
+                cols:[ [
+                    {type:'checkbox',align:'center'},
+                    {field:'id',title:'ID',align:'center'},
+                    {field:'hostInfo',title:'主机',align:'center'},
+                    {field:'idc',title:'机房',align:'center'},
+                    {field:'userName',title:'SSH账户',align:'center'}
+                ] ]
+            });
+        }
+
+        //打开分配 host group 的弹出层
+        function selectHostGroup(data) {
+            mainIndex = layer.open({
+                type:1,
+                content:$("#select-host-group"),
+                area:['650px','400px'],
+                title:'为'+data.name+'绑定主机组',
+                btn: ['<span class=layui-icon>&#xe605;确认分配</span>','<span class=layui-icon>&#x1006;取消分配</span>'],
+                btnAlign:'c',
+                yes: function(index, layero){
+                    var checkStatus = table.checkStatus('host-group-table');
+                    var params = "id="+data.id;
+                    $.each(checkStatus.data,function (index, item) {
+                        params+="&bindGroupIds="+item.id;
+                    });
+                    $.post("/users/save-host-group",params,function (res) {
+                        layer.msg(res.msg);
+                        layer.close(mainIndex);
+                    })
+                },
+                btn2: function(index, layero){
+                    //关闭弹出层
+                },
+                success:function () {
+                    initHostGroupTable(data);
+                }
+            });
+        }
+
+        var hostGroupTable;
+        //初始化 bind_host 列表
+        function initHostGroupTable(data) {
+            console.log(data);
+            hostGroupTable = table.render({
+                elem:'#host-group-table',
+                url:'/users/get-host-group-list/' + data.id,
+                cols:[ [
+                    {type:'checkbox',align:'center'},
+                    {field:'id',title:'ID',align:'center'},
+                    {field:'groupName',title:'主机组',align:'center'},
+                    {field:'hostCount',title:'数量',align:'center'},
+                    // {field:'userName',title:'SSH账户',align:'center'}
+                ] ]
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

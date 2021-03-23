@@ -2,4 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.catas.audit.mapper.HostgroupMapper">
 
+
+    <select id="getAllGroupInfo" resultType="hashmap">
+        select
+            a.id,
+            a.name as groupName,
+            ifnull(b.count, 0) as hostCount
+        from audit_hostgroup as a
+        left join
+             (
+                 select hostgroup_id,
+                        count(hostgroup_id) as count
+                 from audit_hostgroup_bind_hosts
+                 group by hostgroup_id
+             ) as b on a.id = b.hostgroup_id;
+    </select>
+
+    <select id="queryRelatedGroupIds" resultType="integer">
+        select
+            distinct group_id
+        from audit_user_info_groups
+        where user_info_id = #{userId};
+    </select>
+
+    <delete id="deleteRelatedGroupByUserId">
+        delete from audit_user_info_groups
+        where user_info_id = #{userId};
+    </delete>
+
+    <insert id="saveRelatedGroups">
+        insert into
+            audit_user_info_groups (user_info_id, group_id)
+        values
+        <foreach collection="hostGroupList" item="gId" separator=",">
+            (#{userId}, #{gId})
+        </foreach>
+    </insert>
 </mapper>

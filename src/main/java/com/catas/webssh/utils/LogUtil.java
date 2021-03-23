@@ -1,5 +1,6 @@
 package com.catas.webssh.utils;
 
+import com.catas.audit.entity.Sessionlog;
 import com.catas.audit.service.ISessionlogService;
 import com.catas.webssh.constant.ConstantPool;
 import lombok.Data;
@@ -31,7 +32,7 @@ public class LogUtil {
     @Value("${ssh.log-path:#{null}}")
     private String logPath;
 
-    public File init(String uuid) throws IOException {
+    public File init(String uuid, Integer bindHostId, Integer userId) throws IOException {
         // 日志所在目录
         Date nowDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -44,10 +45,17 @@ public class LogUtil {
         if (!logFile.exists()) {
             logFile.createNewFile();
         }
+
+        // 保存到数据库
+        String tag = Path.of(dateStr, uuid).toString();
+        Sessionlog sessionlog = new Sessionlog();
+        sessionlog.setSessionTag(tag);
+        sessionlog.setBindHostId(bindHostId);
+        sessionlog.setUserId(userId);
+        sessionlogService.save(sessionlog);
+
         return logFile;
     }
-
-    // TODO: 保存到数据库
 
     public void log(String msg, File logFile) throws IOException {
         PrintStream printStream = new PrintStream(new FileOutputStream(logFile, true));

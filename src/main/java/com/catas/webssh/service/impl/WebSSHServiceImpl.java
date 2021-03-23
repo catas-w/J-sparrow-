@@ -230,7 +230,8 @@ public class WebSSHServiceImpl implements WebSSHService {
         session.connect(30000);
 
         // 验证成功后开启日志
-        // sshConnectInfo.setLogUtil(new LogUtil(uuId));
+        sshConnectInfo.setUserId(userId);
+        sshConnectInfo.setBindHostId(webSSHData.getBindHostId());
         sshConnectInfo.setLogUtil(logUtil);
         sshConnectInfo.initLog(uuId);
 

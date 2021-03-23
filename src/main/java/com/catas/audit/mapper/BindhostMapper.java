@@ -52,4 +52,13 @@ public interface BindhostMapper extends BaseMapper<Bindhost> {
 
     // 获取主机登录信息
     Map<String, String> getHostLoginInfo(@Param("id") Integer bindHostId);
+
+    // 获取所有绑定主机信息
+    List<Map<String, Object>> getAllHostInfo();
+
+    // 删除用户所有绑定主机
+    void deleteRelatedHostByUserId(@Param("userId") Integer id);
+
+    // 新建用户绑定主机
+    void saveRelatedHost(@Param("userId") Integer uId, @Param("bindHostIdList") List<Integer> bIds);
 }

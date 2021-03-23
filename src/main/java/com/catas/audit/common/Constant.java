@@ -10,4 +10,6 @@ public class Constant {
 
     public static final Integer AUTH_PASSWORD = 0;
     public static final Integer AUTH_SSL = 1;
+
+    public static final String DEFAULT_PWS = "123456";
 }

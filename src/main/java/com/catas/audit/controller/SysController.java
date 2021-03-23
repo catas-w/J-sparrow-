@@ -52,4 +52,17 @@ public class SysController {
         model.addAttribute("bindHostId", bindHostId);
         return "connect/webssh";
     }
+
+    // ssh日志
+    @RequestMapping("/session-log")
+    public String sessionLog() {
+        return "audit/session-log";
+    }
+
+    // 用户管理
+    @RequestMapping("/admin/users")
+    public String userInfo() {
+        return "audit/users";
+    }
+
 }

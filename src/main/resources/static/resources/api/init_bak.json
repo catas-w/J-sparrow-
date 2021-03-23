@@ -29,7 +29,7 @@
         },
         {
           "title": "审计",
-          "href": "/resources/page/setting.html",
+          "href": "/session-log",
           "icon": "fa fa-gears",
           "target": "_self"
         },
@@ -41,18 +41,30 @@
           "child": [
             {
               "title": "用户",
-              "href": "/resources/page/form.html",
+              "href": "/admin/users",
               "icon": "fa fa-list-alt",
               "target": "_self"
             },
             {
               "title": "主机信息",
+              "href": "/admin/hosts",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "主机登录账户",
               "href": "/resources/page/form-step.html",
               "icon": "fa fa-navicon",
               "target": "_self"
             },
             {
-              "title": "SSH账户",
+              "title": "登录信息绑定",
+              "href": "/resources/page/form-step.html",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "主机组",
               "href": "/resources/page/form-step.html",
               "icon": "fa fa-navicon",
               "target": "_self"
@@ -64,7 +76,7 @@
               "target": "_self"
             },
             {
-              "title": "权限",
+              "title": "权限管理",
               "href": "/resources/page/form-step.html",
               "icon": "fa fa-navicon",
               "target": "_self"

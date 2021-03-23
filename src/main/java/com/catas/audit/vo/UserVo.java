@@ -1,16 +1,16 @@
 package com.catas.audit.vo;
 
 import com.catas.audit.entity.UserInfo;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+import java.util.List;
 
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@ToString
 public class UserVo extends UserInfo {
 
     private Integer page = 1;
@@ -19,5 +19,9 @@ public class UserVo extends UserInfo {
     private String code;
 
     private Boolean rememberMe = true;
+
+    private List<Integer> bindHostIds;
+
+    private List<Integer> bindGroupIds;
 }
 

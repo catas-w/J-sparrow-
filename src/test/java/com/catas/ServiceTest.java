@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.catas.audit.dto.RelatedHostDto;
 import com.catas.audit.mapper.BindhostMapper;
 import com.catas.audit.service.IBindhostService;
+import com.catas.audit.service.IHostgroupService;
 import com.catas.audit.service.IUserInfoService;
 import com.catas.audit.vo.RelatedHostVo;
 import com.catas.webssh.config.WebSSHWebSocketConfig;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +34,9 @@ public class ServiceTest {
     @Autowired
     WebSSHWebSocketConfig webSocketConfig;
 
+    @Autowired
+    IHostgroupService hostgroupService;
+
     @Test
     void test1() {
         List<Integer> list = userInfoService.queryGroupIdsByUserId(1);
@@ -49,14 +54,26 @@ public class ServiceTest {
 
     @Test
     void test3() {
-        Set<Integer> set = bindhostService.queryAllRelatedHostIds(1);
-        System.out.println(set);
+        // Set<Integer> set = bindhostService.queryAllRelatedHostIds(1);
+        // System.out.println(set);
+
+        // System.out.println(hostgroupService.getAllGroupInfo());
+        System.out.println("***************************");
+        System.out.println(hostgroupService.queryRelatedGroupIds(1));
+        hostgroupService.updateRelatedGroups(1, Arrays.asList(2,3,4));
+        System.out.println("***************************");
+        System.out.println(hostgroupService.queryRelatedGroupIds(1));
+
     }
 
     @Test
     void test4() {
-        Map<String, String> info = bindhostService.getHostLoginInfo(1);
-        System.out.println(info);
+        System.out.println(bindhostService.queryAllRelatedHostIds(1));
+        System.out.println("----------------------");
+        // bindhostMapper.deleteRelatedHostByUserId(1);
+        // bindhostMapper.saveRelatedHost(1, Arrays.asList(1,2,4));
+        bindhostService.updateUserBindHosts(1, Arrays.asList(5,6,7));
+        System.out.println(bindhostService.queryAllRelatedHostIds(1));
     }
 
     @Test
@@ -67,9 +84,4 @@ public class ServiceTest {
         System.out.println(bindhostService.queryBindHostsByUserGroup(new Page<RelatedHostDto>(1,10), hostVo));
     }
 
-    @Test
-    void test6() {
-        String logPath = webSocketConfig.logPath;
-        System.out.printf(logPath);
-    }
 }

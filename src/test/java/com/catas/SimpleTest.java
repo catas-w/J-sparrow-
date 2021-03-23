@@ -18,6 +18,9 @@ public class SimpleTest {
 
     @Test
     public void test2() {
+        double v = 1.5e-4;
+        long pow = (long) Math.pow(3, 3);
+        "ssss".substring(1);
         System.out.println(Arrays.toString(findRedundantConnection(new int[][]{{1, 2}, {1, 3}, {2, 3}})));
     }
 
@@ -45,7 +48,69 @@ public class SimpleTest {
         return res;
     }
 
+    @Test
+    public void test3() {
+        System.out.println(myPow(2, -2));
+    }
 
+    public double myPow(double x, int n) {
+        if(n == 0)
+            return 1;
+        if (n == 1)
+            return x;
+
+        double res;
+        if (n > 0) {
+            res = myPow(x, n/2);
+            res *= res;
+            if (n % 2 == 1)
+                res *= 2;
+            return res;
+        }else {
+            res = myPow(x, -n/2);
+            res *= res;
+            if (-n % 2 == 1)
+                res *= 2;
+            return 1 / res;
+        }
+    }
+
+    @Test
+    public void isMatch() {
+        System.out.println(reMatch("abc", "a*"));
+        System.out.println(reMatch("aa", "a*"));
+        System.out.println(reMatch("ab", ".*"));
+        System.out.println(reMatch("aab", "c*a*b"));
+        System.out.println(reMatch("ab", ".*c"));
+        System.out.println(reMatch("mississippi", "mis*is*p*."));
+    }
+
+    public boolean reMatch(String str, String pattern) {
+        if (str.length()==0 && pattern.length()==0) {
+            return true;
+        }
+        if (str.length()!=0 && pattern.length()==0) {
+            return false;
+        }
+        // 若 pattern 下一个字符是 *
+        if (pattern.length() > 1 && pattern.charAt(1) == '*') {
+            // 若当前字符匹配
+            if (str.length()>0 && (str.charAt(0) == pattern.charAt(0) || pattern.charAt(0) == '.')) {
+                return reMatch(str, pattern.substring(2))
+                        || reMatch(str.substring(1), pattern.substring(2))
+                        || reMatch(str.substring(1), pattern);
+            }else {
+                // 当前字符不匹配
+                return reMatch(str, pattern.substring(2));
+            }
+
+        }
+        if (str.length()>0 && (str.charAt(0) == pattern.charAt(0) ||  pattern.charAt(0) == '.')){
+            return reMatch(str.substring(1), pattern.substring(1));
+        }else {
+            return false;
+        }
+    }
 }
 
 
