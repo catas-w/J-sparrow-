@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hosts</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/resources/lib/layui-v2.5.5/css/layui.css" media="all">
+    <link rel="stylesheet" href="/resources/css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="" method="post">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">主机名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="hostName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="userName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添 加 </button>
+                <!--<button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs layui-btn-primary data-count-edit" lay-event="edit">编 辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删 除</a>
+        </script>
+
+        <!--修改弹出层-->
+        <div id="addOrUpdateDiv" style="display: none; padding: 10px 5% 10px 10px;">
+            <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
+                <div class="layui-form-item">
+                    <div class="layui-input-block" id="parentDept">
+                        <input type="hidden" name="id" id="userId" disabled>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">主机名</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="hostName" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">IP</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ipAddress" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">机房</label>
+                        <div class="layui-input-block">
+                            <select id="idc-select" name="idcId" lay-verify="required">
+                                <option value="-1">无</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="text-align: center;padding-right: 7%">
+                        <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
+                            class="layui-icon layui-icon-search layui-icon-normal"></i>提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
+                            class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div>
+
+
+</div>
+<script src="/resources/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+        table.render({
+            elem: '#currentTableId',
+            url: '/bindhost/get-all',
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [ [
+                {type: "checkbox", width: 50},
+                {field: 'id', width: 150, title: 'ID', sort: true},
+                {field: 'hostId', width: 180, title: '', hide: true},
+                {field: 'hostUserId', width: 180, title: '', hide: true},
+                {field: 'hostInfo', width: 120, title: '主机', sort: true},
+                {field: 'hostUserInfo', width: 180, title: '用户名'},
+                {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+            ] ],
+            limits: [5, 10, 15],
+            limit: 10,
+            page: true,
+            skin: 'line',
+            done: function (data, curr, count) {
+                //不是第一页时，如果当前返回的数据为0那么就返回上一页
+                if (data.data.length === 0 && curr !== 1) {
+                    tableIns.reload({
+                        page: {
+                            curr: curr - 1
+                        }
+                    })
+                }
+            }
+        });
+
+        // 加载 select
+        $.ajax({
+                url:"/bindhost/get-host-list",
+                type:"GET",
+                dataType:"json",
+                success:function(result){
+                    var list = result.data;    //返回的数据
+                    var server = document.getElementById("idc-select"); //server为select定义的id
+                    for(var p in list){
+                        var option = document.createElement("option");  // 创建添加option属性
+                        option.setAttribute("value",list[p].id); // 给option的value添加值
+                        option.innerText=list[p].name;     // 打印option对应的纯文本
+                        server.appendChild(option);           //给select添加option子标签
+                        form.render("select");            // 刷性select，显示出数据
+                    }
+                },
+                error:function() {
+                    layer.msg("load failed");
+                }
+            }
+        );
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                },
+                where: data.field
+            }, 'data');
+
+            return false;
+        });
+
+        /**
+         * toolbar监听事件
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            switch(obj.event) {
+                case 'add':
+                    openAddLayer(data);
+                    break;
+            }
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            // console.log(obj)
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            // console.log(data);
+            switch (obj.event) {
+                case 'edit':
+                    updateDept(data);
+                    break;
+                case 'delete':
+                    deleteUser(data);
+                    break;
+            }
+        });
+        //删除
+        function deleteUser(data) {
+            layer.confirm('你确定要删除[' + data.name + ']吗？', {icon: 3, title: '提示'}, function (index) {
+                $.post("/bindhost/delete/"+data.id, function (res) {
+                    if (res.code === 200) {
+                        table.reload('currentTableId');
+                    }
+                    layer.msg(res.msg);
+                });
+                layer.close(index);
+            });
+        }
+
+        //打开添加弹出层
+        function openAddLayer() {
+            mainIndex = layer.open({
+                type:1,
+                content:$("#addOrUpdateDiv"),
+                area:['700px','400px'],
+                title:'添加绑定信息',
+                success:function () {
+                    $("#dataFrm")[0].reset();
+                    $("#userId").val("");
+                    url="/bindhost/add";
+                }
+            });
+        }
+
+        //打开修改的弹出层
+        function updateDept(data) {
+            mainIndex = layer.open({
+                type:1,
+                content:$("#addOrUpdateDiv"),
+                area:['700px','400px'],
+                title:'修改绑定',
+                success:function () {
+                    //清空原有的数据
+                    $("#dataFrm")[0].reset();
+                    //装载新的数据
+                    form.val("dataFrm",data);
+                    url="/bindhost/update";
+                }
+            });
+        }
+
+        // 提交表单
+        form.on("submit(doSubmit)",function (data) {
+            // console.log(data.field);
+            var data_field = data.field;
+            if (data_field.hasOwnProperty('enabled')) {
+                data_field.enabled = 1;
+            }else {
+                data_field.enabled = 0;
+            }
+            $.post(url, data.field, function (res) {
+                if (res.code === 200){
+                    table.reload('currentTableId');
+                }
+                layer.msg(res.msg);
+                layer.close(mainIndex);
+            });
+            return false;
+        });
+
+    });
+</script>
+
+</body>
+</html>

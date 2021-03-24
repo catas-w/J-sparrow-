@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class SimpleTest {
 
@@ -111,8 +113,116 @@ public class SimpleTest {
             return false;
         }
     }
-}
 
+    @Test
+    void testIsNum() {
+        // System.out.println(isNumber("233"));
+        // System.out.println(isNumber("2.33"));
+        // System.out.println(isNumber("233e3"));
+        // System.out.println(isNumber("+100"));
+        // System.out.println(isNumber("-100"));
+        // System.out.println(isNumber("+0123"));
+        // System.out.println(isNumber("2.3e3"));
+        // System.out.println(isNumber("2a3.2"));
+        // System.out.println(isNumber("2.3.3"));
+        // System.out.println(isNumber("23e3.3"));
+        System.out.println(isNumber(".1"));
+        System.out.println(isNumber(". 1"));
+        System.out.println(isNumber(" 1.e-3"));
+        System.out.println(isNumber(" e9"));
+    }
+
+    public boolean isNumber(String s) {
+        s = s.strip();
+        int len = s.length();
+        if (len == 0) {
+            return false;
+        }
+        int pos = 0;
+        int next = scanInteger(s, pos);
+        if (next == len && next > pos) {
+            // 扫描数字后且指针到头
+            return true;
+        }
+        if (s.charAt(next) == '.') {
+            next ++;
+            int nextDot = scanUnsignInteger(s, next); // 数组越界风险
+            if (nextDot == len) {
+                // 数组到头
+                return ! (nextDot == next);
+            }
+            next = nextDot;
+        }
+        if (s.charAt(next) == 'e' || s.charAt(next) == 'E') {
+            next ++;
+            int nextE = scanInteger(s, next);
+            if (next == nextE) {
+                // e 后面直接到头
+                return false;
+            }
+            next = nextE;
+        }
+        return next == len;
+    }
+
+    public int scanUnsignInteger(String s, int pos) {
+        // 扫描无符号整数
+        int p = pos;
+        while(p < s.length() && s.charAt(p) >= '0' && s.charAt(p) <= '9') {
+            p ++;
+        }
+        return p;
+    }
+
+    public int scanInteger(String s, int pos) {
+        if (pos == s.length()) {
+            return pos;
+        }
+        if (s.charAt(pos) == '+' || s.charAt(pos) == '-') {
+            pos++;
+        }
+        return scanUnsignInteger(s, pos);
+    }
+
+    @Test
+    void testExchange() {
+
+        System.out.println(Arrays.toString(exchange(new int[]{1, 2, 3, 4, 5})));
+        System.out.println(Arrays.toString(exchange(new int[]{1, 2})));
+        System.out.println(Arrays.toString(exchange(new int[]{1, 1})));
+        System.out.println(Arrays.toString(exchange(new int[]{2,2,2})));
+        System.out.println(Arrays.toString(exchange(new int[]{})));
+        System.out.println(Arrays.toString(exchange(new int[]{1})));
+        System.out.println(Arrays.toString(exchange(new int[]{2,0,0,1})));
+        System.out.println(Arrays.toString(exchange(new int[]{2,2,21,1,1})));
+    }
+
+    public int[] exchange(int[] nums) {
+        int head = 0;
+        int tail = nums.length - 1;
+        while (head < tail) {
+            while (head <= tail && head < nums.length && isOdd(nums[head])) {
+                head ++;
+            }
+            while (tail >= head && tail >= 0 && !isOdd(nums[tail])) {
+                tail --;
+            }
+            if (tail > head) {
+                int temp = nums[head];
+                nums[head] = nums[tail];
+                nums[tail] = temp;
+            }
+        }
+        return nums;
+    }
+
+    public boolean isOdd(int x) {
+        return (x % 2) == 1;
+    }
+
+
+
+}
 
 class UF {
 

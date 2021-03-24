@@ -53,31 +53,25 @@
             },
             {
               "title": "主机登录账户",
-              "href": "/resources/page/form-step.html",
+              "href": "/admin/account",
               "icon": "fa fa-navicon",
               "target": "_self"
             },
             {
               "title": "登录信息绑定",
-              "href": "/resources/page/form-step.html",
+              "href": "/admin/bind-host",
               "icon": "fa fa-navicon",
               "target": "_self"
             },
             {
               "title": "主机组",
-              "href": "/resources/page/form-step.html",
+              "href": "/admin/host-group",
               "icon": "fa fa-navicon",
               "target": "_self"
             },
             {
               "title": "IDC",
-              "href": "/resources/page/form-step.html",
-              "icon": "fa fa-navicon",
-              "target": "_self"
-            },
-            {
-              "title": "权限管理",
-              "href": "/resources/page/form-step.html",
+              "href": "/admin/idc",
               "icon": "fa fa-navicon",
               "target": "_self"
             }

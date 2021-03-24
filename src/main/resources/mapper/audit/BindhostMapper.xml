@@ -156,7 +156,7 @@
     <select id="getAllHostInfo" resultType="hashmap">
         SELECT
             a.id as id,
-            CONCAT(b.host_name,'@',b.ip_address, ':', b.`port`) as hostInfo,
+            CONCAT('[', b.host_name,']',b.ip_address, ':', b.`port`) as hostInfo,
             d.`name` as idc,
             c.username as userName
         FROM

@@ -2,4 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.catas.audit.mapper.HostMapper">
 
+    <select id="getAllHostInfo" resultType="hashmap" parameterType="com.catas.audit.vo.HostVo">
+        select
+            a.id,
+            a.host_name as hostName,
+            a.ip_address as ipAddress,
+            a.port as port,
+            b.id as idcId,
+            b.name as idcName
+        from audit_host as a
+        left join audit_idc as b on a.idc_id = b.id
+        <where>
+            <if test="hostName != null">
+                AND a.host_name like concat('%', #{hostName}, '%')
+            </if>
+            <if test="idcName != null">
+                AND b.name like concat('%', #{idcName}, '%')
+            </if>
+        </where>
+    </select>
+
 </mapper>

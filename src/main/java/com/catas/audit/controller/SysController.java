@@ -62,7 +62,36 @@ public class SysController {
     // 用户管理
     @RequestMapping("/admin/users")
     public String userInfo() {
-        return "audit/users";
+        return "admin/users";
     }
 
+    // 主机信息管理
+    @RequestMapping("/admin/hosts")
+    public String HostInfo() {
+        return "admin/hosts";
+    }
+
+    // 主机登录账户
+    @RequestMapping("/admin/account")
+    public String sshAccount() {
+        return "admin/account";
+    }
+
+    // 主机登录账户
+    @RequestMapping("/admin/bind-host")
+    public String bindHost() {
+        return "admin/bindhost";
+    }
+
+    // 主机登录账户
+    @RequestMapping("/admin/host-group")
+    public String hostGroup() {
+        return "admin/hostgroup";
+    }
+
+    // 主机登录账户
+    @RequestMapping("/admin/idc")
+    public String idc() {
+        return "admin/idc";
+    }
 }

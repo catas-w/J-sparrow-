@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.catas.audit.dto.RelatedHostDto;
 import com.catas.audit.mapper.BindhostMapper;
 import com.catas.audit.service.IBindhostService;
+import com.catas.audit.service.IHostService;
 import com.catas.audit.service.IHostgroupService;
 import com.catas.audit.service.IUserInfoService;
+import com.catas.audit.vo.HostVo;
 import com.catas.audit.vo.RelatedHostVo;
 import com.catas.webssh.config.WebSSHWebSocketConfig;
 import com.catas.webssh.utils.LogUtil;
@@ -37,6 +39,9 @@ public class ServiceTest {
     @Autowired
     IHostgroupService hostgroupService;
 
+    @Autowired
+    IHostService hostService;
+
     @Test
     void test1() {
         List<Integer> list = userInfoService.queryGroupIdsByUserId(1);
@@ -50,6 +55,13 @@ public class ServiceTest {
         // relatedHostVo.setHostName("local");
         relatedHostVo.setIdc("图书馆");
         System.out.println(bindhostService.queryRelatedHosts(new Page<RelatedHostDto>(1,10),relatedHostVo));
+    }
+
+    @Test
+    void test6() {
+        HostVo hostVo = new HostVo();
+        hostVo.setHostName("loca");
+        System.out.println(hostService.getAllHostInfo(hostVo));
     }
 
     @Test
