@@ -33,7 +33,7 @@ public class LoginController {
         // System.out.println("userVo = " + userVo);
         String code = (String) session.getAttribute("code");
         if (userVo.getCode()==null || !userVo.getCode().equals(code)) {
-            // 验证码不正确
+            // TODO: 验证码不正确
         }
 
         Subject subject = SecurityUtils.getSubject();

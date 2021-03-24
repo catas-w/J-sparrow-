@@ -169,6 +169,27 @@
             audit_idc AS d on b.idc_id = d.id
     </select>
 
+    <select id="getAllBindHost" resultType="hashmap" parameterType="com.catas.audit.vo.BindHostVo">
+        select
+            a.id as id,
+            b.id as hostId,
+            c.id as hostUserId,
+            concat(b.host_name, '[', b.ip_address, ']') as hostInfo,
+            c.username as userInfo
+        from
+            audit_bindhost as a
+        join audit_host as b on a.host_id = b.id
+        join audit_hostuser as c on a.host_user_id = c.id
+        <where>
+            <if test="hostName != null">
+                and b.host_name like concat('%', #{hostName}, '%')
+            </if>
+            <if test="userName != null">
+                and c.username like concat('%', #{userName}, '%')
+            </if>
+        </where>
+    </select>
+
     <delete id="deleteRelatedHostByUserId" >
         DELETE
         from

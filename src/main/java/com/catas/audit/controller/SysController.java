@@ -77,19 +77,19 @@ public class SysController {
         return "admin/account";
     }
 
-    // 主机登录账户
+    // bind host
     @RequestMapping("/admin/bind-host")
     public String bindHost() {
         return "admin/bindhost";
     }
 
-    // 主机登录账户
+    // host group
     @RequestMapping("/admin/host-group")
     public String hostGroup() {
-        return "admin/hostgroup";
+        return "admin/hostGroup";
     }
 
-    // 主机登录账户
+    // idc
     @RequestMapping("/admin/idc")
     public String idc() {
         return "admin/idc";

@@ -66,6 +66,7 @@ server:
       persistent: true
       timeout: 36000
 
+# ssh log path/
 ssh:
   log-path: D:/PY_Projects/SpringBootProjects/sparrow/log/audit
 

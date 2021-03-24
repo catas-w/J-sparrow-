@@ -4,6 +4,7 @@ import com.catas.webssh.utils.LogUtil;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -16,6 +17,8 @@ public class SimpleTest {
         // Integer.par
         // Arrays.sort;
         System.out.println(Integer.toString(5, 2));
+        ArrayList<Integer> list = new ArrayList<>();
+
     }
 
     @Test
@@ -116,17 +119,6 @@ public class SimpleTest {
 
     @Test
     void testIsNum() {
-        // System.out.println(isNumber("233"));
-        // System.out.println(isNumber("2.33"));
-        // System.out.println(isNumber("233e3"));
-        // System.out.println(isNumber("+100"));
-        // System.out.println(isNumber("-100"));
-        // System.out.println(isNumber("+0123"));
-        // System.out.println(isNumber("2.3e3"));
-        // System.out.println(isNumber("2a3.2"));
-        // System.out.println(isNumber("2.3.3"));
-        // System.out.println(isNumber("23e3.3"));
-        System.out.println(isNumber(".1"));
         System.out.println(isNumber(". 1"));
         System.out.println(isNumber(" 1.e-3"));
         System.out.println(isNumber(" e9"));
@@ -220,7 +212,57 @@ public class SimpleTest {
         return (x % 2) == 1;
     }
 
+    @Test
+    void testOrder() {
+        System.out.println(Arrays.toString(spiralOrder(new int[][]{{1, 2, 3}, {5, 6, 7, 8}, {9, 10, 11, 12}})));
+        System.out.println(Arrays.toString(spiralOrder(new int[][]{{1}})));
+        System.out.println(Arrays.toString(spiralOrder(new int[][]{{1,2},{2,6},{3,8}})));
+        System.out.println(Arrays.toString(spiralOrder(new int[][]{{}})));
+    }
 
+    public int[] spiralOrder(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int[] path = new int[rows * cols];
+        travelEdge(matrix, 0, rows-1, 0, cols-1, path, 0);
+        return path;
+    }
+
+    public void travelEdge(int[][] matrix, int rowStart, int rowEnd, int colStart, int colEnd, int[] path, int index) {
+        if ((rowStart > rowEnd) || (colStart > colEnd)) {
+            return;
+        }
+        // 第一行
+        for (int j = colStart; j <= colEnd; j++) {
+            path[index++] = matrix[rowStart][j];
+            if (index == path.length) {
+                return;
+            }
+        }
+        // last column
+        for (int i = rowStart + 1; i <= rowEnd; i++) {
+            path[index++] = matrix[i][colEnd];
+            if (index == path.length) {
+                return;
+            }
+        }
+        // 最后行
+        for (int j = colEnd - 1; j >= colStart; j--) {
+            path[index++] = matrix[rowEnd][j];
+            if (index == path.length) {
+                return;
+            }
+        }
+        // first column
+        for (int i = rowEnd - 1; i >= rowStart + 1; i--) {
+            path[index++] = matrix[i][colStart];
+            if (index == path.length) {
+                return;
+            }
+        }
+
+        travelEdge(matrix, rowStart+1, rowEnd-1, colStart+1, colEnd-1, path, index);
+    }
 
 }
 

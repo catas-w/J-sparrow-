@@ -7,6 +7,7 @@ import com.catas.audit.entity.Bindhost;
 import com.catas.audit.mapper.BindhostMapper;
 import com.catas.audit.service.IBindhostService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.catas.audit.vo.BindHostVo;
 import com.catas.audit.vo.RelatedHostVo;
 import org.springframework.stereotype.Service;
 
@@ -65,6 +66,11 @@ public class BindhostServiceImpl extends ServiceImpl<BindhostMapper, Bindhost> i
     @Override
     public List<Map<String, Object>> getAllHostInfo() {
         return this.getBaseMapper().getAllHostInfo();
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllBindHost(BindHostVo bindHostVo) {
+        return this.getBaseMapper().getAllBindHost(bindHostVo);
     }
 
     @Override

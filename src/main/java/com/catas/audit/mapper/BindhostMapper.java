@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.catas.audit.dto.RelatedHostDto;
 import com.catas.audit.entity.Bindhost;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.catas.audit.vo.BindHostVo;
 import com.catas.audit.vo.RelatedHostVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -53,8 +54,11 @@ public interface BindhostMapper extends BaseMapper<Bindhost> {
     // 获取主机登录信息
     Map<String, String> getHostLoginInfo(@Param("id") Integer bindHostId);
 
-    // 获取所有绑定主机信息
+    // 获取所有绑定主机信息 -- 个人信息
     List<Map<String, Object>> getAllHostInfo();
+
+    // 获取所有bind host -- bindHost 管理
+    List<Map<String, Object>> getAllBindHost(BindHostVo bindHostVo);
 
     // 删除用户所有绑定主机
     void deleteRelatedHostByUserId(@Param("userId") Integer id);

@@ -3,7 +3,7 @@
 <mapper namespace="com.catas.audit.mapper.HostgroupMapper">
 
 
-    <select id="getAllGroupInfo" resultType="hashmap">
+    <select id="getAllGroupInfo" resultType="hashmap" parameterType="com.catas.audit.vo.HostGroupVo">
         select
             a.id,
             a.name as groupName,
@@ -15,7 +15,12 @@
                         count(hostgroup_id) as count
                  from audit_hostgroup_bind_hosts
                  group by hostgroup_id
-             ) as b on a.id = b.hostgroup_id;
+             ) as b on a.id = b.hostgroup_id
+        <where>
+            <if test="name != null">
+                and a.name like concat('%', #{name}, '%')
+            </if>
+        </where>
     </select>
 
     <select id="queryRelatedGroupIds" resultType="integer">
@@ -36,6 +41,36 @@
         values
         <foreach collection="hostGroupList" item="gId" separator=",">
             (#{userId}, #{gId})
+        </foreach>
+    </insert>
+
+    <!--获取当前组所有绑定的 bind-host id-->
+    <select id="getAllRelatedBindHostIds" resultType="int">
+        SELECT
+            bindhost_id
+        FROM audit_hostgroup_bind_hosts as a
+        <where>
+            <if test="groupId != null">
+                and a.hostgroup_id = #{groupId}
+            </if>
+        </where>
+    </select>
+
+    <!--删除当前组所有的 bindhost-->
+    <delete id="deleteAllRelatedBindHosts">
+        delete from
+            audit_hostgroup_bind_hosts as a
+        where
+            a.hostgroup_id = #{groupId}
+    </delete>
+
+    <!--新租绑定 bind-host 关系-->
+    <insert id="saveRelatedBindHosts">
+        insert into
+            audit_hostgroup_bind_hosts (hostgroup_id, bindhost_id)
+        VALUES
+        <foreach collection="bindHostIds" item="item" separator=",">
+            (#{groupId}, #{item})
         </foreach>
     </insert>
 </mapper>

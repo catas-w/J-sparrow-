@@ -4,6 +4,8 @@ import com.catas.audit.entity.Hostgroup;
 import com.catas.audit.mapper.HostgroupMapper;
 import com.catas.audit.service.IHostgroupService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.catas.audit.vo.HostGroupVo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,9 +24,15 @@ import java.util.Set;
 public class HostgroupServiceImpl extends ServiceImpl<HostgroupMapper, Hostgroup> implements IHostgroupService {
 
     @Override
-    public List<Map<String, Object>> getAllGroupInfo() {
-        return this.baseMapper.getAllGroupInfo();
+    public List<Map<String, Object>> getAllGroupInfo(HostGroupVo hostGroupVo) {
+        return this.baseMapper.getAllGroupInfo(hostGroupVo);
     }
+
+    @Override
+    public List<Map<String, Object>> getAllGroupInfo() {
+        return getAllGroupInfo(null);
+    }
+
 
     @Override
     public Set<Integer> queryRelatedGroupIds(Integer id) {
@@ -36,5 +44,17 @@ public class HostgroupServiceImpl extends ServiceImpl<HostgroupMapper, Hostgroup
         HostgroupMapper baseMapper = this.baseMapper;
         baseMapper.deleteRelatedGroupByUserId(id);
         baseMapper.saveRelatedGroups(id, gIds);
+    }
+
+    @Override
+    public Set<Integer> getAllRelatedBindHostIds(Integer groupId) {
+        return this.getBaseMapper().getAllRelatedBindHostIds(groupId);
+    }
+
+    @Override
+    public void updateRelatedBindHosts(HostGroupVo hostGroupVo) {
+        HostgroupMapper baseMapper = this.getBaseMapper();
+        baseMapper.deleteAllRelatedBindHosts(hostGroupVo.getId());
+        baseMapper.saveRelatedBindHosts(hostGroupVo.getId(), hostGroupVo.getBindHostIds());
     }
 }
