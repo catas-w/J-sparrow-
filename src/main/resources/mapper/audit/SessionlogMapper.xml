@@ -2,4 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.catas.audit.mapper.SessionlogMapper">
 
+
+    <select id="getALlSessionLogInfo" resultType="hashmap" parameterType="com.catas.audit.vo.SessionLogVo">
+        select
+            a.id as id,
+            a.create_date as createDate,
+            b.name as userInfo,
+            d.host_name as hostName,
+            d.ip_address as ipAddress,
+            e.username as hostUser
+        from audit_sessionlog as a
+        join audit_user_info as b on a.user_id = b.id
+        join audit_bindhost as c on a.bind_host_id = c.id
+        join audit_host as d on c.host_id = d.id
+        join audit_hostuser as e on c.host_user_id = e.id
+        <where>
+            <if test="userName != null">
+                AND b.name like CONCAT('%', #{userName}, '%')
+            </if>
+            <if test="hostName != null">
+                AND d.host_name like CONCAT('%', #{hostName}, '%')
+            </if>
+            <if test="startDate != null">
+                AND DATE(a.create_date) &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND date(a.create_date) &lt;= #{endDate}
+            </if>
+        </where>
+    </select>
 </mapper>

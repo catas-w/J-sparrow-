@@ -1,4 +1,4 @@
-package com.catas.audit.controller;
+package com.catas.audit.controller.admin;
 
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -68,7 +68,7 @@ public class HostController {
     }
 
     /**
-     *  admin
+     *  -------admin--------
      * @return json
      */
     // 获取所有主机信息

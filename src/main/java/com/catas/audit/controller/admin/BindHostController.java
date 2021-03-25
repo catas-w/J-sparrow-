@@ -1,4 +1,4 @@
-package com.catas.audit.controller;
+package com.catas.audit.controller.admin;
 
 
 import com.catas.audit.common.Constant;

@@ -2,6 +2,10 @@ package com.catas.audit.service;
 
 import com.catas.audit.entity.Sessionlog;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.catas.audit.vo.SessionLogVo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +17,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISessionlogService extends IService<Sessionlog> {
 
+    // 获取所有日志信息
+    List<Map<String, Object>> getALlSessionLogInfo(SessionLogVo sessionlogVo);
 }

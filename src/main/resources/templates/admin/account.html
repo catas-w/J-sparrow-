@@ -1,14 +1,6 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>HostAccount</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/resources/lib/layui-v2.5.5/css/layui.css" media="all">
-    <link rel="stylesheet" href="/resources/css/public.css" media="all">
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="common/header"></div>
 <body>
 <div class="layuimini-container">
     <div class="layuimini-main">
@@ -55,14 +47,14 @@
         <!--修改弹出层-->
         <div id="addOrUpdateDiv" style="display: none; padding: 10px 5% 10px 10px;">
             <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
-                <!--<div class="layui-form-item">-->
-                <!--    &lt;!&ndash;<label class="layui-form-label">Id</label>&ndash;&gt;-->
-                <!--    <div class="layui-input-block" id="parentDept">-->
-                <!--        <input type="hidden" name="id" id="userId" disabled>-->
-                <!--    </div>-->
-                <!--</div>-->
                 <div class="layui-form-item">
-                    <div class="layui-inline">
+                    <!--<label class="layui-form-label">Id</label>-->
+                    <div class="layui-input-block" id="parentDept">
+                        <input type="hidden" name="id" id="userId" disabled>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="">
                         <label class="layui-form-label">账户名</label>
                         <div class="layui-input-block">
                             <input type="text" name="username" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
@@ -70,7 +62,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <div class="layui-inline">
+                    <div class="">
                         <label class="layui-form-label">密码</label>
                         <div class="layui-input-block">
                             <input type="text" name="password" lay-verify="required" autocomplete="off" class="layui-input input-radius" >

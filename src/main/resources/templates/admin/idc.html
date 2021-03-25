@@ -11,15 +11,9 @@
                 <form class="layui-form layui-form-pane" action="" method="post">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">主机名</label>
+                            <label class="layui-form-label">IDC名称</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="hostName" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">用户名</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="userName" autocomplete="off" class="layui-input">
+                                <input type="text" name="name" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -33,7 +27,6 @@
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
                 <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添 加 </button>
-                <!--<button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
             </div>
         </script>
 
@@ -48,26 +41,16 @@
         <div id="addOrUpdateDiv" style="display: none; padding: 10px 5% 10px 10px;">
             <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
                 <div class="layui-form-item">
+                    <!--<label class="layui-form-label">Id</label>-->
                     <div class="layui-input-block" id="parentDept">
                         <input type="hidden" name="id" id="userId" disabled>
                     </div>
                 </div>
-
                 <div class="layui-form-item">
                     <div class="">
-                        <label class="layui-form-label">主机</label>
+                        <label class="layui-form-label">IDC名称</label>
                         <div class="layui-input-block">
-                            <select id="host-select" name="hostId" lay-verify="required">
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="">
-                        <label class="layui-form-label">账户</label>
-                        <div class="layui-input-block">
-                            <select id="user-select" name="hostUserId" lay-verify="required">
-                            </select>
+                            <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
                         </div>
                     </div>
                 </div>
@@ -97,7 +80,7 @@
 
         table.render({
             elem: '#currentTableId',
-            url: '/bindhost/get-all',
+            url: '/idc/get-all',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
@@ -107,10 +90,12 @@
             cols: [ [
                 {type: "checkbox", width: 50},
                 {field: 'id', width: 150, title: 'ID', sort: true},
-                {field: 'hostId', width: 180, title: '', hide: true},
-                {field: 'hostUserId', width: 180, title: '', hide: true},
-                {field: 'hostInfo', width: 180, title: '主机', sort: true},
-                {field: 'userInfo', width: 180, title: '账户'},
+                {field: 'name', width: 180, title: 'IDC'},
+                {field: 'hostCount', width: 180, title: '主机数', sort: true},
+                // {field: 'port', width: 120, title: '端口', sort: true},
+                // {field: 'idcName', width: 180, title: '机房'},
+                // {field: 'idcId', width: 180, title: '机房', hide: true},
+                // {field: 'isAdmin', title: '管理员', Width: 80},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ] ],
             limits: [5, 10, 15],
@@ -129,48 +114,6 @@
             }
         });
 
-        // 加载 select
-        $.ajax({
-                url:"/bindhost/get-host-list",
-                type:"GET",
-                dataType:"json",
-                success:function(result){
-                    var list = result.data;    //返回的数据
-                    var server = document.getElementById("host-select"); //server为select定义的id
-                    for(var p in list){
-                        var option = document.createElement("option");  // 创建添加option属性
-                        option.setAttribute("value",list[p].id); // 给option的value添加值
-                        option.innerText=list[p].name;     // 打印option对应的纯文本
-                        server.appendChild(option);           //给select添加option子标签
-                        form.render("select");            // 刷性select，显示出数据
-                    }
-                },
-                error:function() {
-                    layer.msg("load failed");
-                }
-            }
-        );
-
-        $.ajax({
-                url:"/bindhost/get-user-list",
-                type:"GET",
-                dataType:"json",
-                success:function(result){
-                    var list = result.data;    //返回的数据
-                    var server = document.getElementById("user-select"); //server为select定义的id
-                    for(var p in list){
-                        var option = document.createElement("option");  // 创建添加option属性
-                        option.setAttribute("value",list[p].id); // 给option的value添加值
-                        option.innerText=list[p].name;     // 打印option对应的纯文本
-                        server.appendChild(option);           //给select添加option子标签
-                        form.render("select");            // 刷性select，显示出数据
-                    }
-                },
-                error:function() {
-                    layer.msg("load failed");
-                }
-            }
-        );
 
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
@@ -198,10 +141,6 @@
         });
 
         //监听表格复选框选择
-        table.on('checkbox(currentTableFilter)', function (obj) {
-            // console.log(obj)
-        });
-
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
             // console.log(data);
@@ -217,7 +156,7 @@
         //删除
         function deleteUser(data) {
             layer.confirm('你确定要删除[' + data.name + ']吗？', {icon: 3, title: '提示'}, function (index) {
-                $.post("/bindhost/delete/"+data.id, function (res) {
+                $.post("/idc/delete/"+data.id, function (res) {
                     if (res.code === 200) {
                         table.reload('currentTableId');
                     }
@@ -232,12 +171,12 @@
             mainIndex = layer.open({
                 type:1,
                 content:$("#addOrUpdateDiv"),
-                area:['500px','350px'],
-                title:'添加绑定信息',
+                area:['500px','300px'],
+                title:'添加主机',
                 success:function () {
                     $("#dataFrm")[0].reset();
                     $("#userId").val("");
-                    url="/bindhost/add";
+                    url="/idc/add";
                 }
             });
         }
@@ -247,14 +186,14 @@
             mainIndex = layer.open({
                 type:1,
                 content:$("#addOrUpdateDiv"),
-                area:['500px','350px'],
-                title:'修改绑定',
+                area:['500px','300px'],
+                title:'修改用户信息',
                 success:function () {
                     //清空原有的数据
                     $("#dataFrm")[0].reset();
                     //装载新的数据
                     form.val("dataFrm",data);
-                    url="/bindhost/update";
+                    url="/idc/update";
                 }
             });
         }
@@ -262,7 +201,12 @@
         // 提交表单
         form.on("submit(doSubmit)",function (data) {
             // console.log(data.field);
-            // var data_field = data.field;
+            var data_field = data.field;
+            if (data_field.hasOwnProperty('enabled')) {
+                data_field.enabled = 1;
+            }else {
+                data_field.enabled = 0;
+            }
             $.post(url, data.field, function (res) {
                 if (res.code === 200){
                     table.reload('currentTableId');

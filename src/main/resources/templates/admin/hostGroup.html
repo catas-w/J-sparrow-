@@ -1,14 +1,6 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Hosts</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/resources/lib/layui-v2.5.5/css/layui.css" media="all">
-    <link rel="stylesheet" href="/resources/css/public.css" media="all">
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="common/header"></div>
 <body>
 <div class="layuimini-container">
     <div class="layuimini-main">
@@ -56,7 +48,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <div class="layui-inline">
+                    <div class="">
                         <label class="layui-form-label">主机组</label>
                         <div class="layui-input-block">
                             <input type="text" name="groupName" lay-verify="required" autocomplete="off" class="layui-input input-radius" >

@@ -2,4 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.catas.audit.mapper.IdcMapper">
 
+
+    <select id="getAllIdcInfo" resultType="hashmap">
+        select
+            a.id as id,
+            a.name as name,
+            ifnull(b.cnt, 0) as hostCount
+        from audit_idc as a
+        left join
+             (
+                 select idc_id, count(*) as cnt
+                 from audit_host
+                 group by idc_id) as b
+             on a.id = b.idc_id
+        <where>
+            <if test="name != null">
+                and a.name like concat('%', #{name}, '%')
+            </if>
+        </where>
+    </select>
 </mapper>

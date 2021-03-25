@@ -4,7 +4,11 @@ import com.catas.audit.entity.Sessionlog;
 import com.catas.audit.mapper.SessionlogMapper;
 import com.catas.audit.service.ISessionlogService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.catas.audit.vo.SessionLogVo;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -17,4 +21,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class SessionlogServiceImpl extends ServiceImpl<SessionlogMapper, Sessionlog> implements ISessionlogService {
 
+    @Override
+    public List<Map<String, Object>> getALlSessionLogInfo(SessionLogVo sessionlogVo) {
+        return this.getBaseMapper().getALlSessionLogInfo(sessionlogVo);
+    }
 }

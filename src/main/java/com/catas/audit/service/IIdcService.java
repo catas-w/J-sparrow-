@@ -2,6 +2,11 @@ package com.catas.audit.service;
 
 import com.catas.audit.entity.Idc;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.catas.audit.vo.IdcVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +18,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IIdcService extends IService<Idc> {
 
+    // 查询所有 IDC 信息
+    List<Map<String, Object>> getAllIdcInfo(IdcVo idcVo);
 }

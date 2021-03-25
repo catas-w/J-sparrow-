@@ -1,4 +1,4 @@
-package com.catas.audit.controller;
+package com.catas.audit.controller.admin;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
