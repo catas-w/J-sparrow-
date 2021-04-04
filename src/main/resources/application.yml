@@ -109,4 +109,5 @@ server:
 # ssh log path/
 ssh:
   log-path: D:/PY_Projects/SpringBootProjects/sparrow/log/audit
-
+  schedule-log-path: D:/PY_Projects/SpringBootProjects/sparrow/log/glimmer
+  maxRows: 1000

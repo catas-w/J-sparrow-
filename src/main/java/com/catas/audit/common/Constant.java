@@ -12,4 +12,14 @@ public class Constant {
     public static final Integer AUTH_SSL = 1;
 
     public static final String DEFAULT_PWS = "123456";
+
+    // ---------- glimmer ------------
+    public static final Integer EXEC_COMMAND_TASK = 0;
+    public static final Integer EXEC_SCP_TASK = 1;
+
+    public static final Integer TASK_STATUS_CLOSED = 0;
+    public static final Integer TASK_STATUS_RUNNING = 1;
+    public static final Integer TASK_STATUS_PAUSED = 2;
+    public static final Integer TASK_STATUS_FAILED = 3;
+
 }

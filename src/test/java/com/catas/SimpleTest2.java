@@ -42,7 +42,7 @@ public class SimpleTest2 {
           每一轮的组合数 f(n,s)=f(n-1,s-1)+f(n-1,s-2)+f(n-1,s-3)+f(n-1,s-4)+f(n-1,s-5)+f(n-1,s-6)
           p(n, s) = f(n, s) / 6^n
          */
-        double total = Math.pow(n, 6);
+        double total = Math.pow(6, n);
         int[][] dp = new int[n][max + 1];
 
         for (int i=1; i<=6; i++) {
@@ -51,7 +51,7 @@ public class SimpleTest2 {
         for (int i=1; i<n; i++) {
             // 每一轮min=i+1, max=n*6
             for (int j=i+1; j<=max; j++) {
-                for (int k=0; k<6; k++) {
+                for (int k=1; k<=6; k++) {
                     dp[i][j] += (j-k >= 0) ? dp[i-1][j-k] : 0;
                 }
             }

@@ -3,11 +3,12 @@
 <mapper namespace="com.catas.glimmer.mapper.PlanMapper">
 
 
-    <select id="getRelatedJobs" resultType="com.catas.glimmer.entity.Job">
+    <select id="getRelatedJobs" resultType="hashmap">
         SELECT
             *
         from glimmer_job
         where plan_id = #{planId}
+        order by `order`
     </select>
 
     <select id="getRelatedBindHosts" resultType="hashmap">

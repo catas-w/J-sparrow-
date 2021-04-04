@@ -19,7 +19,7 @@ import java.util.Map;
 public interface PlanMapper extends BaseMapper<Plan> {
 
     // 获取关联 job
-    List<Job> getRelatedJobs(@Param("planId") Integer id);
+    List<Map<String, Object>> getRelatedJobs(@Param("planId") Integer id);
 
     // 关联主机信息
     List<Map<String, Object>> getRelatedBindHosts(@Param("planId") Integer planId);

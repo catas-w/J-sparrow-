@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import java.util.Date;
 
 
@@ -27,6 +28,16 @@ public class PlanController {
     @Autowired
     private SchedulerFactoryBean schedulerFactoryBean;
 
+    @PostConstruct
+    public void initPlan() {
+        synchronized (log) {
+            try {
+                planService.restartAllPlan();
+            } catch (SchedulerException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * @Description: start a schedule plan

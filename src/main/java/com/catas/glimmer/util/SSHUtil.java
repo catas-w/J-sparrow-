@@ -1,20 +1,27 @@
 package com.catas.glimmer.util;
 
+import com.catas.webssh.utils.LogUtil;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+@Slf4j
+@Component
 public class SSHUtil {
 
-    public static String execCommand(String cmd, String host, int port, String username, String password) {
-        return SSHUtil.execCommand(cmd, host, port, username, password, 15);
+    public String execCommand(String cmd, String host, int port, String username, String password) {
+        return this.execCommand(cmd, host, port, username, password, 15 * 1000);
     }
 
-    public static String execCommand(String cmd, String host, int port,String username, String password, int timeout) {
+    public String execCommand(String cmd, String host, int port,String username, String password, int timeout) {
         JSch jSch = new JSch();
         Session session = null;
         ChannelExec channelExec = null;
@@ -22,6 +29,7 @@ public class SSHUtil {
         BufferedReader errInputStreamReader = null;
         StringBuilder runLog = new StringBuilder("");
         StringBuilder errLog = new StringBuilder("");
+        runLog.append("Trying to connect to host: ").append(username).append("@").append(host).append("\n");
         try {
             // 1. 获取 ssh session
             session = jSch.getSession(username, host, port);
@@ -30,6 +38,8 @@ public class SSHUtil {
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect();  // 获取到 ssh session
 
+            runLog.append("Connect success.\n");
+            runLog.append("Executing command: ").append(cmd).append("\n");
             // 2. 通过 exec 方式执行 shell 命令
             channelExec = (ChannelExec) session.openChannel("exec");
             channelExec.setCommand(cmd);
@@ -49,7 +59,7 @@ public class SSHUtil {
             // 6. 记录命令执行错误 log
             String errLine = null;
             while ((errLine = errInputStreamReader.readLine()) != null) {
-                errLog.append(errLine).append("\n");
+                runLog.append(errLine).append("\n");
             }
 
             // 7. 输出 shell 命令执行日志
@@ -57,10 +67,9 @@ public class SSHUtil {
                     + channelExec.isClosed());
             System.out.println("命令执行完成，执行日志如下:");
             System.out.println(runLog.toString());
-            System.out.println("命令执行完成，执行错误日志如下:");
-            System.out.println(errLog.toString());
         } catch (Exception e) {
             e.printStackTrace();
+            runLog.append("Error occurred, 执行任务中出错!").append(e.getMessage()).append("\n");
         } finally {
             try {
                 if (inputStreamReader != null) {

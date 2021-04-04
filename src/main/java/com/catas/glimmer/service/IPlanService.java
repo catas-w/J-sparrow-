@@ -20,7 +20,7 @@ import java.util.Map;
 public interface IPlanService extends IService<Plan> {
 
     // 获取关联 job
-    List<Job> getRelatedJobs(Plan plan);
+    List<Map<String, Object>> getRelatedJobs(Plan plan);
 
     // 获取 dataMap
     JobDataMap getJobDataMap(Plan plan);

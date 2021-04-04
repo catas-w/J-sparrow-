@@ -39,6 +39,8 @@ public class SimpleTest {
         // SSHUtil sshUtil = new SSHUtil("127.0.0.1", "catas", "eminem");
         // String log = sshUtil.execCommand("ls -lh; ls -a");
         // System.out.println(log);
+        SSHUtil sshUtil = new SSHUtil();
+        // sshUtil.execCommand("ls ", "127.0.0.1", 22, "catas", "eminem");
     }
 
     @Test

@@ -9,15 +9,14 @@ import com.catas.glimmer.service.IJobBindHostService;
 import com.catas.glimmer.service.IJobService;
 import com.catas.glimmer.service.IPlanService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.catas.webssh.utils.LogUtil;
 import org.quartz.*;
+import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -39,8 +38,11 @@ public class PlanServiceImpl extends ServiceImpl<PlanMapper, Plan> implements IP
     @Autowired
     private SchedulerFactoryBean schedulerFactoryBean;
 
+    @Autowired
+    private LogUtil logUtil;
+
     @Override
-    public List<Job> getRelatedJobs(Plan plan) {
+    public List<Map<String, Object>> getRelatedJobs(Plan plan) {
         return this.getBaseMapper().getRelatedJobs(plan.getId());
     }
 
@@ -61,6 +63,7 @@ public class PlanServiceImpl extends ServiceImpl<PlanMapper, Plan> implements IP
         dataMap.put("plan", plan);
         dataMap.put("tasks", getRelatedJobs(plan));
         dataMap.put("bindHosts", getRelatedBindHosts(plan));
+        dataMap.put("logFile", logUtil.initScheduleLog(plan));
         return dataMap;
     }
 
@@ -89,7 +92,19 @@ public class PlanServiceImpl extends ServiceImpl<PlanMapper, Plan> implements IP
 
     @Override
     public void restartAllPlan() throws SchedulerException {
-
+        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+        Set<JobKey> set = scheduler.getJobKeys(GroupMatcher.anyGroup());
+        scheduler.pauseJobs(GroupMatcher.anyGroup());
+        for (JobKey jobKey : set) {                                                 //删除从数据库中注册的所有JOB
+            scheduler.unscheduleJob(TriggerKey.triggerKey(jobKey.getName(), jobKey.getGroup()));
+            scheduler.deleteJob(jobKey);
+        }
+        QueryWrapper<Plan> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("enabled", 1);
+        List<Plan> planList = this.list(queryWrapper);
+        for (Plan plan : planList) {
+            startPlan(plan);
+        }
     }
 
     @Override
