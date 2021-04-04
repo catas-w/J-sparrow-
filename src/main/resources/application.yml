@@ -9,7 +9,7 @@ spring:
       max-active: 20
       max-wait: 5000
       initial-size: 1
-      filters: stat,log4j,wall
+#      filters: stat,log4j,wall
       validation-query: SELECT 'X'   #验证连接
       enable: true
       #监控配置
@@ -32,6 +32,46 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+
+  quartz:
+    scheduler-name: clusteredScheduler # Scheduler 名字。默认为 schedulerName
+    job-store-type: jdbc # Job 存储器类型。默认为 memory 表示内存，可选 jdbc 使用数据库。
+    auto-startup: true # Quartz 是否自动启动
+    startup-delay: 0 # 延迟 N 秒启动
+    wait-for-jobs-to-complete-on-shutdown: true # 应用关闭时，是否等待定时任务执行完成。默认为 false ，建议设置为 true
+    overwrite-existing-jobs: false # 是否覆盖已有 Job 的配置
+#    properties: # 添加 Quartz Scheduler 附加属性
+#      org:
+#        quartz:
+#          # JobStore 相关配置
+#          jobStore:
+#            # 数据源名称
+#            dataSource: myDataSource # 使用的数据源
+#            class: org.quartz.impl.jdbcjobstore.JobStoreTX # JobStore 实现类
+#            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+#            tablePrefix: glimmer_ # Quartz 表前缀
+#            isClustered: false # 是集群模式
+#            clusterCheckinInterval: 1000
+#            useProperties: false
+#          # 线程池相关配置
+#          threadPool:
+#            threadCount: 25 # 线程池大小。默认为 10 。
+#            threadPriority: 5 # 线程优先级
+#            class: org.quartz.simpl.SimpleThreadPool # 线程池类型
+#          #配置数据库源
+#          dataSource:
+#            myDataSource:
+#              connectionProvider:
+#                class: com.catas.glimmer.config.DruidConnectionProvider
+#              driver: com.mysql.cj.jdbc.Driver
+#              url: jdbc:mysql://127.0.0.1:3306/fortress?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+#              username: root
+#              password: eminem
+#              maxConnection: 50
+
+#    jdbc: # 使用 JDBC 的 JobStore 的时候，JDBC 的配置
+#      initialize-schema: never # 是否自动使用 SQL 初始化 Quartz 表结构。
+
 
 #配置mybatisplus
 mybatis-plus:

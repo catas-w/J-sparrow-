@@ -59,6 +59,7 @@ public class HostController {
         Page<RelatedHostDto> page = new Page<>(relatedHostVo.getPage(), relatedHostVo.getLimit());
 
         if (relatedHostVo.getGroupId() == null){
+            // TODO: 改为全部主机
             bindhostService.queryRelatedHosts(page, relatedHostVo);
         }else {
             bindhostService.queryBindHostsByUserGroup(page, relatedHostVo);

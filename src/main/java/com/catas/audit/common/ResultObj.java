@@ -30,4 +30,10 @@ public class ResultObj {
     public static final ResultObj DELETE_SUCCESS = new ResultObj(Constant.OK, "删除成功");
     public static final ResultObj DELETE_FAILED = new ResultObj(Constant.ERROR, "删除失败");
 
+    //  ------------- glimmer -----------
+    public static final ResultObj PLAN_UNABLE = new ResultObj(Constant.ERROR, "任务未激活");
+    public static final ResultObj PLAN_START_SUCCESS = new ResultObj(Constant.OK, "任务已启动");
+    public static final ResultObj PLAN_START_FAILED = new ResultObj(Constant.ERROR, "任务启动失败");
+
+
 }

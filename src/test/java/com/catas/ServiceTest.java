@@ -1,7 +1,9 @@
 package com.catas;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.catas.audit.dto.RelatedHostDto;
+import com.catas.audit.entity.UserInfo;
 import com.catas.audit.mapper.BindhostMapper;
 import com.catas.audit.service.IBindhostService;
 import com.catas.audit.service.IHostService;
@@ -9,6 +11,11 @@ import com.catas.audit.service.IHostgroupService;
 import com.catas.audit.service.IUserInfoService;
 import com.catas.audit.vo.HostVo;
 import com.catas.audit.vo.RelatedHostVo;
+import com.catas.glimmer.entity.Job;
+import com.catas.glimmer.entity.Plan;
+import com.catas.glimmer.service.IJobService;
+import com.catas.glimmer.service.IPlanService;
+import com.catas.glimmer.util.SSHUtil;
 import com.catas.webssh.config.WebSSHWebSocketConfig;
 import com.catas.webssh.utils.LogUtil;
 import org.junit.jupiter.api.Test;
@@ -42,10 +49,18 @@ public class ServiceTest {
     @Autowired
     IHostService hostService;
 
+    @Autowired
+    private IJobService jobService;
+
+    @Autowired
+    private IPlanService planService;
+
     @Test
     void test1() {
-        List<Integer> list = userInfoService.queryGroupIdsByUserId(1);
-        System.out.println(list);
+        // List<Job> relatedJobs = planMapper.getRelatedJobs(plan.getId());
+        Plan plan = planService.getById(1);
+        List<Map<String, Object>> maps = planService.getRelatedBindHosts(plan);
+        System.out.println(maps);
     }
 
     @Test
@@ -95,5 +110,6 @@ public class ServiceTest {
         // hostVo.setGroupId(1);
         System.out.println(bindhostService.queryBindHostsByUserGroup(new Page<RelatedHostDto>(1,10), hostVo));
     }
+
 
 }

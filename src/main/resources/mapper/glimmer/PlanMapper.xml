@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.catas.glimmer.mapper.PlanMapper">
+
+
+    <select id="getRelatedJobs" resultType="com.catas.glimmer.entity.Job">
+        SELECT
+            *
+        from glimmer_job
+        where plan_id = #{planId}
+    </select>
+
+    <select id="getRelatedBindHosts" resultType="hashmap">
+        SELECT
+            b.id as bindHostId,
+            c.ip_address as ipAddress,
+            c.`port` as port,
+            d.username as userName,
+            d.`password` as password
+        FROM
+            glimmer_plan_bind_host as a
+            JOIN audit_bindhost as b on a.bind_host_id = b.id
+            JOIN audit_host as c on b.host_id = c.id
+            JOIN audit_hostuser as d on b.host_user_id = d.id
+        WHERE a.plan_id = #{planId}
+    </select>
+
+</mapper>

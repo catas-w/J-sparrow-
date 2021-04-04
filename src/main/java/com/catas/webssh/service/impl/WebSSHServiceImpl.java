@@ -30,8 +30,6 @@ import java.util.concurrent.Executors;
 
 /**
 * @Description: WebSSH业务逻辑实现
-* @Author: NoCortY
-* @Date: 2020/3/8
 */
 @Service
 public class WebSSHServiceImpl implements WebSSHService {
@@ -52,10 +50,6 @@ public class WebSSHServiceImpl implements WebSSHService {
 
     /**
      * @Description: 初始化连接
-     * @Param: [session]
-     * @return: void
-     * @Author: NoCortY
-     * @Date: 2020/3/7
      */
     @Override
     public void initConnection(WebSocketSession session) {
@@ -70,10 +64,6 @@ public class WebSSHServiceImpl implements WebSSHService {
 
     /**
      * @Description: 处理客户端发送的数据
-     * @Param: [buffer, session]
-     * @return: void
-     * @Author: NoCortY
-     * @Date: 2020/3/7
      */
     @Override
     public void recvHandle(String buffer, WebSocketSession session) {
@@ -193,10 +183,6 @@ public class WebSSHServiceImpl implements WebSSHService {
 
     /**
      * @Description: 使用jsch连接终端
-     * @Param: [cloudSSH, webSSHData, webSocketSession]
-     * @return: void
-     * @Author: NoCortY
-     * @Date: 2020/3/7
      */
     private void connectToSSH(SSHConnectInfo sshConnectInfo, WebSSHData webSSHData, WebSocketSession webSocketSession, String uuId) throws JSchException, IOException {
 
@@ -259,7 +245,6 @@ public class WebSSHServiceImpl implements WebSSHService {
             while ((i = inputStream.read(buffer)) != -1) {
                 sendMessage(sshConnectInfo, webSocketSession, Arrays.copyOfRange(buffer, 0, i));
             }
-
         } finally {
             //断开连接后关闭会话
             session.disconnect();
@@ -273,10 +258,6 @@ public class WebSSHServiceImpl implements WebSSHService {
 
     /**
      * @Description: 将消息转发到终端
-     * @Param: [channel, data]
-     * @return: void
-     * @Author: NoCortY
-     * @Date: 2020/3/7
      */
     private void transToSSH(SSHConnectInfo sshConnectInfo, String command) throws IOException {
         // 记录命令
