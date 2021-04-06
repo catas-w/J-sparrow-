@@ -120,6 +120,30 @@
         </where>
     </select>
 
+    <!--查寻用户所有主机信息-->
+    <select id="queryAllBHostByBHostIds" resultType="com.catas.audit.dto.RelatedHostDto">
+        SELECT
+            b.id as id,
+            c.host_name as host_name,
+            c.ip_address as ip_address,
+            c.idc_id as idc_id,
+            c.`port` as port,
+            c.enabled as enabled,
+            d.username as username,
+            d.auth_type as auth_type,
+            e.name as idc
+        FROM
+            audit_bindhost AS b
+            JOIN audit_host AS c on b.host_id = c.id
+            JOIN audit_hostuser AS d on b.host_user_id = d.id
+            join audit_idc as e on e.id = c.idc_id
+        WHERE
+            b.id IN
+            <foreach collection="bHostIds" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+    </select>
+
 
     <select id="queryRelatedHostIds" resultType="integer">
         <include refid="getRelatedHostIds"/>

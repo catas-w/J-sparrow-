@@ -111,13 +111,13 @@
           "child": [
             {
               "title": "任务设置",
-              "href": "/resources/page/404.html",
+              "href": "/glimmer",
               "icon": "fa fa-hourglass-end",
               "target": "_self"
             },
             {
               "title": "任务日志",
-              "href": "/resources/page/404.html",
+              "href": "/glimmer/log",
               "icon": "fa fa-hourglass-end",
               "target": "_self"
             }

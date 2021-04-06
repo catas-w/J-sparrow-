@@ -1,8 +1,12 @@
 package com.catas.glimmer.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.catas.glimmer.entity.Job;
 import com.catas.glimmer.entity.Plan;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.catas.glimmer.vo.PlanVo;
+import org.apache.ibatis.annotations.Param;
 import org.quartz.*;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,9 @@ import java.util.Map;
  * @since 2021-04-03
  */
 public interface IPlanService extends IService<Plan> {
+
+    // 获取所有计划信息
+    List<PlanVo> getAllPlanInfo(IPage<PlanVo> page, @Param("userId") Integer id);
 
     // 获取关联 job
     List<Map<String, Object>> getRelatedJobs(Plan plan);

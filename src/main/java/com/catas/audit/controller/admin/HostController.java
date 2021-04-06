@@ -1,6 +1,7 @@
 package com.catas.audit.controller.admin;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.catas.audit.common.ActiveUser;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -58,14 +60,16 @@ public class HostController {
         relatedHostVo.setUserId(activeUser.getUserInfo().getId());
         Page<RelatedHostDto> page = new Page<>(relatedHostVo.getPage(), relatedHostVo.getLimit());
 
+        IPage<RelatedHostDto> hostsByUserGroup = bindhostService.queryBindHostsByUserGroup(page, relatedHostVo);
+        HashSet<RelatedHostDto> hostSet = new HashSet<>(hostsByUserGroup.getRecords());
+
         if (relatedHostVo.getGroupId() == null){
             // TODO: 改为全部主机
-            bindhostService.queryRelatedHosts(page, relatedHostVo);
-        }else {
-            bindhostService.queryBindHostsByUserGroup(page, relatedHostVo);
+            IPage<RelatedHostDto> ungroupedHosts = bindhostService.queryRelatedHosts(page, relatedHostVo);
+            hostSet.addAll(ungroupedHosts.getRecords());
         }
 
-        return new DataGridView(page.getTotal(), page.getRecords());
+        return new DataGridView((long) hostSet.size(), hostSet);
     }
 
     /**

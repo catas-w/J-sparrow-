@@ -22,4 +22,8 @@ public class Constant {
     public static final Integer TASK_STATUS_PAUSED = 2;
     public static final Integer TASK_STATUS_FAILED = 3;
 
+    public static final Integer PLAN_STATUS_CLOSED = 0;
+    public static final Integer PLAN_STATUS_RUNNING = 1;
+    public static final Integer PLAN_STATUS_PAUSED = 2;
+    public static final Integer PLAN_STATUS_FAILED = 3;
 }

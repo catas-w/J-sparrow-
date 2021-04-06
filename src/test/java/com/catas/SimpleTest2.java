@@ -104,11 +104,43 @@ public class SimpleTest2 {
 
     @Test
     void testSingNum() {
-        // int[][] sequence = findContinuousSequence(9);
-        // System.out.println(Arrays.deepToString(sequence));
-        System.out.println(reverseWords("the sky is blue"));
-        System.out.println(reverseWords("  hello world!  "));
-        System.out.println(reverseWords("a good   example"));
+        System.out.println(Arrays.toString(maxSlidingWindow(new int[]{1, 3, -1, -3, 5, 3, 6, 7}, 3)));
+    }
+
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums.length == 0) {
+            return new int[0];
+        }
+        // 单调队列
+        Queue<Integer> queue = new LinkedList<>();
+        Deque<Integer> maxQueue = new LinkedList<>();
+        int[] res = new int[nums.length - k + 1];
+        // 初始化队列
+        for (int i=0; i<k; i++) {
+            queue.add(nums[i]);
+            while (!maxQueue.isEmpty() && nums[i] > maxQueue.peekLast()) {
+                maxQueue.pollLast();
+            }
+            maxQueue.addLast(nums[i]);
+        }
+        // 滑动
+        int index = 0;
+        res[index++] = maxQueue.peekFirst();
+        for (int i=k; i<nums.length; i++) {
+
+            int val = queue.poll();
+            if (val == maxQueue.peekFirst()) {
+                maxQueue.pollFirst();
+            }
+            queue.add(nums[i]);
+            while (!maxQueue.isEmpty() && nums[i] > maxQueue.peekLast()) {
+                maxQueue.pollLast();
+            }
+            maxQueue.addLast(nums[i]);
+
+            res[index++] = maxQueue.peekFirst();
+        }
+        return res;
     }
 
     public String reverseWords(String s) {

@@ -1,6 +1,7 @@
 package com.catas;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.catas.audit.dto.RelatedHostDto;
 import com.catas.audit.entity.UserInfo;
@@ -16,6 +17,7 @@ import com.catas.glimmer.entity.Plan;
 import com.catas.glimmer.service.IJobService;
 import com.catas.glimmer.service.IPlanService;
 import com.catas.glimmer.util.SSHUtil;
+import com.catas.glimmer.vo.PlanVo;
 import com.catas.webssh.config.WebSSHWebSocketConfig;
 import com.catas.webssh.utils.LogUtil;
 import org.junit.jupiter.api.Test;
@@ -65,50 +67,10 @@ public class ServiceTest {
 
     @Test
     void test2() {
-        RelatedHostVo relatedHostVo = new RelatedHostVo();
-        relatedHostVo.setUserId(1);
-        // relatedHostVo.setHostName("local");
-        relatedHostVo.setIdc("图书馆");
-        System.out.println(bindhostService.queryRelatedHosts(new Page<RelatedHostDto>(1,10),relatedHostVo));
-    }
-
-    @Test
-    void test6() {
-        HostVo hostVo = new HostVo();
-        hostVo.setHostName("loca");
-        System.out.println(hostService.getAllHostInfo(hostVo));
-    }
-
-    @Test
-    void test3() {
-        // Set<Integer> set = bindhostService.queryAllRelatedHostIds(1);
-        // System.out.println(set);
-
-        // System.out.println(hostgroupService.getAllGroupInfo());
-        System.out.println("***************************");
-        System.out.println(hostgroupService.queryRelatedGroupIds(1));
-        hostgroupService.updateRelatedGroups(1, Arrays.asList(2,3,4));
-        System.out.println("***************************");
-        System.out.println(hostgroupService.queryRelatedGroupIds(1));
-
-    }
-
-    @Test
-    void test4() {
-        System.out.println(bindhostService.queryAllRelatedHostIds(1));
-        System.out.println("----------------------");
-        // bindhostMapper.deleteRelatedHostByUserId(1);
-        // bindhostMapper.saveRelatedHost(1, Arrays.asList(1,2,4));
-        bindhostService.updateUserBindHosts(1, Arrays.asList(5,6,7));
-        System.out.println(bindhostService.queryAllRelatedHostIds(1));
-    }
-
-    @Test
-    void test5() {
-        RelatedHostVo hostVo = new RelatedHostVo();
-        hostVo.setUserId(1);
-        // hostVo.setGroupId(1);
-        System.out.println(bindhostService.queryBindHostsByUserGroup(new Page<RelatedHostDto>(1,10), hostVo));
+        // System.out.println(">>>>>>>>>>>>>>>>>>>");
+        // IPage<Plan> page = new Page<>(1,10);
+        // List<Plan> allPlanInfo = planService.getAllPlanInfo(page, 1);
+        // System.out.println(allPlanInfo);
     }
 
 

@@ -1,6 +1,8 @@
 package com.catas.glimmer.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.catas.glimmer.entity.Job;
 import com.catas.glimmer.entity.Plan;
 import com.catas.glimmer.job.SchedulePlan;
@@ -9,6 +11,7 @@ import com.catas.glimmer.service.IJobBindHostService;
 import com.catas.glimmer.service.IJobService;
 import com.catas.glimmer.service.IPlanService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.catas.glimmer.vo.PlanVo;
 import com.catas.webssh.utils.LogUtil;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
@@ -40,6 +43,11 @@ public class PlanServiceImpl extends ServiceImpl<PlanMapper, Plan> implements IP
 
     @Autowired
     private LogUtil logUtil;
+
+    @Override
+    public List<PlanVo> getAllPlanInfo(IPage<PlanVo> page, Integer id) {
+        return this.getBaseMapper().getAllPlanInfo(page, id);
+    }
 
     @Override
     public List<Map<String, Object>> getRelatedJobs(Plan plan) {

@@ -1,8 +1,11 @@
 package com.catas.glimmer.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.catas.glimmer.entity.Job;
 import com.catas.glimmer.entity.Plan;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.catas.glimmer.vo.PlanVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,4 +27,6 @@ public interface PlanMapper extends BaseMapper<Plan> {
     // 关联主机信息
     List<Map<String, Object>> getRelatedBindHosts(@Param("planId") Integer planId);
 
+    // 获取所有计划信息
+    List<PlanVo> getAllPlanInfo(IPage<PlanVo> page, @Param("userId") Integer id);
 }

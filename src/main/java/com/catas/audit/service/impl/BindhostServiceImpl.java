@@ -40,6 +40,15 @@ public class BindhostServiceImpl extends ServiceImpl<BindhostMapper, Bindhost> i
                 relatedHostVo.getGroupId(), relatedHostVo.getHostName(), relatedHostVo.getIdc());
     }
 
+    /**
+     * @Description:  查寻用户所有主机信息
+     */
+    @Override
+    public IPage<RelatedHostDto> queryAllBHostByBHostIds(Page<RelatedHostDto> page, RelatedHostVo relatedHostVo) {
+        Set<Integer> hostIds = this.queryAllRelatedHostIds(relatedHostVo.getUserId());
+        return this.getBaseMapper().queryAllBHostByBHostIds(page, hostIds);
+    }
+
     public List<Integer> queryRelatedHostIds(Integer userId) {
         return this.getBaseMapper().queryRelatedHostIds(userId);
     }

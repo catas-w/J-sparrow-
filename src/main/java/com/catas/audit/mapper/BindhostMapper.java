@@ -42,6 +42,9 @@ public interface BindhostMapper extends BaseMapper<Bindhost> {
             @Param("idc") String idc
     );
 
+    // 查寻用户所有主机信息
+    IPage<RelatedHostDto> queryAllBHostByBHostIds(Page<RelatedHostDto> page, @Param("bHostIds") Set<Integer> bHostIds);
+
     // 根据用户id获取直接关联的 bindHost id
     List<Integer> queryRelatedHostIds(@Param("userId")  Integer userId);
 

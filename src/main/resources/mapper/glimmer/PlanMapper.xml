@@ -26,4 +26,13 @@
         WHERE a.plan_id = #{planId}
     </select>
 
+    <!--获取所有计划信息-->
+    <select id="getAllPlanInfo" resultType="com.catas.glimmer.vo.PlanVo">
+        SELECT
+            a.*,
+            b.`name` as userName
+        FROM
+            glimmer_plan as a
+        JOIN audit_user_info as b on a.user_id = b.id
+    </select>
 </mapper>

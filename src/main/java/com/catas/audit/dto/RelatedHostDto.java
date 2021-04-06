@@ -28,6 +28,12 @@ public class RelatedHostDto {
 
     private Integer authType;
 
+    private String description;
+
+    public String getDescription() {
+        return String.format("%s@%s", hostName, ipAddress);
+    }
+
     public String getEnabled() {
         return enabled == 0 ? "否" : "是";
     }

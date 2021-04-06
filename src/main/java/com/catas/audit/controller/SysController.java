@@ -94,4 +94,22 @@ public class SysController {
     public String idc() {
         return "admin/idc";
     }
+
+    // schedule plan
+    @RequestMapping("/glimmer")
+    public String glimmer() {
+        return "glimmer/list";
+    }
+
+    // schedule log
+    @RequestMapping("/glimmer/log")
+    public String scheduleLogPage() {
+        return "glimmer/logs";
+    }
+
+    // 计划详情页
+    @RequestMapping("/glimmer/detail/{id}")
+    public String scheduleDetail(@PathVariable("id") Integer planId) {
+        return "glimmer/plan-detail";
+    }
 }
