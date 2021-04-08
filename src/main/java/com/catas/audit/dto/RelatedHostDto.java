@@ -31,7 +31,7 @@ public class RelatedHostDto {
     private String description;
 
     public String getDescription() {
-        return String.format("%s@%s", hostName, ipAddress);
+        return String.format("%s@%s[%s]", hostName, ipAddress, userName);
     }
 
     public String getEnabled() {

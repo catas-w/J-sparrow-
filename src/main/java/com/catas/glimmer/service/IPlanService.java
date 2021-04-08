@@ -38,6 +38,9 @@ public interface IPlanService extends IService<Plan> {
      */
     List<Map<String, Object>> getRelatedBindHosts(Plan plan);
 
+    // 更新绑定主机
+    void updateBindHosts(Integer planId, List<Integer> bHostIds);
+
     // 获取jobDetail
     JobDetail getJobDetail(JobKey jobKey, String description, JobDataMap dataMap);
 

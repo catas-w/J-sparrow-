@@ -56,6 +56,7 @@ public class HostController {
     // 当前用户的主机信息
     @RequestMapping("/hostList")
     public DataGridView getHostList(RelatedHostVo relatedHostVo) {
+        System.out.println(">>>>>>>>>>>");
         ActiveUser activeUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
         relatedHostVo.setUserId(activeUser.getUserInfo().getId());
         Page<RelatedHostDto> page = new Page<>(relatedHostVo.getPage(), relatedHostVo.getLimit());

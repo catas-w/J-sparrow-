@@ -48,7 +48,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">Cron</label>
                     <div class="layui-input-block">
-                        <input type="text" id="cronVal" name="cron" placeholder="点击输入Cron表达式" autocomplete="off" class="layui-input">
+                        <input type="text" id="cronVal" lay-verify="required" name="cron" placeholder="点击输入Cron表达式" autocomplete="off" class="layui-input">
                     </div>
                 </div>
 
@@ -69,7 +69,7 @@
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn layui-btn-radius layui-btn-success" lay-submit="" lay-filter="demo1">提   交</button>
+                        <button class="layui-btn layui-btn-radius layui-btn-success" lay-submit="" lay-filter="doSubmit" id="doSubmit" >提   交</button>
                     </div>
                 </div>
             </form>
@@ -89,7 +89,7 @@
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
                 <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添 加 </button>
-                <!--<button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="reOrder"> 更新次序 </button>
             </div>
         </script>
 
@@ -97,6 +97,70 @@
             <a class="layui-btn layui-btn-xs layui-btn-primary data-count-edit" lay-event="edit">编 辑</a>
             <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删 除</a>
         </script>
+    </div>
+
+    <!--修改弹出层-->
+    <div id="addOrUpdateDiv" style="display: none; padding: 10px 5% 10px 10px;">
+        <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="hidden" name="id" id="jobId" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="description" autocomplete="off" class="layui-input input-radius" >
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="">
+                    <label class="layui-form-label">命令</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="command" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
+                    </div>
+                </div>
+            </div>
+            <!--<div>-->
+            <!--    <div class="layui-inline">-->
+            <!--        <label class="layui-form-label">类型</label>-->
+            <!--        <div class="layui-input-block">-->
+            <!--            <select id="idc-select" name="idcId" lay-verify="required">-->
+            <!--                <option value="-1">无</option>-->
+            <!--            </select>-->
+            <!--        </div>-->
+            <!--    </div>-->
+            <!--</div>-->
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">激活</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" name="enabled" checked lay-skin="switch" lay-filter="encrypt">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="text-align: center;padding-right: 7%">
+                    <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="submitJob" id="submitJob">
+                        <i class="layui-icon layui-icon-search layui-icon-normal"></i>提交
+                    </button>
+                    <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm">
+                        <i class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -130,6 +194,7 @@
 
         //渲染多选
         var demo1 = xmSelect.render({
+            name: "bHostIds",
             el: '#demo1',
             paging: false,
             theme: {
@@ -185,9 +250,12 @@
             cols: [ [
                 {type: "checkbox", width: 120},
                 {field: 'id', width: 200, title: 'ID', sort: true, hide: true},
+                {field: 'number', width: 100, title: '次序', sort: true, type: 'numbers'},
                 {field: 'name', width: 200, title: '任务名', sort: true},
-                {field: 'taskType', width: 200, title: '类型'},
+                {field: 'taskType', width: 200, hide: true},
+                {field: 'taskTypeDesc', width: 200, title: '类型'},
                 {field: 'description', width: 200, title: '描述', sort: true},
+                {field: 'command', width: 200, title: 'cmd', hide: true},
                 {title: '操作', Width: 120, toolbar: '#currentTableBar'}
             ] ],
             limits: [10, 15, 25],
@@ -202,6 +270,119 @@
             // even: true //开启隔行背景
         });
 
+        // 监听表格事件
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            switch (obj.event) {
+                case 'add':
+                    openAddLayer(data);
+                    break;
+                case 'reOrder':
+                    reOrder(data);
+                    break;
+            }
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            switch (obj.event) {
+
+                case 'edit':
+                    openUpdateLayer(data);
+                    break;
+                case 'delete':
+                    deleteJob(data);
+                    break;
+            }
+        });
+
+        //打开添加弹出层
+        function openAddLayer() {
+            mainIndex = layer.open({
+                type:1,
+                content:$("#addOrUpdateDiv"),
+                area:['600px','400px'],
+                title:'添加任务',
+                success:function () {
+                    $("#dataFrm")[0].reset();
+                    $("#jobId").val("");
+                    url= window.location.pathname + "/job/add";
+                }
+            });
+        }
+
+        //打开修改的弹出层
+        function openUpdateLayer(data) {
+            mainIndex = layer.open({
+                type:1,
+                content:$("#addOrUpdateDiv"),
+                area:['600px','400px'],
+                title:'修改任务',
+                success:function () {
+                    //清空原有的数据
+                    $("#dataFrm")[0].reset();
+                    //装载新的数据
+                    form.val("dataFrm",data);
+                    url= window.location.pathname + "/job/update";
+                }
+            });
+        }
+
+        //删除
+        function deleteJob(data) {
+            layer.confirm('你确定要删除任务[' + data.name + ']吗？', {icon: 3, title: '提示'}, function (index) {
+                $.post( window.location.pathname+"/job/delete/"+data.id, function (res) {
+                    if (res.code === 200) {
+                        table.reload('jobTable');
+                    }
+                    layer.msg(res.msg);
+                });
+                layer.close(index);
+            });
+        }
+
+        // 更新顺序
+        function reOrder() {
+            var tableData = layui.table.cache['jobTable'];
+            var orders = [];
+            for (i in tableData) {
+                orders.push(tableData[i].id);
+            }
+            data = {
+                'orders': orders
+            };
+            // console.log(data);
+            layer.confirm('确定要更改顺序吗?', function (index) {
+                $.post( window.location.pathname+"/job/reorder/", data, function (res) {
+                    if (res.code === 200) {
+                        // table.reload('jobTable');
+                    }
+                    layer.msg(res.msg);
+                });
+                layer.close(index);
+            });
+        }
+
+        // 提交表单--job
+        form.on("submit(submitJob)",function (data) {
+            // console.log(data.field);
+            var data_field = data.field;
+            if (data_field.hasOwnProperty('enabled')) {
+                data_field.enabled = 1;
+            }else {
+                data_field.enabled = 0;
+            }
+            console.log(data_field);
+            $.post(url, data.field, function (res) {
+                if (res.code === 200){
+                    table.reload('jobTable');
+                }
+                layer.msg(res.msg);
+                layer.close(mainIndex);
+            });
+            return false;
+        });
+
         //监听指定开关
         form.on('switch(switchTest)', function (data) {
             layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
@@ -210,33 +391,28 @@
             layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
         });
 
-        //监听提交
-        form.on('submit(demo1)', function (data) {
-            layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
-            })
-            return false;
-        });
-
-        //表单初始赋值
-        $.ajax({
-            url:"/glimmer/get-plan-detail/" + getPlanId(),
-            type:"post",
-            dataType:"json",
-            success:function(result){
-                var res = result.data;    //返回的数据
-                console.log(res);
-                form.val('planDetail', res);
-                demo1.setValue(res.bHostIds);
-            },
-            error:function() {
-                    layer.msg("加载失败");
+        //表单初始赋值--plan
+        function loadFromInfo() {
+            $.ajax({
+                    url:"/glimmer/get-plan-detail/" + getPlanId(),
+                    type:"post",
+                    dataType:"json",
+                    success:function(result){
+                        var res = result.data;    //返回的数据
+                        // console.log(res);
+                        form.val('planDetail', res);
+                        demo1.setValue(res.bHostIds);
+                    },
+                    error:function() {
+                        layer.msg("加载失败");
+                    }
                 }
-            }
-        )
+            )
+        }
 
+        loadFromInfo();
 
-        // 提交表单
+        // 提交表单--plan
         form.on("submit(doSubmit)",function (data) {
             // console.log(data.field);
             var data_field = data.field;
@@ -245,15 +421,17 @@
             }else {
                 data_field.enabled = 0;
             }
-            $.post(url, data.field, function (res) {
+            // console.log(data_field);
+            $.post("/glimmer/update", data.field, function (res) {
                 if (res.code === 200){
-                    table.reload('currentTableId');
+                    loadFromInfo();
                 }
                 layer.msg(res.msg);
                 layer.close(mainIndex);
             });
             return false;
         });
+
 
     });
 </script>

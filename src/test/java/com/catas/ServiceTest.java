@@ -71,6 +71,7 @@ public class ServiceTest {
         // IPage<Plan> page = new Page<>(1,10);
         // List<Plan> allPlanInfo = planService.getAllPlanInfo(page, 1);
         // System.out.println(allPlanInfo);
+        planService.updateBindHosts(2, Arrays.asList(2,4,6));
     }
 
 

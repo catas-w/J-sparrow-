@@ -5,10 +5,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.catas.glimmer.entity.Job;
 import com.catas.glimmer.entity.Plan;
+import com.catas.glimmer.entity.PlanBindHost;
 import com.catas.glimmer.job.SchedulePlan;
 import com.catas.glimmer.mapper.PlanMapper;
 import com.catas.glimmer.service.IJobBindHostService;
 import com.catas.glimmer.service.IJobService;
+import com.catas.glimmer.service.IPlanBindHostService;
 import com.catas.glimmer.service.IPlanService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.catas.glimmer.vo.PlanVo;
@@ -42,6 +44,9 @@ public class PlanServiceImpl extends ServiceImpl<PlanMapper, Plan> implements IP
     private SchedulerFactoryBean schedulerFactoryBean;
 
     @Autowired
+    private IPlanBindHostService planBindHostService;
+
+    @Autowired
     private LogUtil logUtil;
 
     @Override
@@ -53,6 +58,23 @@ public class PlanServiceImpl extends ServiceImpl<PlanMapper, Plan> implements IP
     public List<Map<String, Object>> getRelatedJobs(Plan plan) {
         return this.getBaseMapper().getRelatedJobs(plan.getId());
     }
+
+    // 更新绑定主机
+    @Override
+    public void updateBindHosts(Integer planId, List<Integer> bHostIds) {
+        QueryWrapper<PlanBindHost> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("plan_id", planId);
+        planBindHostService.remove(queryWrapper);
+        HashSet<PlanBindHost> bindHostHashSet = new HashSet<>();
+        for (Integer bHostId : bHostIds) {
+            PlanBindHost obj = new PlanBindHost();
+            obj.setPlanId(planId);
+            obj.setBindHostId(bHostId);
+            bindHostHashSet.add(obj);
+        }
+        if (!bindHostHashSet.isEmpty())
+            planBindHostService.saveBatch(bindHostHashSet);
+    };
 
     /**
      *

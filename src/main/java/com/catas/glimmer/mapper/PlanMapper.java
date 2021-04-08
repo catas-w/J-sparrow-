@@ -29,4 +29,10 @@ public interface PlanMapper extends BaseMapper<Plan> {
 
     // 获取所有计划信息
     List<PlanVo> getAllPlanInfo(IPage<PlanVo> page, @Param("userId") Integer id);
+
+    // 删除所有绑定主机
+    void clearBindHosts();
+
+    // 新建绑定主机
+    void addBindHosts(@Param("bHostIds") List<Integer> bHostIds);
 }

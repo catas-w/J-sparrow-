@@ -1,4 +1,4 @@
-package com.catas.glimmer.vo;
+ package com.catas.glimmer.vo;
 
 import com.catas.audit.common.Constant;
 import com.catas.glimmer.entity.Plan;
@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -24,6 +25,10 @@ public class PlanVo extends Plan {
     private String statusLevel;
 
     private Boolean enableLevel;
+
+    private List<Integer> bHostIds;
+
+    private List<Integer> orders;
 
     public String getName() {
         return super.getName();

@@ -49,6 +49,7 @@ public class SchedulePlan implements Job {
         logger.info(">>>>>>>>> Running start >>>>>>>>>>>");
         try {
             runSSHJob(dataMap);
+            // printJobMsg(dataMap);
         } catch (InterruptedException e) {
             e.printStackTrace();
             logUtil.log("Error occurred when executing current plan!", logFile);
@@ -61,7 +62,7 @@ public class SchedulePlan implements Job {
     }
 
     // print message of jobs, for test purpose
-    public void printJobMsg(JobDataMap dataMap) {
+    public void printJobMsg(JobDataMap dataMap) throws InterruptedException {
         logger.info(dataMap.toString());
         logger.info(dataMap.getString("name"));
         logger.info(dataMap.get("tasks").toString());
