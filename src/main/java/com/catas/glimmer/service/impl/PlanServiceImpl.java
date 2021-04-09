@@ -110,14 +110,14 @@ public class PlanServiceImpl extends ServiceImpl<PlanMapper, Plan> implements IP
     @Override
     public Trigger getTrigger(Plan plan) {
         return TriggerBuilder.newTrigger()
-                .withIdentity(plan.getId() + plan.getName())
+                .withIdentity(plan.getId()+"")
                 .withSchedule(CronScheduleBuilder.cronSchedule(plan.getCron()))
                 .build();
     }
 
     @Override
     public JobKey getJobKey(Plan plan) {
-        return JobKey.jobKey(plan.getId() + plan.getName());
+        return JobKey.jobKey(plan.getId()+"");
     }
 
     @Override

@@ -16,8 +16,10 @@ import com.catas.glimmer.entity.Job;
 import com.catas.glimmer.entity.Plan;
 import com.catas.glimmer.service.IJobService;
 import com.catas.glimmer.service.IPlanService;
+import com.catas.glimmer.service.IScheduleLogService;
 import com.catas.glimmer.util.SSHUtil;
 import com.catas.glimmer.vo.PlanVo;
+import com.catas.glimmer.vo.ScheduleLogVo;
 import com.catas.webssh.config.WebSSHWebSocketConfig;
 import com.catas.webssh.utils.LogUtil;
 import org.junit.jupiter.api.Test;
@@ -57,6 +59,9 @@ public class ServiceTest {
     @Autowired
     private IPlanService planService;
 
+    @Autowired
+    private IScheduleLogService scheduleLogService;
+
     @Test
     void test1() {
         // List<Job> relatedJobs = planMapper.getRelatedJobs(plan.getId());
@@ -67,11 +72,9 @@ public class ServiceTest {
 
     @Test
     void test2() {
-        // System.out.println(">>>>>>>>>>>>>>>>>>>");
-        // IPage<Plan> page = new Page<>(1,10);
-        // List<Plan> allPlanInfo = planService.getAllPlanInfo(page, 1);
-        // System.out.println(allPlanInfo);
-        planService.updateBindHosts(2, Arrays.asList(2,4,6));
+        ScheduleLogVo logVo = new ScheduleLogVo();
+        List<ScheduleLogVo> logsList = scheduleLogService.getLogsList(null, logVo);
+        System.out.println(logsList);
     }
 
 

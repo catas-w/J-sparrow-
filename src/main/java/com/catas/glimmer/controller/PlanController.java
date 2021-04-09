@@ -9,15 +9,19 @@ import com.catas.audit.common.ActiveUser;
 import com.catas.audit.common.Constant;
 import com.catas.audit.common.DataGridView;
 import com.catas.audit.common.ResultObj;
+import com.catas.audit.entity.Sessionlog;
 import com.catas.glimmer.entity.Job;
 import com.catas.glimmer.entity.Plan;
 import com.catas.glimmer.entity.PlanBindHost;
+import com.catas.glimmer.entity.ScheduleLog;
 import com.catas.glimmer.job.SchedulePlan;
 import com.catas.glimmer.service.IJobService;
 import com.catas.glimmer.service.IPlanBindHostService;
 import com.catas.glimmer.service.IPlanService;
+import com.catas.glimmer.service.IScheduleLogService;
 import com.catas.glimmer.vo.JobVo;
 import com.catas.glimmer.vo.PlanVo;
+import com.catas.glimmer.vo.ScheduleLogVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.tomcat.util.bcel.Const;
@@ -25,12 +29,20 @@ import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -54,6 +66,12 @@ public class PlanController {
 
     @Autowired
     private SchedulerFactoryBean schedulerFactoryBean;
+
+    @Autowired
+    private IScheduleLogService scheduleLogService;
+
+    @Value("${ssh.schedule-log-path:#{null}}")
+    private String scheduleLogPath;
 
     // @PostConstruct
     // public void initPlan() {
@@ -340,6 +358,46 @@ public class PlanController {
         } catch (SchedulerException e) {
             e.printStackTrace();
             return new ResultObj(Constant.ERROR, "Unknown Error!");
+        }
+    }
+
+    // 获取日志列表
+    @RequestMapping("/logs/get-all")
+    public DataGridView getLogsList(ScheduleLogVo logVo) {
+        Page<ScheduleLogVo> page = new Page<>(logVo.getPage(), logVo.getLimit());
+        List<ScheduleLogVo> list = scheduleLogService.getLogsList(page, logVo);
+        return new DataGridView(page.getTotal(), list);
+    }
+
+    // 下载日志文件
+    @RequestMapping("/logs/download/{id}")
+    public void downloadSSHLog(@PathVariable("id") Integer logId, HttpServletResponse response) {
+        ScheduleLog scheduleLog = scheduleLogService.getById(logId);
+        String tag = scheduleLog.getLogFilePath();
+        File logFile = Path.of(this.scheduleLogPath, tag).toFile();
+        if (!logFile.exists()) {
+            return;
+        }
+        try{
+            FileInputStream inputStream = new FileInputStream(logFile);
+            byte[] data = new byte[inputStream.available()];
+            inputStream.read(data);
+            String diskfilename = "log_" + logId + ".txt";
+            response.setContentType("txt/plain");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + diskfilename + "\"");
+            response.setContentLength(data.length);
+            response.setHeader("Content-Range", "" + (data.length - 1));
+            response.setHeader("Accept-Ranges", "bytes");
+            response.setHeader("Etag", "W/\"9767057-1323779115364\"");
+            OutputStream os = response.getOutputStream();
+
+            os.write(data);
+            //先声明的流后关掉！
+            os.flush();
+            os.close();
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -29,49 +29,56 @@
 <div class="layuimini-container">
     <div class="layuimini-main">
 
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添 加 </button>
+        <div class="layui-card">
+            <div class="layui-card-header">定时任务</div>
+            <div class="layui-card-body">
+                <script type="text/html" id="toolbarDemo">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添 加 </button>
+                    </div>
+                </script>
+
+                <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+                <script type="text/html" id="currentTableBar">
+                    <a class="layui-btn layui-btn-xs layui-btn-primary data-count-edit" lay-event="edit">编 辑</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-success data-count-edit" lay-event="refresh">启 动</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-warm data-count-edit" lay-event="pause">暂 停</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">移 除</a>
+                </script>
+
+                <!--修改弹出层-->
+                <div id="addOrUpdateDiv" style="display: none; padding: 10px 5% 10px 10px;">
+                    <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
+                        <div class="layui-form-item">
+                            <div class="layui-input-block" id="parentDept">
+                                <input type="hidden" name="id" id="id" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">名 称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block" style="text-align: center;padding-right: 7%">
+                                <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
+                                        class="layui-icon layui-icon-search layui-icon-normal"></i>保存
+                                </button>
+                                <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
+                                        class="layui-icon layui-icon-refresh"></i><span>重置</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
             </div>
-        </script>
-
-        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
-
-        <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-xs layui-btn-primary data-count-edit" lay-event="edit">编 辑</a>
-            <a class="layui-btn layui-btn-xs layui-btn-success data-count-edit" lay-event="refresh">启 动</a>
-            <a class="layui-btn layui-btn-xs layui-btn-warm data-count-edit" lay-event="pause">暂 停</a>
-            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">移 除</a>
-        </script>
-
-        <!--修改弹出层-->
-        <div id="addOrUpdateDiv" style="display: none; padding: 10px 5% 10px 10px;">
-            <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
-                <div class="layui-form-item">
-                    <div class="layui-input-block" id="parentDept">
-                        <input type="hidden" name="id" id="id" disabled>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">名 称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block" style="text-align: center;padding-right: 7%">
-                        <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
-                            class="layui-icon layui-icon-search layui-icon-normal"></i>保存
-                        </button>
-                        <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
-                            class="layui-icon layui-icon-refresh"></i><span>重置</span>
-                        </button>
-                    </div>
-                </div>
-
-            </form>
+            </div>
         </div>
-        </div>
+
+
 
 
 </div>

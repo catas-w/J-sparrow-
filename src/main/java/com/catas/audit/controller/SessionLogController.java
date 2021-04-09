@@ -68,6 +68,5 @@ public class SessionLogController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

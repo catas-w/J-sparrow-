@@ -1,127 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:replace="common/header"></div>
-
 <body>
 <div class="layuimini-container">
     <div class="layuimini-main">
 
-        <fieldset class="table-search-fieldset">
-            <legend>搜索信息</legend>
-            <div style="margin: 10px 10px 10px 10px">
-                <form class="layui-form layui-form-pane" action="" method="post">
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">主机名</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="hostName" autocomplete="off" class="layui-input">
+
+        <div class="layui-card">
+            <div class="layui-card-header">任务日志</div>
+            <div class="layui-card-body">
+                <fieldset class="table-search-fieldset">
+                    <legend>筛选</legend>
+                    <div style="margin: 10px 10px 10px 10px">
+                        <form class="layui-form layui-form-pane" action="" method="post">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">用户名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="userName" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">计划名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="planName" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">IDC</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="idcName" autocomplete="off" class="layui-input">
+                            <div class="layui-inline">
+                                <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
                             </div>
-                        </div>
-                        <div class="layui-inline">
-                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
-                        </div>
+                        </form>
                     </div>
-                </form>
+                </fieldset>
+
+                <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+                <script type="text/html" id="currentTableBar">
+                    <a class="layui-btn layui-btn-sm layui-btn-success data-count-edit" lay-event="view">查&nbsp;看</a>
+                </script>
             </div>
-        </fieldset>
-
-        <script type="text/html" id="toolbarDemo">
-            <div class="layui-btn-container">
-                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添 加 </button>
-                <!--<button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>-->
-            </div>
-        </script>
-
-        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
-
-        <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-xs layui-btn-primary data-count-edit" lay-event="edit">编 辑</a>
-            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删 除</a>
-        </script>
-
-        <!--修改弹出层-->
-        <div id="addOrUpdateDiv" style="display: none; padding: 10px 5% 10px 10px;">
-            <form action="" method="post" class="layui-form" id="dataFrm" lay-filter="dataFrm">
-                <div class="layui-form-item">
-                    <!--<label class="layui-form-label">Id</label>-->
-                    <div class="layui-input-block" id="parentDept">
-                        <input type="hidden" name="id" id="userId" disabled>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">主机名</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="hostName" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">IP</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="ipAddress" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
-                        </div>
-                    </div>
-                </div>
-                <!--<div class="layui-form-item">-->
-                <!--    -->
-                <!--</div>-->
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">端口</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="port" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">机房</label>
-                        <div class="layui-input-block">
-                            <select id="idc-select" name="idcId" lay-verify="required">
-                                <option value="-1">无</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">激活</label>
-                        <div class="layui-input-block">
-                            <input type="checkbox" name="enabled" checked lay-skin="switch" lay-filter="encrypt">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <div class="layui-input-block" style="text-align: center;padding-right: 7%">
-                        <button type="button" class="layui-btn layui-btn-radius" lay-submit="" lay-filter="doSubmit" id="doSubmit"><i
-                            class="layui-icon layui-icon-search layui-icon-normal"></i>提交
-                        </button>
-                        <button type="reset" class="layui-btn layui-btn-radius layui-btn-warm"><i
-                            class="layui-icon layui-icon-refresh"></i><span>重置</span>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
         </div>
 
-
+    </div>
 </div>
 <script src="/resources/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script>
-    layui.use(['form', 'table'], function () {
+    layui.use(['form', 'table', 'laydate'], function () {
         var $ = layui.jquery,
             form = layui.form,
-            table = layui.table;
+            table = layui.table
+        laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#startDate'
+        });
+
+        laydate.render({
+            elem: '#endDate'
+        });
 
         table.render({
             elem: '#currentTableId',
-            url: '/host/get-all-host-info',
+            url: '/glimmer/logs/get-all',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',
@@ -130,13 +71,12 @@
             }],
             cols: [ [
                 {type: "checkbox", width: 50},
-                {field: 'id', width: 150, title: 'ID', sort: true},
-                {field: 'hostName', width: 180, title: '主机名'},
-                {field: 'ipAddress', width: 180, title: 'IP', sort: true},
-                {field: 'port', width: 120, title: '端口', sort: true},
-                {field: 'idcName', width: 180, title: '机房'},
-                {field: 'idcId', width: 180, title: '机房', hide: true},
-                // {field: 'isAdmin', title: '管理员', Width: 80},
+                {field: 'id', width: 150, title: 'log id', hide: true},
+                {field: 'planId', width: 150, title: '计划ID'},
+                {field: 'planName', width: 200, title: '计划名称'},
+                {field: 'userName', width: 180, title: '创建用户'},
+                {field: 'description', width: 180, title: '描述'},
+                {field: 'statusLevel', width: 180, title: '状态', sort: true},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ] ],
             limits: [5, 10, 15],
@@ -155,28 +95,6 @@
             }
         });
 
-        // 加载 select
-        $.ajax({
-                url:"/host/get-idc-list",
-                type:"GET",
-                dataType:"json",
-                success:function(result){
-                    var list = result.data;    //返回的数据
-                    var server = document.getElementById("idc-select"); //server为select定义的id
-                    for(var p in list){
-                        var option = document.createElement("option");  // 创建添加option属性
-                        option.setAttribute("value",list[p].id); // 给option的value添加值
-                        option.innerText=list[p].name;     // 打印option对应的纯文本
-                        server.appendChild(option);           //给select添加option子标签
-                        form.render("select");            // 刷性select，显示出数据
-                    }
-                },
-                error:function() {
-                    layer.msg("load failed");
-                }
-            }
-        );
-
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
             //执行搜索重载
@@ -190,98 +108,46 @@
             return false;
         });
 
-        /**
-         * toolbar监听事件
-         */
-        table.on('toolbar(currentTableFilter)', function (obj) {
-            var data = obj.data;
-            switch(obj.event) {
-                case 'add':
-                    openAddLayer(data);
-                    break;
-            }
-        });
-
         //监听表格复选框选择
-        table.on('checkbox(currentTableFilter)', function (obj) {
-            // console.log(obj)
-        });
-
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
             // console.log(data);
             switch (obj.event) {
-                case 'edit':
-                    updateDept(data);
-                    break;
-                case 'delete':
-                    deleteUser(data);
+                case 'view':
+                    downloadLog(data);
                     break;
             }
         });
-        //删除
-        function deleteUser(data) {
-            layer.confirm('你确定要删除[' + data.name + ']吗？', {icon: 3, title: '提示'}, function (index) {
-                $.post("/host/delete/"+data.id, function (res) {
-                    if (res.code === 200) {
-                        table.reload('currentTableId');
-                    }
-                    layer.msg(res.msg);
-                });
-                layer.close(index);
+
+        function downloadLog(data) {
+            // console.log(data);
+            postDownLoadFile({
+                url: "/glimmer/logs/download/" + data.id,
+                method: 'post',
+                data: {}
             });
         }
 
-        //打开添加弹出层
-        function openAddLayer() {
-            mainIndex = layer.open({
-                type:1,
-                content:$("#addOrUpdateDiv"),
-                area:['700px','400px'],
-                title:'添加主机',
-                success:function () {
-                    $("#dataFrm")[0].reset();
-                    $("#userId").val("");
-                    url="/host/add";
-                }
-            });
-        }
-
-        //打开修改的弹出层
-        function updateDept(data) {
-            mainIndex = layer.open({
-                type:1,
-                content:$("#addOrUpdateDiv"),
-                area:['700px','400px'],
-                title:'修改用户信息',
-                success:function () {
-                    //清空原有的数据
-                    $("#dataFrm")[0].reset();
-                    //装载新的数据
-                    form.val("dataFrm",data);
-                    url="/host/update";
-                }
-            });
-        }
-
-        // 提交表单
-        form.on("submit(doSubmit)",function (data) {
-            // console.log(data.field);
-            var data_field = data.field;
-            if (data_field.hasOwnProperty('enabled')) {
-                data_field.enabled = 1;
-            }else {
-                data_field.enabled = 0;
+        /*===================post请求下载文件
+         * options:{
+         * url:'',  //下载地址
+         * data:{name:value}, //要发送的数据
+         * method:'post'
+         * }
+         */
+        var postDownLoadFile = function (options) {
+            var config = $.extend(true, { method: 'post' }, options);
+            var $iframe = $('<iframe id="down-file-iframe" />');
+            var $form = $('<form target="down-file-iframe" method="' + config.method + '" />');
+            $form.attr('action', config.url);
+            for (var key in config.data) {
+                $form.append('<input type="hidden" name="' + key + '" value="' + config.data[key] + '" />');
             }
-            $.post(url, data.field, function (res) {
-                if (res.code === 200){
-                    table.reload('currentTableId');
-                }
-                layer.msg(res.msg);
-                layer.close(mainIndex);
-            });
-            return false;
-        });
+            $iframe.append($form);
+            $(document.body).append($iframe);
+            $form[0].submit();
+            $iframe.remove();
+        }
 
     });
 </script>

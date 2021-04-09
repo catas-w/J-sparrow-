@@ -2,4 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.catas.glimmer.mapper.ScheduleLogMapper">
 
+    <select id="getLogsList" parameterType="com.catas.glimmer.vo.ScheduleLogVo" resultType="com.catas.glimmer.vo.ScheduleLogVo">
+        SELECT
+            a.id as id,
+            b.id as planId,
+            b.`name` as planName,
+            b.`status` as status,
+            b.description as description,
+            c.`name` as userName
+        FROM
+            glimmer_schedule_log as a
+        LEFT JOIN glimmer_plan as b on a.plan_id = b.id
+        LEFT JOIN audit_user_info as c on b.user_id = c.id
+        <where>
+            <if test="logVo.planName != null">
+                AND b.`name` like concat('%', #{logVo.planName}, '%')
+            </if>
+            <if test="logVo.userName != null">
+                AND c.`name` like concat('%', #{logVo.userName}, '%')
+            </if>
+        </where>
+    </select>
+
 </mapper>

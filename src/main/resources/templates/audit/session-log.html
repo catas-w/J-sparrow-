@@ -5,51 +5,59 @@
 <div class="layuimini-container">
     <div class="layuimini-main">
 
-        <fieldset class="table-search-fieldset">
-            <legend>筛选</legend>
-            <div style="margin: 10px 10px 10px 10px">
-                <form class="layui-form layui-form-pane" action="" method="post">
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">用户名</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="userName" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">主机名</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="hostName" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <label class="layui-form-label">开始日期</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="startDate" id="startDate" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-inline">
-                            <label class="layui-form-label">截至日期</label>
-                            <div class="layui-input-inline">
-                                <input type="text" name="endDate" id="endDate" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
 
-                        <div class="layui-inline">
-                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
-                        </div>
+        <div class="layui-card">
+            <div class="layui-card-header">SSH 日志</div>
+            <div class="layui-card-body">
+                <fieldset class="table-search-fieldset">
+                    <legend>筛选</legend>
+                    <div style="margin: 10px 10px 10px 10px">
+                        <form class="layui-form layui-form-pane" action="" method="post">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">用户名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="userName" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">主机名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="hostName" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">开始日期</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="startDate" id="startDate" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">截至日期</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="endDate" id="endDate" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline">
+                                    <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </fieldset>
+
+                <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+
+                <script type="text/html" id="currentTableBar">
+                    <a class="layui-btn layui-btn-sm layui-btn-success data-count-edit" lay-event="view">查&nbsp;看</a>
+                </script>
             </div>
-        </fieldset>
+        </div>
 
-        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
 
-        <script type="text/html" id="currentTableBar">
-            <a class="layui-btn layui-btn-sm layui-btn-success data-count-edit" lay-event="view">查&nbsp;看</a>
-        </script>
 
         <!--修改弹出层-->
 
