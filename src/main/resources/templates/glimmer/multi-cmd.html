@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="common/header"></div>
+<script src="/resources/plugins/codeMirror/codemirror.js"></script>
+<script src="/resources/plugins/codeMirror/shell/shell.js"></script>
+<script src="/resources/plugins/codeMirror/addon/edit/closebrackets.js"></script>
+<script src="/resources/plugins/codeMirror/addon/edit/matchbrackets.js"></script>
+<script src="/resources/plugins/codeMirror/shell/shell.js"></script>
+<link rel="stylesheet" href="/resources/plugins/codeMirror/codemirror.css">
+<link rel="stylesheet" href="/resources/plugins/codeMirror/theme/darcula.css">
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <div class="layui-card">
+            <div class="layui-card-header">批量任务</div>
+            <div class="layui-card-body">
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                    <legend>配&nbsp;&nbsp;置</legend>
+                    <form class="layui-form" action="" lay-filter="planDetail" >
+                        <!--<div class="layui-form-item">-->
+                        <!--    <div class="layui-input-block" id="parentDept">-->
+                        <!--        <input type="hidden" name="id" id="id" disabled>-->
+                        <!--    </div>-->
+                        <!--</div>-->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">选择主机
+                                <!--&nbsp;&nbsp;(已选择:<span class="layui-badge layui-bg-blue">2</span>)-->
+                            </label>
+                            <div class="layui-input-block">
+                                <div id="demo1"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">延时执行</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="delay" lay-verify="number" autocomplete="off" value="0" placeholder="请输入时间(秒)" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备   注</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="description" placeholder="描述" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">命   令</label>
+                            <div class="layui-input-block">
+                                <textarea name="cmd" id="cmd-area" placeholder="</>请输入命令" class="layui-textarea cmd-text"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-radius layui-btn-success" lay-submit="" lay-filter="doSubmit" id="doSubmit" >开始执行</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </fieldset>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="/resources/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script>
+    layui.config({
+        base: '/resources/plugins/',   // 第三方模块所在目录
+        version: 'v1.5.21' // 插件版本号
+    }).extend({
+        soulTable: 'soulTable/soulTable.slim',
+        xmSelect: 'xmSelect/xm-select',
+        cron: "cron/cron"
+    }).use(['form', 'table', 'xmSelect'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            xmSelect = layui.xmSelect;
+
+        var editor = CodeMirror.fromTextArea(document.getElementById('cmd-area'), {
+            mode: 'shell',
+            lineNumbers: true,
+            matchBrackets: true,
+            theme: 'darcula',
+            closeBrackets: true,
+        });
+
+        //渲染多选
+        var demo1 = xmSelect.render({
+            name: "bindHostIds",
+            el: '#demo1',
+            paging: false,
+            theme: {
+                color: '#1cbbb4',
+            },
+            prop: {
+                name: 'description',
+                value: 'id',
+            },
+            // data: []
+        })
+
+        // 加载多选框数据
+        function loadBHostInfo() {
+            $.ajax({
+                url:"/host/hostList",
+                type:"post",
+                dataType:"json",
+                data: {
+                    page: 1,
+                    limit: 1000
+                },
+                success:function(result){
+                    var res = result.data;    //返回的数据
+                    // 多选框
+                    demo1.update({
+                        data: res
+                    })
+                },
+                error:function() {
+                    layer.msg("关联主机加载失败");
+                    }
+                }
+            )
+        }
+
+        loadBHostInfo();
+
+        //监听指定开关
+        form.on('switch(switchTest)', function (data) {
+            layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            });
+            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+        });
+
+        // 提交表单-
+        form.on("submit(doSubmit)",function (data) {
+            // console.log(data.field);
+            var data_field = data.field;
+            if (data_field.hasOwnProperty('enabled')) {
+                data_field.enabled = 1;
+            }else {
+                data_field.enabled = 0;
+            }
+            data_field.cmd = editor.getValue();
+            data_field.taskType = 0;
+            // console.log(data_field);
+            $.post("/glimmer/multi/cmd/create", data_field, function (res) {
+                if (res.code === 0){
+                    toLogDetailPage(res.data);
+                }
+                layer.msg(res.msg);
+            });
+            return false;
+        });
+
+        function toLogDetailPage(data) {
+            window.location.pathname = "/glimmer/multi/log/detail/" + data.id;
+        }
+    });
+</script>
+
+</body>
+</html>

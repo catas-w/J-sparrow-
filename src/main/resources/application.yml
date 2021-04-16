@@ -42,6 +42,9 @@ spring:
     wait-for-jobs-to-complete-on-shutdown: false # 应用关闭时，是否等待定时任务执行完成。默认为 false ，建议设置为 true
     overwrite-existing-jobs: false # 是否覆盖已有 Job 的配置#
 
+  redis:
+    host: 127.0.0.1
+    port: 6379
 
 #配置mybatisplus
 mybatis-plus:
@@ -81,3 +84,11 @@ ssh:
   log-path: D:/PY_Projects/SpringBootProjects/sparrow/log/audit
   schedule-log-path: D:/PY_Projects/SpringBootProjects/sparrow/log/glimmer
   maxRows: 1000
+
+
+email:
+  queue:
+    name: email-queue
+multiTask:
+  queue:
+    name: multi-queue

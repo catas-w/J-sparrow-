@@ -29,6 +29,127 @@ public class SimpleTest2 {
     }
 
     @Test
+    void testPal() {
+        HashSet<List<Integer>> hashSet = new HashSet<>();
+
+        hashSet.add(new ArrayList<>(Arrays.asList(1,2,3)));
+        hashSet.add(new ArrayList<>(Arrays.asList(1,2,3)));
+        hashSet.add(new ArrayList<>(Arrays.asList(2,1,3)));
+        for (List<Integer> list : hashSet) {
+            System.out.println(list);
+        }
+    }
+
+    @Test
+    void testTreeSum() {
+        System.out.println(generateParenthesis(1));
+        System.out.println(generateParenthesis(2));
+    }
+
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        getRes(res, new StringBuilder(), n, n, new LinkedList<Integer>());
+        return res;
+    }
+
+    public void getRes(List<String> res, StringBuilder builder,int left, int right, Deque<Integer> stack) {
+        if (left == 0 && right == 0) {
+            res.add(builder.toString());
+            return;
+        }
+        if (left > 0) {
+            stack.push(0);
+            builder.append("(");
+            getRes(res, builder, left-1, right, stack);
+            //回溯
+            stack.pop();
+            builder.deleteCharAt(builder.length()-1);
+        }
+
+
+        if (right > 0) {
+            if (!stack.isEmpty() && stack.peek() == 0) {
+                stack.pop();
+                builder.append(")");
+                getRes(res, builder, left, right-1, stack);
+                //回溯
+                stack.push(0);
+                builder.deleteCharAt(builder.length()-1);
+            }
+        }
+
+    }
+
+    public List<List<Integer>> threeSum(int[] nums) {
+        if (nums.length < 3) {
+            return new ArrayList<>();
+        }
+
+        Set<List<Integer>> tempRes = new HashSet<>();
+        for (int i=0; i<nums.length; i++) {
+            twoSum(nums, i, tempRes);
+        }
+        return new ArrayList<>(tempRes);
+    }
+
+    public void twoSum(int[] nums, int curNum, Set<List<Integer>> res) {
+        int target = -nums[curNum];
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i=0; i != curNum && i<nums.length; i++) {
+            if (map.containsKey(nums[i])) {
+                List<Integer> curRes = new ArrayList<>(Arrays.asList(nums[curNum], nums[i], map.get(nums[i])));
+                Collections.sort(curRes);
+                res.add(curRes);
+            } else {
+                map.put(target - nums[i], nums[i]);
+            }
+        }
+    }
+
+    public String longestPalindrome(String s) {
+        int len = s.length();
+        int[] dp = new int[len];
+        dp[0] = 1;
+        int maxPos = 0;
+        Arrays.fill(dp, 1);
+
+        int maxSamePos = 0;
+        int[] allSame = new int[len];
+        Arrays.fill(allSame, 1);
+        for (int i=1; i<len; i++) {
+            char chr = s.charAt(i);
+
+            int counter0 = i - 2;
+            if (counter0 >=0 && s.charAt(counter0) == chr) {
+                // 三元序列
+                dp[i] = 3;
+            }
+
+            if (chr == s.charAt(i-1)) {
+                // 全同序列
+                allSame[i] = allSame[i-1] + 1;
+            }
+            if (allSame[i] > allSame[maxSamePos]) {
+                maxSamePos = i;
+            }
+
+            // 一般序列
+            int counter = i - dp[i-1] - 1;
+            if (counter >= 0 && s.charAt(counter) == chr) {
+                dp[i] = Math.max(dp[i], dp[i-1] + 2);
+            }
+
+            if (dp[i] > dp[maxPos]) {
+                maxPos = i;
+            }
+        }
+        if (dp[maxPos] > dp[maxSamePos])
+            return s.substring(maxPos - dp[maxPos] + 1, maxPos+1);
+        else
+            return s.substring(maxSamePos - allSame[maxSamePos] + 1, maxSamePos);
+    }
+
+    @Test
     void testDices() {
         System.out.println(Arrays.toString(dicesProbability(2)));
     }

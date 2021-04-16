@@ -15,11 +15,13 @@ import com.catas.audit.vo.RelatedHostVo;
 import com.catas.glimmer.entity.Job;
 import com.catas.glimmer.entity.Plan;
 import com.catas.glimmer.service.IJobService;
+import com.catas.glimmer.service.IMultiTaskService;
 import com.catas.glimmer.service.IPlanService;
 import com.catas.glimmer.service.IScheduleLogService;
 import com.catas.glimmer.util.SSHUtil;
 import com.catas.glimmer.vo.PlanVo;
 import com.catas.glimmer.vo.ScheduleLogVo;
+import com.catas.glimmer.vo.TaskLogVo;
 import com.catas.webssh.config.WebSSHWebSocketConfig;
 import com.catas.webssh.utils.LogUtil;
 import org.junit.jupiter.api.Test;
@@ -62,6 +64,9 @@ public class ServiceTest {
     @Autowired
     private IScheduleLogService scheduleLogService;
 
+    @Autowired
+    private IMultiTaskService multiTaskService;
+
     @Test
     void test1() {
         // List<Job> relatedJobs = planMapper.getRelatedJobs(plan.getId());
@@ -72,9 +77,16 @@ public class ServiceTest {
 
     @Test
     void test2() {
-        ScheduleLogVo logVo = new ScheduleLogVo();
-        List<ScheduleLogVo> logsList = scheduleLogService.getLogsList(null, logVo);
-        System.out.println(logsList);
+        TaskLogVo taskLogVo = new TaskLogVo();
+        taskLogVo.setDelay(5);
+        taskLogVo.setBindHostIds(Arrays.asList(1,2));
+        taskLogVo.setDescription("test");
+        taskLogVo.setCmd("df -h");
+        taskLogVo.setTaskType(0);
+        taskLogVo.setUserId(1);
+        taskLogVo.setTaskCount(taskLogVo.getBindHostIds().size());
+        multiTaskService.createTask(taskLogVo);
+
     }
 
 

@@ -85,21 +85,21 @@
           "child": [
             {
               "title": "批量命令",
-              "href": "/resources/page/login-1.html",
+              "href": "/glimmer/multi/cmd",
               "icon": "fa fa-stumbleupon-circle",
-              "target": "_blank"
+              "target": "_self"
             },
             {
               "title": "文件传输",
-              "href": "/resources/page/login-2.html",
+              "href": "/glimmer/multi/scp",
               "icon": "fa fa-viacoin",
-              "target": "_blank"
+              "target": "_self"
             },
             {
               "title": "任务日志",
-              "href": "/resources/page/login-3.html",
+              "href": "/glimmer/multi/log",
               "icon": "fa fa-tags",
-              "target": "_blank"
+              "target": "_self"
             }
           ]
         },

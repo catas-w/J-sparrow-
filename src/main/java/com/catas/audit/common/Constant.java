@@ -26,4 +26,11 @@ public class Constant {
     public static final Integer PLAN_STATUS_RUNNING = 1;
     public static final Integer PLAN_STATUS_PAUSED = 2;
     public static final Integer PLAN_STATUS_FAILED = 3;
+
+    public static final Integer MULTI_TASK_CMD = 0;
+    public static final Integer MULTI_TASK_SCP = 1;
+
+    public static final Integer MULTI_TASK_RUNNING = 0;
+    public static final Integer MULTI_TASK_SUCCESS = 1;
+    public static final Integer MULTI_TASK_FAILED = 2;
 }

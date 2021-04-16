@@ -12,16 +12,22 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
 public class SSHUtil {
 
-    public String execCommand(String cmd, String host, int port, String username, String password) {
+    public Map<String, String>  execCommand(String cmd, String host, int port, String username, String password) {
         return this.execCommand(cmd, host, port, username, password, 15 * 1000);
     }
 
-    public String execCommand(String cmd, String host, int port,String username, String password, int timeout) {
+    public Map<String, String>  execCommand(String cmd, String host, int port,String username, String password, int timeout) {
+        Map<String, String> res = new HashMap<>();
+        res.put("status", "0");
+        res.put("msg", "");
+
         JSch jSch = new JSch();
         Session session = null;
         ChannelExec channelExec = null;
@@ -61,15 +67,12 @@ public class SSHUtil {
             while ((errLine = errInputStreamReader.readLine()) != null) {
                 runLog.append(errLine).append("\n");
             }
+            res.put("status", "SUCCESS");
 
-            // 7. 输出 shell 命令执行日志
-            System.out.println("exitStatus=" + channelExec.getExitStatus() + ", openChannel.isClosed="
-                    + channelExec.isClosed());
-            System.out.println("命令执行完成，执行日志如下:");
-            System.out.println(runLog.toString());
         } catch (Exception e) {
             e.printStackTrace();
             runLog.append("Error occurred, 执行任务中出错!").append(e.getMessage()).append("\n");
+            res.put("status", "FAILED");
         } finally {
             try {
                 if (inputStreamReader != null) {
@@ -89,7 +92,7 @@ public class SSHUtil {
                 e.printStackTrace();
             }
         }
-
-        return runLog.toString();
+        res.put("msg", runLog.toString());
+        return res;
     }
 }

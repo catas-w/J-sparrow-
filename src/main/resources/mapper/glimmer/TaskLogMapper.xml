@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.catas.glimmer.mapper.TaskLogMapper">
+
+
+    <select id="getRelatedTaskDetail" resultType="com.catas.glimmer.dto.TaskDetailDto">
+        SELECT
+            a.id,
+            a.start_time as startTime,
+            a.result as result,
+            a.`status` as `status`,
+            c.host_name as hostName,
+            c.ip_address as ipAddr,
+            d.username as hostUser
+        FROM
+            glimmer_task_log_detail as a
+        JOIN audit_bindhost as b on a.bind_host_id = b.id
+        JOIN audit_host as c on b.host_id = c.id
+        JOIN audit_hostuser as d on b.host_user_id = d.id
+        where a.parent_task_id = #{taskId}
+        order by a.id desc
+    </select>
+
+</mapper>

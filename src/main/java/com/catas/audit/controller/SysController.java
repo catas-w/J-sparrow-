@@ -116,4 +116,22 @@ public class SysController {
     public String scheduleDetail(@PathVariable("id") Integer planId) {
         return "glimmer/plan-detail";
     }
+
+    // 多任务
+    @RequestMapping("/glimmer/multi/cmd")
+    public String multiTaskPage() {
+        return "glimmer/multi-cmd";
+    }
+
+    // 多任务日志
+    @RequestMapping("/glimmer/multi/log")
+    public String multiTaskLog() {
+        return "glimmer/multi-logs";
+    }
+
+    // 日志详情页
+    @RequestMapping("/glimmer/multi/log/detail/{id}")
+    public String multiLogDetail(@PathVariable("id") Integer logId) {
+        return "glimmer/multi-logs-detail";
+    }
 }

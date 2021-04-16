@@ -1,29 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <title>Hosts</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/resources/lib/layui-v2.5.5/css/layui.css" media="all">
-    <link rel="stylesheet" href="/resources/css/public.css" media="all">
-
-    <style>
-        .layui-btn-success {
-            background-color: #29a877;
-        }
-        .layui-btn-normal {
-            background-color: #1daec7; !important;
-        }
-        .layui-btn-danger {
-            background-color: #ef6121;
-        }
-        .layui-btn-warm {
-            background-color: #ffb950;
-        }
-    </style>
-</head>
+<div th:replace="common/header"></div>
 
 <body>
 <div class="layuimini-container">
@@ -42,7 +19,7 @@
 
                 <script type="text/html" id="currentTableBar">
                     <a class="layui-btn layui-btn-xs layui-btn-primary data-count-edit" lay-event="edit">编 辑</a>
-                    <a class="layui-btn layui-btn-xs layui-btn-success data-count-edit" lay-event="refresh">启 动</a>
+                    <a class="layui-btn layui-btn-xs layui-btn-success data-count-edit" lay-event="refresh">重 启</a>
                     <a class="layui-btn layui-btn-xs layui-btn-warm data-count-edit" lay-event="pause">暂 停</a>
                     <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">移 除</a>
                 </script>

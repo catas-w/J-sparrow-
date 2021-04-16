@@ -109,10 +109,10 @@ public class SchedulePlan implements Job {
         String password = (String) bindHost.get("password");
         String ipAddress = (String) bindHost.get("ipAddress");
         Long port = (Long) bindHost.get("port");
-        String result = sshUtil.execCommand(command, ipAddress, Math.toIntExact(port), userName, password);
+        Map<String, String>  result = sshUtil.execCommand(command, ipAddress, Math.toIntExact(port), userName, password);
         synchronized (lock) {
             // 结果写入日志
-            logUtil.log(result, logFile);
+            logUtil.log(result.get("msg"), logFile);
         }
     }
 
