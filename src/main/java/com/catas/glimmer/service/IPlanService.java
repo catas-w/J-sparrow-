@@ -56,6 +56,9 @@ public interface IPlanService extends IService<Plan> {
     // 修改任务
     void modifyPlan() throws SchedulerException;
 
+    // 修改Cron
+    void modifyCron(Plan plan, String cron) throws SchedulerException;
+
     // 启动 任务
     void startPlan(Plan plan) throws SchedulerException;
 

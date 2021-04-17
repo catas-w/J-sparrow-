@@ -4,6 +4,8 @@ import org.apache.commons.collections.EnumerationUtils;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Array;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class SimpleTest2 {
@@ -11,27 +13,17 @@ public class SimpleTest2 {
 
     @Test
     void testMergeSort() {
-        Deque<Integer> dq = new LinkedList<>();
-        // dq.poll();
-        dq.offer(2);
-        dq.offer(1);
-        dq.offer(3);
-        dq.add(4);
-        dq.add(6);
-        dq.add(5);
-        dq.push(-1);
-        dq.push(-2);
-        System.out.println(dq.pop());
-        System.out.println(dq.pop());
-        System.out.println(dq.pop());
-        int pow = (int) Math.pow(1, 5);
-        // dq.pop()
+        Path path = Paths.get("D:\\PY_Projects\\SpringBootProjects\\sparrow\\log\\tmp", "log.txt");
+        System.out.println(path.toString());
+        System.out.println(path.toFile().getName());
+        System.out.println(path.toFile().getPath());
+        System.out.println(path.toFile().exists());
+
     }
 
     @Test
     void testPal() {
         HashSet<List<Integer>> hashSet = new HashSet<>();
-
         hashSet.add(new ArrayList<>(Arrays.asList(1,2,3)));
         hashSet.add(new ArrayList<>(Arrays.asList(1,2,3)));
         hashSet.add(new ArrayList<>(Arrays.asList(2,1,3)));
@@ -42,8 +34,10 @@ public class SimpleTest2 {
 
     @Test
     void testTreeSum() {
-        System.out.println(generateParenthesis(1));
-        System.out.println(generateParenthesis(2));
+        int[] ints = new int[]{12, 4, 6, 12, 4};
+        // Arrays.sort(ints, 1,4);
+        Arrays.sort(ints, 1,5);
+        System.out.println(Arrays.toString(ints));
     }
 
     public List<String> generateParenthesis(int n) {

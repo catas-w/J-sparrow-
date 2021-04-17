@@ -6,6 +6,7 @@ import com.catas.glimmer.entity.TaskLog;
 import com.catas.glimmer.service.ITaskLogDetailService;
 import com.catas.glimmer.util.SSHUtil;
 import com.catas.glimmer.vo.TaskLogDetailVo;
+import com.catas.glimmer.vo.TaskLogVo;
 import com.github.sonus21.rqueue.annotation.RqueueListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +28,6 @@ public class MessageListener {
     @Autowired
     private ITaskLogDetailService logDetailService;
 
-    @RqueueListener(value = "${email.queue.name}", numRetries = "3", concurrency = "5-10")
-    public void sendEmail(String email) {
-        log.info(">>>>>>>>>>>>> Running send email >>>>>>>>>>>>>");
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        log.info("发送邮件任务 Email {}", email);
-        log.info("<<<<<<<<<<<< End Task <<<<<<<<<<<<<<<<<");
-    }
 
     /**
      * @Description: 执行异步任务
@@ -68,12 +58,22 @@ public class MessageListener {
         String name = loginInfo.get("username");
         String password = loginInfo.get("password");
 
-        TaskLog parentTask = taskDetail.getParentTask();
+        TaskLogVo parentTask = taskDetail.getParentTask();
         Integer taskType = parentTask.getTaskType();
 
         if (taskType.equals(Constant.MULTI_TASK_CMD)) {
             // 命令
             Map<String, String> res = sshUtil.execCommand(parentTask.getCmd(), ipAddress, port, name, password);
+            if (res.get("status").equals("SUCCESS")) {
+                taskDetail.setStatus(Constant.MULTI_TASK_SUCCESS);
+            }else {
+                taskDetail.setStatus(Constant.MULTI_TASK_FAILED);
+            }
+            taskDetail.setResult(res.get("msg"));
+
+        } else if (taskType.equals(Constant.MULTI_TASK_SCP)) {
+            // sftp
+            Map<String, String> res = sshUtil.execSFTP(ipAddress, port, name, password, parentTask.getFiles(), parentTask.getRemotePath());
             if (res.get("status").equals("SUCCESS")) {
                 taskDetail.setStatus(Constant.MULTI_TASK_SUCCESS);
             }else {

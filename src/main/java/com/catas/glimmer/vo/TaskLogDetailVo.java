@@ -2,12 +2,14 @@ package com.catas.glimmer.vo;
 
 import com.catas.glimmer.entity.TaskLog;
 import com.catas.glimmer.entity.TaskLogDetail;
+import com.catas.glimmer.util.SSHTaskInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,5 +23,6 @@ public class TaskLogDetailVo extends TaskLogDetail implements Serializable {
 
     private Integer limit = 10;
 
-    private TaskLog parentTask;
+    private TaskLogVo parentTask;
+
 }

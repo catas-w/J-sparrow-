@@ -29,10 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @SpringBootTest
 public class ServiceTest {
@@ -67,12 +64,22 @@ public class ServiceTest {
     @Autowired
     private IMultiTaskService multiTaskService;
 
+    @Autowired
+    private SSHUtil sshUtil;
+
     @Test
     void test1() {
-        // List<Job> relatedJobs = planMapper.getRelatedJobs(plan.getId());
-        Plan plan = planService.getById(1);
-        List<Map<String, Object>> maps = planService.getRelatedBindHosts(plan);
-        System.out.println(maps);
+        String baseDir = "D:\\PY_Projects\\SpringBootProjects\\sparrow\\log\\glimmer\\";
+
+        String f1 = baseDir + "1-.log";
+        String f2 = baseDir + "Plan-2.log";
+        String user = "catas";
+        String ip = "127.0.0.1";
+        String remotePath = "/home/catas/test/";
+        // String cmd = String.format("scp '%s' '%s' %s@%s:%s", f1+baseDir, f2+baseDir, user, ip, remotePath);
+        List<String> files = Arrays.asList(f1, f2);
+        Map<String, String> res = sshUtil.execSFTP(ip,22, user, "eminem", files, remotePath);
+        System.out.println(res);
     }
 
     @Test

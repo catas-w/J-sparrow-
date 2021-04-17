@@ -90,13 +90,13 @@
               "target": "_self"
             },
             {
-              "title": "文件传输",
-              "href": "/glimmer/multi/scp",
+              "title": "文件分发",
+              "href": "/glimmer/multi/sftp",
               "icon": "fa fa-viacoin",
               "target": "_self"
             },
             {
-              "title": "任务日志",
+              "title": "操作记录",
               "href": "/glimmer/multi/log",
               "icon": "fa fa-tags",
               "target": "_self"

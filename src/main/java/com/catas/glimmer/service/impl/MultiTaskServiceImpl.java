@@ -49,4 +49,10 @@ public class MultiTaskServiceImpl implements IMultiTaskService {
 
         return taskLogVo.getId();
     }
+
+    @Override
+    public int createTaskScp(TaskLogVo taskLogVo) {
+
+        return 0;
+    }
 }

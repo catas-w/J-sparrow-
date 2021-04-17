@@ -10,4 +10,8 @@ public interface IMultiTaskService {
      */
     int createTask(TaskLogVo taskLogVo);
 
+    /**
+     * @Description: 新建sftp多任务
+     */
+    int createTaskScp(TaskLogVo taskLogVo);
 }

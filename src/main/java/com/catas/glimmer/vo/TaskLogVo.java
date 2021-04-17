@@ -26,8 +26,14 @@ public class TaskLogVo extends TaskLog implements Serializable {
 
     private String curTaskType = "";
 
+    @NotNull(message = "主机不能为空")
     private List<Integer> bindHostIds;
 
     private Integer delay = 0;
 
+    @NotNull()
+    private List<String> files;
+
+    @NotNull(message = "不能为空")
+    private String remotePath;
 }

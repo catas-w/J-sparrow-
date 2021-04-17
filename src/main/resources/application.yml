@@ -85,10 +85,10 @@ ssh:
   schedule-log-path: D:/PY_Projects/SpringBootProjects/sparrow/log/glimmer
   maxRows: 1000
 
+upload:
+  tmp: D:/PY_Projects/SpringBootProjects/sparrow/log/tmp
 
-email:
-  queue:
-    name: email-queue
+
 multiTask:
   queue:
     name: multi-queue

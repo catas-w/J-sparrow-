@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="common/header"></div>
+<link rel="stylesheet" href="/resources/lib/jq-module/zyupload/zyupload-1.0.0.min.css" media="all">
+<link rel="stylesheet" href="/resources/plugins/dropzone/dropzone.css">
+<link rel="stylesheet" href="/resources/plugins/font-awesome/css/font-awesome.min.css">
+<style>
+    .dz-default:hover {
+        opacity: 65%;
+    }
+</style>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <div class="layui-card">
+            <div class="layui-card-header">文件分发</div>
+            <div class="layui-card-body">
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                    <legend>配&nbsp;&nbsp;置</legend>
+                    <form class="layui-form" action="" lay-filter="planDetail" >
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">选择文件</label>
+                            <div class="layui-input-block">
+                                <!--<div id="zyupload" class="zyupload"></div>-->
+
+                                <div id="UploadForm" class="dropzone form-control">
+                                    <div class="dz-default dz-message">
+                                        <div class="dz-icon icon-wrap icon-circle icon-wrap-md">
+                                            <i class="fa fa-cloud-upload fa-3x"></i>
+                                        </div>
+                                        <div>
+                                            <p class="dz-text">拖曳或点击上传文件</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">选择主机
+                                <!--&nbsp;&nbsp;(已选择:<span class="layui-badge layui-bg-blue">2</span>)-->
+                            </label>
+                            <div class="layui-input-block">
+                                <div id="demo1"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">延时执行(s)</label>
+                            <div class="layui-input-block">
+                                <input type="number" name="delay" lay-verify="number" autocomplete="off" value="0" placeholder="请输入时间(秒)" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">备   注</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="description" placeholder="请输入描述" autocomplete="off" class="layui-input">
+                            </div>
+                        </div><div class="layui-form-item">
+                            <label class="layui-form-label">远程路径</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="remotePath" placeholder="请输入要上传的路径" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-radius layui-btn-success" lay-submit="" lay-filter="doSubmit" id="doSubmit" >开始执行</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </fieldset>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="/resources/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="/resources/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+<script src="/resources/plugins/dropzone/dropzone.js"></script>
+
+<script>
+    layui.config({
+        base: '/resources/plugins/',   // 第三方模块所在目录
+        version: 'v1.5.21' // 插件版本号
+    }).extend({
+        soulTable: 'soulTable/soulTable.slim',
+        xmSelect: 'xmSelect/xm-select',
+        cron: "cron/cron"
+    }).use(['form', 'table', 'xmSelect'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            xmSelect = layui.xmSelect;
+
+        //渲染多选
+        var demo1 = xmSelect.render({
+            name: "bindHostIds",
+            el: '#demo1',
+            paging: false,
+            theme: {
+                color: '#1cbbb4',
+            },
+            prop: {
+                name: 'description',
+                value: 'id',
+            },
+            // data: []
+        })
+
+        // 加载多选框数据
+        function loadBHostInfo() {
+            $.ajax({
+                url:"/host/hostList",
+                type:"post",
+                dataType:"json",
+                data: {
+                    page: 1,
+                    limit: 1000
+                },
+                success:function(result){
+                    var res = result.data;    //返回的数据
+                    // 多选框
+                    demo1.update({
+                        data: res
+                    })
+                },
+                error:function() {
+                    layer.msg("关联主机加载失败");
+                    }
+                }
+            )
+        }
+
+        loadBHostInfo();
+
+        //监听指定开关
+        form.on('switch(switchTest)', function (data) {
+            layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                offset: '6px'
+            });
+            layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+        });
+
+        // 提交表单-
+        form.on("submit(doSubmit)",function (data) {
+            // console.log(data.field);
+            var data_field = data.field;
+            if (data_field.hasOwnProperty('enabled')) {
+                data_field.enabled = 1;
+            }else {
+                data_field.enabled = 0;
+            }
+            data_field.taskType = 0;
+            data_field.files = Array.from(file_ls);
+            console.log(data_field);
+            $.post("/glimmer/multi/scp/create", data_field, function (res) {
+                if (res.code === 0){
+                    toLogDetailPage(res.data);
+                }
+                layer.msg(res.msg);
+            });
+            return false;
+        });
+
+        function toLogDetailPage(data) {
+            window.location.pathname = "/glimmer/multi/log/detail/" + data.id;
+        }
+
+    });
+</script>
+<script>
+    // drop zone
+    var file_ls = new Set();
+    // var myDropzone = new Dropzone("#UploadForm", {
+    Dropzone.options.UploadForm = {
+        url: "/glimmer/multi/scp/upload/",//文件提交地址
+        method:"post",  //也可用put
+        paramName:"file", //默认为file
+        addRemoveLinks:true,
+        parallelUploads: 1,
+        dictResponseError: '文件上传失败!',
+        dictFallbackMessage:"浏览器不受支持",
+        dictFileTooBig:"文件过大上传文件最大支持.",
+        dictRemoveLinks: "删除",
+        dictCancelUpload: "取消",
+        //对一些方法的后续处理
+        init:function(){
+            this.on("addedfile", function(file) {
+                //上传文件时触发的事件
+                document.querySelector('div .dz-default').style.display = 'none';
+            });
+            this.on("success",function(file,data){
+                //上传成功触发的事件
+                file_ls.add(file.name);
+                console.log(file_ls);
+            });
+            this.on("error",function (file,data) {
+                //上传失败触发的事件
+                var message = '';
+                if (file.accepted){
+                    // $.each(data, function (key, val) {
+                    //     message = message + val[0] + ';';
+                    // })
+                    message = data.msg;
+                    //控制器层面的错误提示，file.accepted = true的时候；
+                    alert(message);
+                }
+            });
+            this.on("removedfile",function(file){
+                // console.log(file.name);
+                removeFiles_From_Server(file.name);
+                // this.removeFile(file.name);
+                file_ls.delete(file.name);
+                if (JSON.stringify(Array.from(file_ls)) === '[]') {
+                    console.log(file_ls);
+                    document.querySelector('div .dz-default').style.display = 'block';
+                }
+            });
+            this.on("sending", function (file, xhr, formData) {  //文件上传前调用
+                // formData.append('csrfmiddlewaretoken', "{{ csrf_token }}");
+
+            })
+        }
+
+    };
+
+    function removeFiles_From_Server(filename) {
+        $.ajax({
+            type: "POST",
+            timeout: 60000,
+            dataType: "json",
+            url: '/glimmer/multi/scp/remove/',  //后台url请求，处理传递的参数
+            // async: false,
+            data: {
+                filename: filename,
+                method: 'remove',
+            },
+            beforeSend: function (xhr) {
+                // $("#loading_").css("display", "block");    // 数据加载成功之前，使用loading组件（使用加载中的图片，显示图片gif即可）
+            },
+            success: function (data) {
+                //ajax请求成功执行该函数
+                // $("#loading_").css("display", "none");  	 //关闭加载中图片
+                //alert("删除成功，数量："+data.count+"个")
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                // $("#loading_").css("display", "none")
+                if (textStatus === "timeout") {
+                    alert(" 请求超时，可能是网络较慢，请重新加载")
+                } else {
+                    alert("XMLHttpRequest.status:" + XMLHttpRequest.status + "\n" + "XMLHttpRequest.readyState:" + XMLHttpRequest.readyState + "\n"
+                        + "textStatus:" + textStatus);
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

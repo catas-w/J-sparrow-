@@ -123,6 +123,12 @@ public class SysController {
         return "glimmer/multi-cmd";
     }
 
+    // 批量传输
+    @RequestMapping("/glimmer/multi/sftp")
+    public String multiSftp() {
+        return "glimmer/multi-scp";
+    }
+
     // 多任务日志
     @RequestMapping("/glimmer/multi/log")
     public String multiTaskLog() {

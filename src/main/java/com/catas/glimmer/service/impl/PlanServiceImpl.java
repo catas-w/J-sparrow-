@@ -143,6 +143,26 @@ public class PlanServiceImpl extends ServiceImpl<PlanMapper, Plan> implements IP
     }
 
     @Override
+    public void modifyCron(Plan plan, String cron) throws SchedulerException{
+        JobDataMap dataMap = this.getJobDataMap(plan);
+        JobKey jobKey = this.getJobKey(plan);
+        TriggerKey triggerKey = new TriggerKey(jobKey.getName(), jobKey.getGroup());
+        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+        CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
+        String oldCron = cronTrigger.getCronExpression();
+        if (!oldCron.equalsIgnoreCase(cron)) {
+            plan.setCron(cron);
+            CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
+            CronTrigger trigger = TriggerBuilder.newTrigger()
+                    .withIdentity(jobKey.getName(), jobKey.getGroup())
+                    .withSchedule(cronScheduleBuilder)
+                    .usingJobData(this.getJobDataMap(plan))
+                    .build();
+            scheduler.rescheduleJob(triggerKey, trigger);
+        }
+    }
+
+    @Override
     public void startPlan(Plan plan) throws SchedulerException {
         JobDataMap dataMap = this.getJobDataMap(plan);
         JobKey jobKey = this.getJobKey(plan);
