@@ -5,6 +5,7 @@ import com.catas.audit.common.DataGridView;
 import com.catas.audit.entity.Sessionlog;
 import com.catas.audit.service.ISessionlogService;
 import com.catas.audit.vo.SessionLogVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,7 @@ public class SessionLogController {
     }
 
     // 下载日志文件
+    @RequiresPermissions("sshlog:view")
     @RequestMapping("/download/{id}")
     public void downloadSSHLog(@PathVariable("id") Integer logId, HttpServletResponse response) {
         Sessionlog sessionlog = sessionlogService.getById(logId);

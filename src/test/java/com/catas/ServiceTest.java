@@ -69,17 +69,9 @@ public class ServiceTest {
 
     @Test
     void test1() {
-        String baseDir = "D:\\PY_Projects\\SpringBootProjects\\sparrow\\log\\glimmer\\";
-
-        String f1 = baseDir + "1-.log";
-        String f2 = baseDir + "Plan-2.log";
-        String user = "catas";
-        String ip = "127.0.0.1";
-        String remotePath = "/home/catas/test/";
-        // String cmd = String.format("scp '%s' '%s' %s@%s:%s", f1+baseDir, f2+baseDir, user, ip, remotePath);
-        List<String> files = Arrays.asList(f1, f2);
-        Map<String, String> res = sshUtil.execSFTP(ip,22, user, "eminem", files, remotePath);
-        System.out.println(res);
+        System.out.println(userInfoService.getPermissionsById(1));
+        System.out.println("======================");
+        System.out.println(userInfoService.getPermissionsById(2));
     }
 
     @Test

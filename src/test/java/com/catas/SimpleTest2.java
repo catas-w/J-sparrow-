@@ -23,14 +23,72 @@ public class SimpleTest2 {
 
     @Test
     void testPal() {
-        HashSet<List<Integer>> hashSet = new HashSet<>();
-        hashSet.add(new ArrayList<>(Arrays.asList(1,2,3)));
-        hashSet.add(new ArrayList<>(Arrays.asList(1,2,3)));
-        hashSet.add(new ArrayList<>(Arrays.asList(2,1,3)));
-        for (List<Integer> list : hashSet) {
-            System.out.println(list);
+        System.out.println(search(new int[]{4, 5, 6, 7, 0, 1, 2,3}, 3));
+        System.out.println(search(new int[]{4, 5, 6, 7, 0, 1, 2,3}, 1));
+        System.out.println(search(new int[]{4, 5, 6, 7, 0, 1, 2,3}, 7));
+        System.out.println(search(new int[]{4, 5, 6, 7, 0, 1, 2,3}, 78));
+        System.out.println(search(new int[]{4, 5, 1, 2}, 2));
+        System.out.println(search(new int[]{4, 5, 1, 2}, 4));
+        // System.out.println(search(new int[]{4, 5, 6, 7, 0, 1, 2}, 1));
+        // System.out.println(search(new int[]{5, 4}, 4));
+        // System.out.println(search(new int[]{5, 4}, 5));
+        // System.out.println(search(new int[]{4, 5}, 4));
+        // System.out.println(search(new int[]{1}, 6));
+        // System.out.println(search(new int[]{1}, 1));
+        System.out.println(search(new int[]{1,0}, 0));
+        System.out.println(search(new int[]{0,1}, 0));
+    }
+
+    public int search(int[] nums, int target) {
+        if (nums.length == 1) {
+            return nums[0] == target ? 0 : -1;
+        }
+        // 找到最小值下标
+        int min = findMin(nums);
+
+
+        if (target <= nums[nums.length-1]){
+            return binarySearch(nums, target, min, nums.length-1);
+        }else if (target >= nums[0]){
+            return binarySearch(nums, target, 0, min-1);
+        }else {
+            return -1;
         }
     }
+
+    public int findMin(int[] nums) {
+        int first = nums[0];
+        int start = 0, end = nums.length-1;
+        if (nums[start] <= nums[end]) {
+            return start;
+        }
+
+        while(start < end) {
+            int mid = (start + end) / 2;
+            if (nums[mid] >= first) {
+                start = mid + 1;
+            }else {
+                end = mid;
+            }
+        }
+        return start;
+    }
+
+    public int binarySearch(int[] nums, int target, int start, int end) {
+        if (start > end) {
+            return -1;
+        }
+        if (start == end) {
+            return nums[start] == target ? start : -1;
+        }
+        int mid = (start + end) / 2;
+        if (nums[mid] >= target) {
+            return binarySearch(nums, target, start, mid);
+        }else {
+            return binarySearch(nums, target, mid+1, end);
+        }
+    }
+
 
     @Test
     void testTreeSum() {

@@ -10,6 +10,7 @@ import com.catas.audit.service.IBindhostService;
 import com.catas.audit.service.IHostService;
 import com.catas.audit.service.IHostuserService;
 import com.catas.audit.vo.BindHostVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,6 +70,7 @@ public class BindHostController {
         return new DataGridView((long) res.size(), res);
     }
 
+    @RequiresPermissions("host:edit")
     @RequestMapping("/add")
     public ResultObj addBindHost(BindHostVo bindHostVo) {
         try {
@@ -83,6 +85,7 @@ public class BindHostController {
         }
     }
 
+    @RequiresPermissions("host:edit")
     @RequestMapping("/update")
     public ResultObj updateBindHost(BindHostVo bindHostVo) {
         try {
@@ -97,6 +100,7 @@ public class BindHostController {
         }
     }
 
+    @RequiresPermissions("host:edit")
     @RequestMapping("/delete/{id}")
     public ResultObj updateBindHost(@PathVariable("id") Integer bindHostId) {
         try {

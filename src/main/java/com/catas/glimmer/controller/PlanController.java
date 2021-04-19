@@ -24,6 +24,7 @@ import com.catas.glimmer.vo.PlanVo;
 import com.catas.glimmer.vo.ScheduleLogVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.tomcat.util.bcel.Const;
 import org.quartz.*;
 import org.slf4j.Logger;
@@ -122,6 +123,7 @@ public class PlanController {
     }
 
     // 添加计划
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/add")
     public ResultObj addPlan(PlanVo planVo) {
         Plan plan = new Plan();
@@ -140,6 +142,7 @@ public class PlanController {
     }
 
     // 修改计划
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/update")
     public ResultObj updatePlan(PlanVo planVo) {
         if (!CronExpression.isValidExpression(planVo.getCron())) {
@@ -163,6 +166,7 @@ public class PlanController {
     }
 
     // 删除计划
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/delete/{id}")
     public ResultObj deletePlan(@PathVariable("id") Integer planId) {
         Plan plan = planService.getById(planId);
@@ -182,6 +186,7 @@ public class PlanController {
     /**
      * @Description: 获取计划对应任务
      */
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/get-job-list")
     public DataGridView getJobList(Integer planId) {
         logger.info("get jobs");
@@ -204,6 +209,7 @@ public class PlanController {
     }
 
     // 添加子任务
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/detail/{pId}/job/add")
     public ResultObj addJob(@PathVariable("pId") Integer planId, JobVo jobVo) {
         try {
@@ -217,6 +223,7 @@ public class PlanController {
     }
 
     // 修改子任务
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/detail/{pId}/job/update")
     public ResultObj updateJob(@PathVariable("pId") Integer planId, JobVo jobVo) {
         try {
@@ -230,6 +237,7 @@ public class PlanController {
     }
 
     // 删除子任务
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/detail/{pId}/job/delete/{jId}")
     public ResultObj deleteJob(@PathVariable("pId") Integer planId, @PathVariable("jId") Integer jobId) {
         try {
@@ -242,6 +250,7 @@ public class PlanController {
     }
 
     // 修改子任务顺序
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/detail/{pId}/job/reorder/")
     public ResultObj reOrder(@PathVariable("pId") Integer planId, PlanVo planVo) {
         List<Integer> orders = planVo.getOrders();
@@ -271,6 +280,7 @@ public class PlanController {
      * @param planId plan id
      * @return result
      */
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/start/{id}")
     public ResultObj startPlan(@PathVariable("id") Integer planId) {
         Plan plan = planService.getById(planId);
@@ -289,6 +299,7 @@ public class PlanController {
         }
     }
 
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/refresh/{id}")
     public ResultObj refreshPlan(@PathVariable("id") Integer planId) {
         Plan plan = planService.getById(planId);
@@ -307,6 +318,7 @@ public class PlanController {
         }
     }
 
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/pause/{id}")
     public ResultObj pausePlan(@PathVariable("id") Integer planId ) {
         Plan plan = planService.getById(planId);
@@ -325,6 +337,7 @@ public class PlanController {
         }
     }
 
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/resume/{id}")
     public ResultObj resumePlan(@PathVariable("id") Integer planId) {
         Plan plan = planService.getById(planId);
@@ -343,6 +356,7 @@ public class PlanController {
         }
     }
 
+    @RequiresPermissions("shedule:create")
     @RequestMapping("/stop/{id}")
     public ResultObj stopPlan(@PathVariable("id") Integer planId) {
         Plan plan = planService.getById(planId);
@@ -362,6 +376,7 @@ public class PlanController {
     }
 
     // 获取日志列表
+    @RequiresPermissions("sshlog:view")
     @RequestMapping("/logs/get-all")
     public DataGridView getLogsList(ScheduleLogVo logVo) {
         Page<ScheduleLogVo> page = new Page<>(logVo.getPage(), logVo.getLimit());
@@ -370,6 +385,7 @@ public class PlanController {
     }
 
     // 下载日志文件
+    @RequiresPermissions("sshlog:view")
     @RequestMapping("/logs/download/{id}")
     public void downloadSSHLog(@PathVariable("id") Integer logId, HttpServletResponse response) {
         ScheduleLog scheduleLog = scheduleLogService.getById(logId);

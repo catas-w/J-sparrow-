@@ -15,6 +15,7 @@ import com.catas.audit.service.IHostgroupService;
 import com.catas.audit.service.IUserInfoService;
 import com.catas.audit.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,7 @@ public class UserInfoController {
         return new DataGridView(page.getTotal(), page.getRecords());
     }
 
+    @RequiresPermissions("user:edit")
     @RequestMapping("/update")
     public ResultObj updateUser(UserVo userVo) {
 
@@ -82,6 +84,7 @@ public class UserInfoController {
         }
     }
 
+    @RequiresPermissions("user:edit")
     @RequestMapping("/add")
     public ResultObj addUser(UserVo userVo) {
         String exist = userInfoExist(userVo);
@@ -117,6 +120,7 @@ public class UserInfoController {
         return "";
     }
 
+    @RequiresPermissions("user:edit")
     @RequestMapping("/delete/{id}")
     public ResultObj deleteUser(@PathVariable("id") Integer userId) {
 
@@ -146,6 +150,7 @@ public class UserInfoController {
     }
 
     // 更新用户绑定主机信息
+    @RequiresPermissions("user:edit")
     @RequestMapping("/save-bind-hosts")
     public ResultObj saveBindHosts(UserVo userVo) {
 
@@ -174,6 +179,7 @@ public class UserInfoController {
         return new DataGridView((long) allGroupInfo.size(), allGroupInfo);
     }
 
+    @RequiresPermissions("user:edit")
     @RequestMapping("/save-host-group")
     public ResultObj saveBindGroups(UserVo userVo) {
 

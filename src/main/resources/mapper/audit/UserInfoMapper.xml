@@ -18,4 +18,16 @@
             t.user_info_id = #{id}
     </select>
 
+    <select id="getPermissionsById" resultType="string">
+        SELECT
+        DISTINCT
+            e.`code`
+        FROM
+            audit_user_info as a
+            JOIN auth_user_info_group as b on a.id = b.user_id
+            JOIN auth_group as c on b.group_id = c.id
+            JOIN auth_group_permissions as d on c.id = d.group_id
+            JOIN auth_permission as e on d.permission_id = e.id
+        WHERE a.id = #{userId}
+    </select>
 </mapper>

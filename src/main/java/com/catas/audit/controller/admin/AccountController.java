@@ -10,6 +10,7 @@ import com.catas.audit.entity.Hostuser;
 import com.catas.audit.service.IHostuserService;
 import com.catas.audit.vo.AccountVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,7 @@ public class AccountController {
         return new DataGridView(page.getTotal(), page.getRecords());
     }
 
+    @RequiresPermissions("host:edit")
     @RequestMapping("/add")
     public ResultObj addAccount(AccountVo accountVo) {
         try {
@@ -51,6 +53,7 @@ public class AccountController {
         }
     }
 
+    @RequiresPermissions("host:edit")
     @RequestMapping("/update")
     public ResultObj updateAccount(AccountVo accountVo) {
         try {
@@ -62,6 +65,7 @@ public class AccountController {
         }
     }
 
+    @RequiresPermissions("host:edit")
     @RequestMapping("/delete/{id}")
     public ResultObj deleteAccounr(@PathVariable("id") Integer id) {
         try {

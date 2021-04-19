@@ -9,6 +9,7 @@ import com.catas.audit.entity.Hostgroup;
 import com.catas.audit.service.IBindhostService;
 import com.catas.audit.service.IHostgroupService;
 import com.catas.audit.vo.HostGroupVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +40,7 @@ public class HostGroupController {
         return new DataGridView((long) allGroupInfo.size(), allGroupInfo);
     }
 
-
+    @RequiresPermissions("host:edit")
     @RequestMapping("/add")
     public ResultObj addGroup(HostGroupVo hostGroupVo) {
         if (hostGroupVo.getName() == null || hostGroupVo.getName().equals("")) {
@@ -58,6 +59,7 @@ public class HostGroupController {
         }
     }
 
+    @RequiresPermissions("host:edit")
     @RequestMapping("/update")
     public ResultObj updateGroup(HostGroupVo hostGroupVo) {
         if (hostGroupVo.getName() == null || hostGroupVo.getName().equals("")) {
@@ -75,6 +77,7 @@ public class HostGroupController {
         }
     }
 
+    @RequiresPermissions("host:edit")
     @RequestMapping("/delete/{id}")
     public ResultObj deleteGroup(@PathVariable("id") Integer groupId) {
         try {

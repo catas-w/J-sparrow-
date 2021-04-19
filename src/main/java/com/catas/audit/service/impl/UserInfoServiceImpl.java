@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -22,6 +23,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Override
     public List<Integer> queryGroupIdsByUserId(Integer id) {
         return this.getBaseMapper().queryGroupIdsByUserId(id);
+    }
+
+    @Override
+    public List<String> getPermissionsById(Integer id) {
+        return this.getBaseMapper().getPermissionsById(id);
     }
 
 

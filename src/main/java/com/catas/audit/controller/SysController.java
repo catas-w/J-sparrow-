@@ -99,6 +99,18 @@ public class SysController {
         return "admin/idc";
     }
 
+    // 权限信息页
+    @RequestMapping("/admin/permission")
+    public String toPermissionPage() {
+        return "admin/permission";
+    }
+
+    // 用户权限组
+    @RequestMapping("/admin/user-group")
+    public String toUserGroupPage() {
+        return "admin/user-group";
+    }
+
     // schedule plan
     @RequestMapping("/glimmer")
     public String glimmer() {

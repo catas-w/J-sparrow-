@@ -33,50 +33,7 @@
           "icon": "fa fa-gears",
           "target": "_self"
         },
-        {
-          "title": "管理",
-          "href": "",
-          "icon": "fa fa-calendar",
-          "target": "_self",
-          "child": [
-            {
-              "title": "用户",
-              "href": "/admin/users",
-              "icon": "fa fa-list-alt",
-              "target": "_self"
-            },
-            {
-              "title": "主机信息",
-              "href": "/admin/hosts",
-              "icon": "fa fa-navicon",
-              "target": "_self"
-            },
-            {
-              "title": "主机登录账户",
-              "href": "/admin/account",
-              "icon": "fa fa-navicon",
-              "target": "_self"
-            },
-            {
-              "title": "登录信息绑定",
-              "href": "/admin/bind-host",
-              "icon": "fa fa-navicon",
-              "target": "_self"
-            },
-            {
-              "title": "主机组",
-              "href": "/admin/host-group",
-              "icon": "fa fa-navicon",
-              "target": "_self"
-            },
-            {
-              "title": "IDC",
-              "href": "/admin/idc",
-              "icon": "fa fa-navicon",
-              "target": "_self"
-            }
-          ]
-        },
+
         {
           "title": "批量任务",
           "href": "",
@@ -122,7 +79,72 @@
               "target": "_self"
             }
           ]
+        },
+        {
+          "title": "主机管理",
+          "href": "",
+          "icon": "fa fa-calendar",
+          "target": "_self",
+          "child": [
+            {
+              "title": "主机信息",
+              "href": "/admin/hosts",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "主机登录账户",
+              "href": "/admin/account",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "登录信息绑定",
+              "href": "/admin/bind-host",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "主机组",
+              "href": "/admin/host-group",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            },
+            {
+              "title": "IDC",
+              "href": "/admin/idc",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "用户信息",
+          "href": "",
+          "icon": "fa fa-home",
+          "target": "_self",
+          "child": [
+            {
+              "title": "堡垒机用户",
+              "href": "/admin/users",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "用户组",
+              "href": "/admin/user-group",
+              "icon": "fa fa-hourglass-end",
+              "target": "_self"
+            },
+            {
+              "title": "权限信息",
+              "href": "/admin/permission",
+              "icon": "fa fa-hourglass-end",
+              "target": "_self"
+            }
+          ]
         }
+
       ]
     },
     {

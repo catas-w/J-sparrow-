@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.catas.audit.mapper.AuthGroupMapper">
+
+    <insert id="addGroupPerms">
+        insert into
+            auth_group_permissions(group_id, permission_id)
+        values
+        <foreach collection="permIdList" separator="," item="permId">
+            (#{groupId}, #{permId})
+        </foreach>
+    </insert>
+
+    <delete id="clearGroupPerms">
+        delete from
+            auth_group_permissions
+        where
+            group_id = #{groupId};
+    </delete>
+</mapper>

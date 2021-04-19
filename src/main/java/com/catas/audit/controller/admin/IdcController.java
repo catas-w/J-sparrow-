@@ -6,6 +6,7 @@ import com.catas.audit.common.DataGridView;
 import com.catas.audit.common.ResultObj;
 import com.catas.audit.service.IIdcService;
 import com.catas.audit.vo.IdcVo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -29,6 +30,7 @@ public class IdcController {
         return new DataGridView((long) allIdcInfo.size(), allIdcInfo);
     }
 
+    @RequiresPermissions("host:edit")
     @RequestMapping("/add")
     public ResultObj addIdc(IdcVo idcVo) {
         try {
@@ -44,6 +46,7 @@ public class IdcController {
         }
     }
 
+    @RequiresPermissions("host:edit")
     @RequestMapping("/update")
     public ResultObj updateIdc(IdcVo idcVo) {
         try {
@@ -59,6 +62,7 @@ public class IdcController {
         }
     }
 
+    @RequiresPermissions("host:edit")
     @RequestMapping("/delete/{id}")
     public ResultObj deleteIdc(@PathVariable("id") Integer idcId ) {
         try {
