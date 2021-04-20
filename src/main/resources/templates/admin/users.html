@@ -57,19 +57,21 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <div class="">
                         <label class="layui-form-label">用户名</label>
                         <div class="layui-input-block">
                             <input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
                         </div>
-                    </div>
                 </div>
                 <div class="layui-form-item">
-                    <div class="">
                         <label class="layui-form-label">邮箱</label>
                         <div class="layui-input-block">
                             <input type="email" name="email" lay-verify="required" autocomplete="off" class="layui-input input-radius" >
                         </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">权限组</label>
+                    <div class="layui-input-block">
+                        <div id="demo1"></div>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -77,8 +79,6 @@
                         <label class="layui-form-label">激活</label>
                         <div class="layui-input-block">
                             <input type="checkbox" name="isActive" lay-skin="switch" lay-filter="encrypt">
-                            <!--<input type="radio" name="isActive" value="1" title="可用" checked="">-->
-                            <!--<input type="radio" name="isActive" value="0" title="不可用">-->
                         </div>
                     </div>
                 </div>
@@ -119,10 +119,59 @@
 </div>
 <script src="/resources/lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script>
-    layui.use(['form', 'table'], function () {
+    layui.config({
+        base: '/resources/plugins/',   // 第三方模块所在目录
+        version: 'v1.5.21' // 插件版本号
+    }).extend({
+        soulTable: 'soulTable/soulTable.slim',
+        xmSelect: 'xmSelect/xm-select',
+    }).use(['form', 'table', 'xmSelect'], function () {
         var $ = layui.jquery,
             form = layui.form,
-            table = layui.table;
+            table = layui.table,
+            xmSelect = layui.xmSelect;
+
+
+        //渲染多选
+        var demo1 = xmSelect.render({
+            name: "relatedGroupList",
+            el: '#demo1',
+            paging: false,
+            theme: {
+                color: '#1cbbb4',
+            },
+            prop: {
+                name: 'name',
+                value: 'id',
+            },
+        })
+
+        // 加载多选框数据
+        function loadPermissionList() {
+            $.ajax({
+                    url:"/admin/permission/group/list",
+                    type:"post",
+                    dataType:"json",
+                    data: {
+                        page: 1,
+                        limit: 1000,
+                    },
+                    success:function(result){
+                        var res = result.data;    //返回的数据
+                        // 多选框
+                        demo1.update({
+                            data: res
+                        })
+                    },
+                    error:function() {
+                        layer.msg("权限组加载失败");
+                    }
+                }
+            )
+        }
+
+        loadPermissionList();
+
 
         table.render({
             elem: '#currentTableId',
@@ -139,8 +188,32 @@
                 {field: 'name', width: 120, title: '用户名'},
                 {field: 'email', width: 180, title: '邮箱', sort: true},
                 {field: 'lastLogin', width: 180, title: '上次登录', sort: true},
-                {field: 'isActive', width: 80, title: '已激活'},
-                {field: 'isAdmin', title: '管理员', Width: 80},
+                {field: 'isActive', width: 80, title: '已激活', templet: function (item) {
+                        let btn = '';
+                        let desc = '';
+                        if (item.isActive) {
+                            btn = 'warm';
+                            desc = 'checked';
+                        }else {
+                            btn = 'danger';
+                            desc = 'unchecked';
+                        }
+                        let res = `<input type="checkbox" ${desc} disabled lay-skin="switch" lay-filter="encrypt">`;
+                        return res;
+                    }},
+                {field: 'isAdmin', title: '管理员', Width: 80,  templet: function (item) {
+                        let btn = '';
+                        let desc = '';
+                        if (item.isAdmin) {
+                            btn = 'warm';
+                            desc = 'checked';
+                        }else {
+                            btn = 'danger';
+                            desc = 'unchecked';
+                        }
+                        let res = `<input type="checkbox" ${desc} disabled lay-skin="switch" lay-filter="encrypt">`;
+                        return res;
+                    }},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ] ],
             limits: [5, 10, 15],
@@ -226,14 +299,36 @@
             mainIndex = layer.open({
                 type:1,
                 content:$("#addOrUpdateDiv"),
-                area:['600px','400px'],
+                area:['700px','500px'],
                 title:'添加用户',
                 success:function () {
                     $("#dataFrm")[0].reset();
                     $("#userId").val("");
+                    demo1.setValue([]);
                     url="/users/add";
                 }
             });
+        }
+
+        // 当前关联的所有组id
+        function getRelatedPermGroups(data) {
+            $.ajax({
+                    url:"/admin/permission/user-related-group/" + data.id,
+                    type:"post",
+                    dataType:"json",
+                    data: {},
+                    success:function(result){
+                        var res = result.data;    //返回的数据
+                        // 更新form
+                        // data.bHostIds = res.bindHostIds;
+                        console.log('更新表单');
+                        demo1.setValue(res.relatedGroupList);
+                    },
+                    error:function() {
+                        layer.msg("加载失败");
+                    }
+                }
+            );
         }
 
         //打开修改的弹出层
@@ -241,7 +336,7 @@
             mainIndex = layer.open({
                 type:1,
                 content:$("#addOrUpdateDiv"),
-                area:['600px','350px'],
+                area:['700px','500px'],
                 title:'修改用户信息',
                 success:function () {
                     //清空原有的数据
@@ -249,6 +344,7 @@
                     //装载新的数据
                     form.val("dataFrm",data);
                     url="/users/update";
+                    getRelatedPermGroups(data);
                 }
             });
         }

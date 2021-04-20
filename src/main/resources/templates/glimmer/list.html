@@ -82,11 +82,39 @@
                 {field: 'userId', width: 180, title: '', sort: true, hide: true},
                 {field: 'userName', width: 150, title: '创建人', sort: true},
                 {field: 'createDate', width: 180, title: '创建时间', sort: true},
-                {field: 'enableLevel', width: 120, title: '可用', sort: true},
-                {field: 'enabled', width: 120, title: '可用', hide: true},
-                {field: 'status', width: 180, title: '', hide: true},
+                // {field: 'enableLevel', width: 120, title: '可用', sort: true},
+                {field: 'enabled', width: 120, title: '可用',  templet: function (item) {
+                        let btn = '';
+                        let desc = '';
+                        if (item.enabled === 1) {
+                            btn = 'warm';
+                            desc = 'checked';
+                        }else {
+                            btn = 'danger';
+                            desc = 'unchecked';
+                        }
+                        let res = `<input type="checkbox" ${desc} disabled lay-skin="switch" lay-filter="encrypt">`;
+                        return res;
+                    }},
+                {field: 'status', width: 180, title: '状态', templet: function (item) {
+                        let btn = '';
+                        let desc = '';
+                        if (item.status === 0) {
+                            btn = 'warm';
+                            desc = '未启动';
+                        }
+                        else if (item.status === 1) {
+                            btn = 'success';
+                            desc = '运行中';
+                        }else if (item.status === 2) {
+                            btn = 'danger';
+                            desc = '已停止';
+                        }
+                        let res = `<button class="layui-btn layui-btn-xs layui-btn-${btn} layui-btn-sm">${desc}</button>`;
+                        return res;
+                    }},
                 {field: 'cron', width: 180, title: '', hide: true},
-                {field: 'statusLevel', width: 150, title: '状态'},
+                // {field: 'statusLevel', width: 150, title: '状态'},
                 {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
             ] ],
             limits: [5, 10, 15],

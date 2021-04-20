@@ -17,4 +17,20 @@
         where
             group_id = #{groupId};
     </delete>
+
+    <insert id="addUserRelatedGroup">
+        insert into
+            auth_user_info_group(user_id, group_id)
+        values
+        <foreach collection="groupIdList" separator="," item="groupId">
+            (#{userId}, #{groupId})
+        </foreach>
+    </insert>
+
+    <delete id="clearUserRelatedGroup">
+        delete from
+            auth_user_info_group
+        where
+            user_id = #{userId}
+    </delete>
 </mapper>

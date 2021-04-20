@@ -25,4 +25,12 @@ public class AuthGroupServiceImpl extends ServiceImpl<AuthGroupMapper, AuthGroup
         if (permIdList != null && !permIdList.isEmpty())
             this.getBaseMapper().addGroupPerms(groupId, permIdList);
     }
+
+    @Override
+    public void updateUserRelatedGroup(Integer userId, List<Integer> groupIdList) {
+        this.getBaseMapper().clearUserRelatedGroup(userId);
+        if (groupIdList != null && !groupIdList.isEmpty()) {
+            this.getBaseMapper().addUserRelatedGroup(userId, groupIdList);
+        }
+    }
 }

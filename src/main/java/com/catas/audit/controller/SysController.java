@@ -44,6 +44,11 @@ public class SysController {
         return "redirect:/toLogin";
     }
 
+    @GetMapping("/reset-password")
+    public String resetPassword() {
+        return "admin/user-password";
+    }
+
     // 主机列表
     @RequestMapping("/host")
     public String myHosts() {

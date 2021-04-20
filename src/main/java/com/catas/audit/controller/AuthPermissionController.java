@@ -8,9 +8,11 @@ import com.catas.audit.common.ResultObj;
 import com.catas.audit.entity.AuthGroup;
 import com.catas.audit.entity.AuthGroupPermissions;
 import com.catas.audit.entity.AuthPermission;
+import com.catas.audit.entity.AuthUserInfoGroup;
 import com.catas.audit.service.IAuthGroupPermissionsService;
 import com.catas.audit.service.IAuthGroupService;
 import com.catas.audit.service.IAuthPermissionService;
+import com.catas.audit.service.IAuthUserInfoGroupService;
 import com.catas.audit.vo.PermissionVo;
 import com.catas.audit.vo.UserGroupVo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -49,6 +51,9 @@ public class AuthPermissionController {
 
     @Autowired
     private IAuthGroupPermissionsService groupPermissionsService;
+
+    @Autowired
+    private IAuthUserInfoGroupService userInfoGroupService;
 
     @RequestMapping("/list")
     public DataGridView getPermissionList(PermissionVo permissionVo) {
@@ -161,6 +166,27 @@ public class AuthPermissionController {
             e.printStackTrace();
             return ResultObj.DELETE_FAILED;
         }
+    }
+
+    /**
+     *
+     * @param userId 用户id
+     * @return 用户关联权限组id list
+     */
+    @RequestMapping("/user-related-group/{id}")
+    public DataGridView getRelatedGroupByUserId(@PathVariable("id") Integer userId) {
+        QueryWrapper<AuthUserInfoGroup> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId).select("group_id");
+        List<AuthUserInfoGroup> userInfoGroups = userInfoGroupService.list(queryWrapper);
+
+        Map<String, List<Integer>> res = new HashMap<>();
+        ArrayList<Integer> list = new ArrayList<>();
+        for (AuthUserInfoGroup obj : userInfoGroups) {
+            list.add(obj.getGroupId());
+        }
+        res.put("relatedGroupList", list);
+
+        return new DataGridView(res);
     }
 }
 

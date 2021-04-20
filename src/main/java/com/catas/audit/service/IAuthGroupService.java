@@ -16,4 +16,6 @@ import java.util.List;
 public interface IAuthGroupService extends IService<AuthGroup> {
 
     void updateGroupPerms(Integer groupId, List<Integer> permIdList);
+
+    void updateUserRelatedGroup(Integer userId, List<Integer> groupIdList);
 }

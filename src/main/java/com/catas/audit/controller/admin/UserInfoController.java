@@ -5,21 +5,26 @@ import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.catas.audit.common.ActiveUser;
 import com.catas.audit.common.Constant;
 import com.catas.audit.common.DataGridView;
 import com.catas.audit.common.ResultObj;
 import com.catas.audit.dto.UserInfoDto;
 import com.catas.audit.entity.UserInfo;
+import com.catas.audit.service.IAuthGroupService;
 import com.catas.audit.service.IBindhostService;
 import com.catas.audit.service.IHostgroupService;
 import com.catas.audit.service.IUserInfoService;
+import com.catas.audit.vo.PasswordVo;
 import com.catas.audit.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -41,6 +46,7 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("/users")
+@Validated
 public class UserInfoController {
 
     @Autowired
@@ -51,6 +57,9 @@ public class UserInfoController {
 
     @Autowired
     private IHostgroupService hostgroupService;
+
+    @Autowired
+    private IAuthGroupService authGroupService;
 
     @RequestMapping("/get-user-list")
     public DataGridView loadUserInfo(UserVo userVo) {
@@ -77,6 +86,7 @@ public class UserInfoController {
 
         try {
             userInfoService.updateById(userVo);
+            authGroupService.updateUserRelatedGroup(userVo.getId(), userVo.getRelatedGroupList());
             return ResultObj.UPDATE_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,6 +108,10 @@ public class UserInfoController {
             String pwd = new Md5Hash(Constant.DEFAULT_PWS, salt, 2).toString();
             userVo.setPassword(pwd);
             userInfoService.save(userVo);
+            // 添加权限组
+            if (userVo.getRelatedGroupList()!= null && !userVo.getRelatedGroupList().isEmpty())
+                authGroupService.updateUserRelatedGroup(userVo.getId(), userVo.getRelatedGroupList());
+
             return ResultObj.ADD_SUCCESS;
         } catch (DuplicateKeyException e) {
             e.printStackTrace();
@@ -179,12 +193,40 @@ public class UserInfoController {
         return new DataGridView((long) allGroupInfo.size(), allGroupInfo);
     }
 
+    // 保存主机组
     @RequiresPermissions("user:edit")
     @RequestMapping("/save-host-group")
     public ResultObj saveBindGroups(UserVo userVo) {
 
         try {
             hostgroupService.updateRelatedGroups(userVo.getId(), userVo.getBindGroupIds());
+            return ResultObj.UPDATE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultObj.UPDATE_FAILED;
+        }
+    }
+
+    /**
+     * @Description: 修改密码
+     */
+    @RequestMapping("/modify-password")
+    public ResultObj modifyPassword(@Validated PasswordVo passwordVo) {
+
+        ActiveUser activateUser = (ActiveUser) SecurityUtils.getSubject().getPrincipal();
+        UserInfo curUser = activateUser.getUserInfo();
+        String oldPassword = passwordVo.getOldPassword();
+        String oldPwdHash = new Md5Hash(oldPassword, curUser.getSalt(), 2).toString();
+        if (!curUser.getPassword().equals(oldPwdHash)) {
+            return ResultObj.error("密码不正确");
+        }
+        if (!passwordVo.getNewPassword().equals(passwordVo.getAgainPassword()))
+            return ResultObj.error("两次输入密码不一致");
+
+        try {
+            String salt = IdUtil.simpleUUID().toUpperCase();
+            String pwd = new Md5Hash(Constant.DEFAULT_PWS, curUser.getSalt(), 2).toString();
+            curUser.setPassword(pwd);
             return ResultObj.UPDATE_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();

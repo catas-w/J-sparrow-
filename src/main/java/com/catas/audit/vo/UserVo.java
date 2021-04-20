@@ -23,5 +23,8 @@ public class UserVo extends UserInfo {
     private List<Integer> bindHostIds;
 
     private List<Integer> bindGroupIds;
+
+    private List<Integer> relatedGroupList;
+
 }
 

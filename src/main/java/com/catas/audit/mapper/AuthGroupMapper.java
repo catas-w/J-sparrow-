@@ -21,4 +21,10 @@ public interface AuthGroupMapper extends BaseMapper<AuthGroup> {
 
     // 添加组关联权限
     void addGroupPerms(@Param("groupId") Integer id, @Param("permIdList") List<Integer> ids);
+
+    // 清楚用户关联组
+    void clearUserRelatedGroup(@Param("userId") Integer id);
+
+    // 添加用户关联组
+    void addUserRelatedGroup(@Param("userId") Integer id, @Param("groupIdList") List<Integer> ids);
 }

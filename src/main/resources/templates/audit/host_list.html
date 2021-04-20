@@ -82,7 +82,20 @@
                 {field: 'idc', width: 140, title: 'IDC', sort: true},
                 {field: 'port', width: 120, title: '端口'},
                 {field: 'userName', width: 120, title: '账户', sort: true},
-                {field: 'enabled', width: 120, title: '可用'},
+                {field: 'enabled', width: 120, title: '可用', templet: function (item) {
+                        let btn = '';
+                        let desc = '';
+                        if (item.enabled === "是") {
+                            btn = 'warm';
+                            desc = 'checked';
+                        }
+                        else {
+                            btn = 'danger';
+                            desc = 'unchecked';
+                        }
+                        let res = `<input type="checkbox" ${desc} disabled lay-skin="switch" lay-filter="encrypt">`;
+                        return res;
+                    }},
                 {field: 'authType', width: 120, title: '认证方式'},
                 {title: '操作', Width: 120, toolbar: '#currentTableBar'}
             ] ],
