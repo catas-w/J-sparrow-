@@ -23,20 +23,133 @@ public class SimpleTest2 {
 
     @Test
     void testPal() {
-        System.out.println(search(new int[]{4, 5, 6, 7, 0, 1, 2,3}, 3));
-        System.out.println(search(new int[]{4, 5, 6, 7, 0, 1, 2,3}, 1));
-        System.out.println(search(new int[]{4, 5, 6, 7, 0, 1, 2,3}, 7));
-        System.out.println(search(new int[]{4, 5, 6, 7, 0, 1, 2,3}, 78));
-        System.out.println(search(new int[]{4, 5, 1, 2}, 2));
-        System.out.println(search(new int[]{4, 5, 1, 2}, 4));
-        // System.out.println(search(new int[]{4, 5, 6, 7, 0, 1, 2}, 1));
-        // System.out.println(search(new int[]{5, 4}, 4));
-        // System.out.println(search(new int[]{5, 4}, 5));
-        // System.out.println(search(new int[]{4, 5}, 4));
-        // System.out.println(search(new int[]{1}, 6));
-        // System.out.println(search(new int[]{1}, 1));
-        System.out.println(search(new int[]{1,0}, 0));
-        System.out.println(search(new int[]{0,1}, 0));
+        System.out.println(minWindow("ADOBECODEBANC", "ABC"));
+        System.out.println(minWindow("a", "a"));
+        System.out.println(minWindow("bbcDMASMOCsbdacCa", "Msa"));
+        System.out.println(minWindow("bbcDMASMOCsbdacCa", "MSA"));
+        System.out.println(minWindow("bbcDMASMOCsbdacCa", "Msaz"));
+
+    }
+
+    public String minWindow(String s, String t) {
+        int[] countS = new int[128];
+        int[] countT = new int[128];
+        long hashS = 0, hashT = 0;
+
+        for (int i=0; i<t.length(); i++) {
+            char chr = t.charAt(i);
+            countT[chr] = 1;
+            hashT ^= 1L << (chr - 'a');
+        }
+
+        for (int j=0; j<s.length(); j++) {
+            char chr = s.charAt(j);
+            countS[chr] += 1;
+            hashS ^= 1L << (chr - 'a');
+        }
+
+        for (int k = 0; k<128; k++) {
+            if (countT[k] == 1 && countS[k] == 0)
+                return "";
+        }
+
+        int left = 0;
+        int right = s.length() - 1;
+
+        while (true) {
+            char chr = s.charAt(left);
+            countS[chr] --;
+            if (countS[chr] <= 0 && countT[chr] == 1) {
+                break;
+            }
+            left ++;
+        }
+        while(true) {
+            char chr = s.charAt(right);
+            countS[chr] --;
+            if (countS[chr] <=0 && countT[chr] == 1){
+                break;
+            }
+            right --;
+        }
+
+        return s.substring(left, right + 1);
+    }
+
+    public boolean canJump(int[] nums) {
+        int len = nums.length;
+        boolean[] memo = new boolean[len];
+        Arrays.fill(memo, true);
+        return jump(nums, memo, len-1);
+    }
+
+    public boolean jump(int[] nums, boolean[] memo, int last) {
+        if (last == 0) {
+            return true;
+        }
+        if (!memo[last])
+            return false;
+
+        int val = nums[last];
+        for (int i=last-1; i>=0; i--) {
+            if (nums[i] >= last-i) {
+                if (jump(nums, memo, i))
+                    return true;
+                else
+                    memo[i] = false;
+            }
+        }
+        return false;
+    }
+
+    public int trap(int[] height) {
+        // 单调栈
+        int len = height.length;
+        if (len == 0) {
+            return 0;
+        }
+
+        int sum = 0;
+        Deque<Integer> stack = new LinkedList<>();
+        for(int i=0; i<len; i++) {
+            while (!stack.isEmpty() && height[i] > height[stack.peek()]) {
+                int lastPopped = stack.pop();
+                while (!stack.isEmpty() && height[stack.peek()] == height[lastPopped]) {
+                    stack.pop();
+                }
+                if (!stack.isEmpty()) {
+                    int topVal = stack.peek();
+                    int deltaHeight = Math.min(height[i], height[topVal]) - height[lastPopped];
+                    int width = i - topVal - 1;
+                    int addArea = width * deltaHeight;
+                    sum += addArea;
+                }
+            }
+
+            stack.push(i);
+        }
+        return sum;
+    }
+
+    public List<List<String>> groupAnagrams(String[] strs) {
+        // int n = strs.length;
+        List<List<String>> res = new ArrayList<>();
+        Map<String, List<String>> map = new HashMap<>();
+        for (String s: strs) {
+            char[] chars = s.toCharArray();
+            Arrays.sort(chars);
+            String hashCode = String.valueOf(chars);
+            if(!map.containsKey(hashCode)) {
+                map.put(hashCode, new ArrayList<>(Arrays.asList(s)));
+            }else {
+                map.get(hashCode).add(s);
+            }
+        }
+
+        for(String key: map.keySet()) {
+            res.add(map.get(key));
+        }
+        return res;
     }
 
     public int search(int[] nums, int target) {

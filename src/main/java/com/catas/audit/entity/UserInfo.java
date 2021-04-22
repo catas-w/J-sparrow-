@@ -10,7 +10,10 @@ import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>
@@ -34,10 +37,13 @@ public class UserInfo implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastLogin;
 
+    @NotNull(message = "名称不能为空")
     private String email;
 
+    @NotNull(message = "名称不能为空")
     private String name;
 
+    @Length(min = 6, message = "密码长度不能小于6位")
     private String password;
 
     private Integer isActive;

@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
  * 
@@ -27,8 +29,10 @@ public class HostgroupBindHosts implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
+    @NotNull(message = "不能为空")
     private Integer hostgroupId;
 
+    @NotNull(message = "不能为空")
     private Integer bindhostId;
 
 

@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * <p>
  * 
@@ -29,8 +31,10 @@ public class Hostuser implements Serializable {
 
     private Integer authType;
 
+    @NotNull(message = "名称不能为空")
     private String username;
 
+    @NotNull(message = "密码不能为空")
     private String password;
 
 

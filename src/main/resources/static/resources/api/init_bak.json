@@ -24,38 +24,38 @@
         {
           "title": "SSH",
           "href": "/host",
-          "icon": "fa fa-window-maximize",
+          "icon": "fa fa-terminal",
           "target": "_self"
         },
         {
           "title": "审计",
           "href": "/session-log",
-          "icon": "fa fa-gears",
+          "icon": "fa fa-bar-chart",
           "target": "_self"
         },
 
         {
           "title": "批量任务",
           "href": "",
-          "icon": "fa fa-flag-o",
+          "icon": "fa fa-sitemap",
           "target": "_self",
           "child": [
             {
               "title": "批量命令",
               "href": "/glimmer/multi/cmd",
-              "icon": "fa fa-stumbleupon-circle",
+              "icon": "fa fa-code",
               "target": "_self"
             },
             {
               "title": "文件分发",
               "href": "/glimmer/multi/sftp",
-              "icon": "fa fa-viacoin",
+              "icon": "fa fa-share-alt",
               "target": "_self"
             },
             {
               "title": "操作记录",
               "href": "/glimmer/multi/log",
-              "icon": "fa fa-tags",
+              "icon": "fa fa-pencil",
               "target": "_self"
             }
           ]
@@ -63,19 +63,19 @@
         {
           "title": "定时任务",
           "href": "",
-          "icon": "fa fa-home",
+          "icon": "fa fa-clock-o",
           "target": "_self",
           "child": [
             {
               "title": "任务设置",
               "href": "/glimmer",
-              "icon": "fa fa-hourglass-end",
+              "icon": "fa fa-dashboard",
               "target": "_self"
             },
             {
               "title": "任务日志",
               "href": "/glimmer/log",
-              "icon": "fa fa-hourglass-end",
+              "icon": "fa fa-file-text-o",
               "target": "_self"
             }
           ]
@@ -83,168 +83,68 @@
         {
           "title": "主机管理",
           "href": "",
-          "icon": "fa fa-calendar",
+          "icon": "fa fa-server",
           "target": "_self",
           "child": [
             {
               "title": "主机信息",
               "href": "/admin/hosts",
-              "icon": "fa fa-navicon",
+              "icon": "fa fa-desktop",
               "target": "_self"
             },
             {
               "title": "主机登录账户",
               "href": "/admin/account",
-              "icon": "fa fa-navicon",
+              "icon": "fa fa-users",
               "target": "_self"
             },
             {
               "title": "登录信息绑定",
               "href": "/admin/bind-host",
-              "icon": "fa fa-navicon",
+              "icon": "fa fa-paperclip",
               "target": "_self"
             },
             {
               "title": "主机组",
               "href": "/admin/host-group",
-              "icon": "fa fa-navicon",
+              "icon": "fa fa-database",
               "target": "_self"
             },
             {
               "title": "IDC",
               "href": "/admin/idc",
-              "icon": "fa fa-navicon",
+              "icon": "fa fa-institution",
               "target": "_self"
             }
           ]
         },
         {
-          "title": "用户信息",
+          "title": "用户&权限",
           "href": "",
-          "icon": "fa fa-home",
+          "icon": "fa fa-user-secret",
           "target": "_self",
           "child": [
             {
               "title": "堡垒机用户",
               "href": "/admin/users",
-              "icon": "fa fa-list-alt",
+              "icon": "fa fa-user",
               "target": "_self"
             },
             {
-              "title": "用户组",
+              "title": "权限组",
               "href": "/admin/user-group",
-              "icon": "fa fa-hourglass-end",
+              "icon": "fa fa-group",
               "target": "_self"
             },
             {
               "title": "权限信息",
               "href": "/admin/permission",
-              "icon": "fa fa-hourglass-end",
+              "icon": "fa fa-exclamation-triangle",
               "target": "_self"
             }
           ]
         }
 
-      ]
-    },
-    {
-      "title": "组件管理",
-      "icon": "fa fa-lemon-o",
-      "href": "",
-      "target": "_self",
-      "child": [
-        {
-          "title": "图标列表",
-          "href": "/resources/page/icon.html",
-          "icon": "fa fa-dot-circle-o",
-          "target": "_self"
-        },
-        {
-          "title": "图标选择",
-          "href": "/resources/page/icon-picker.html",
-          "icon": "fa fa-adn",
-          "target": "_self"
-        },
-        {
-          "title": "颜色选择",
-          "href": "/resources/page/color-select.html",
-          "icon": "fa fa-dashboard",
-          "target": "_self"
-        },
-        {
-          "title": "下拉选择",
-          "href": "/resources/page/table-select.html",
-          "icon": "fa fa-angle-double-down",
-          "target": "_self"
-        },
-        {
-          "title": "文件上传",
-          "href": "/resources/page/upload.html",
-          "icon": "fa fa-arrow-up",
-          "target": "_self"
-        },
-        {
-          "title": "富文本编辑器",
-          "href": "/resources/page/editor.html",
-          "icon": "fa fa-edit",
-          "target": "_self"
-        },
-        {
-          "title": "省市县区选择器",
-          "href": "/resources/page/area.html",
-          "icon": "fa fa-rocket",
-          "target": "_self"
-        }
-      ]
-    },
-    {
-      "title": "其它管理",
-      "icon": "fa fa-slideshare",
-      "href": "",
-      "target": "_self",
-      "child": [
-        {
-          "title": "多级菜单",
-          "href": "",
-          "icon": "fa fa-meetup",
-          "target": "",
-          "child": [
-            {
-              "title": "按钮1",
-              "href": "/resources/page/button.html?v=1",
-              "icon": "fa fa-calendar",
-              "target": "_self",
-              "child": [
-                {
-                  "title": "按钮2",
-                  "href": "/resources/page/button.html?v=2",
-                  "icon": "fa fa-snowflake-o",
-                  "target": "_self",
-                  "child": [
-                    {
-                      "title": "按钮3",
-                      "href": "/resources/page/button.html?v=3",
-                      "icon": "fa fa-snowflake-o",
-                      "target": "_self"
-                    },
-                    {
-                      "title": "表单4",
-                      "href": "/resources/page/form.html?v=1",
-                      "icon": "fa fa-calendar",
-                      "target": "_self"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "title": "失效菜单",
-          "href": "/resources/page/error.html",
-          "icon": "fa fa-superpowers",
-          "target": "_self"
-        }
       ]
     }
   ]

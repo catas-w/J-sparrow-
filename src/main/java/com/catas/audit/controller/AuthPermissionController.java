@@ -126,7 +126,7 @@ public class AuthPermissionController {
 
     @RequiresPermissions("permission:edit")
     @RequestMapping("/group/add")
-    public ResultObj addGroup(@Valid UserGroupVo userGroupVo) {
+    public ResultObj addGroup(@Validated UserGroupVo userGroupVo) {
 
         try {
             groupService.save(userGroupVo);
