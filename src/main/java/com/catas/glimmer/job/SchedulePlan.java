@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -70,7 +72,7 @@ public class SchedulePlan implements Job {
     }
 
     /**
-     * @Description: 串行执行每一个task
+     * @Description: 执行task
      * @param dataMap data map
      */
     public void runSSHJob(JobDataMap dataMap) throws InterruptedException {
@@ -78,7 +80,10 @@ public class SchedulePlan implements Job {
         List<Map<String, Object>> tasks = (List<Map<String, Object>>) dataMap.get("tasks");
         List<Map<String, Object>> bindHosts = (List<Map<String, Object>>) dataMap.get("bindHosts");
         for (Map<String, Object> taskInfo : tasks) {
-            // 串行执行每个Task
+            // 执行每个Task
+            CountDownLatch countDownLatch = new CountDownLatch(bindHosts.size());
+            // new CyclicBarrier()
+
             Integer task_type = (Integer) taskInfo.get("task_type");
             logUtil.log("Running schedule task: " + taskInfo.get("name"), logFile);
             for (Map<String, Object> bindHost : bindHosts) {
@@ -87,15 +92,22 @@ public class SchedulePlan implements Job {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            execSSHCommand(taskInfo, bindHost, logFile);
+                            try {
+                                execSSHCommand(taskInfo, bindHost, logFile);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                countDownLatch.countDown();
+                            }
                         }
                     });
-                    thread.start();
-                    thread.join();
+                    executorService.execute(thread);
                 } else {
                     // TODO: 执行文件SCP
                 }
             }
+            // 等待每一阶段任务执行完
+            countDownLatch.await();
         }
     }
 

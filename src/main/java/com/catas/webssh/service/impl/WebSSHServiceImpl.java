@@ -41,12 +41,12 @@ public class WebSSHServiceImpl implements WebSSHService {
     private LogUtil logUtil;
 
     //存放ssh连接信息的map
-    private static Map<String, Object> sshMap = new ConcurrentHashMap<>();
+    private static final Map<String, Object> sshMap = new ConcurrentHashMap<>();
 
-    private Logger logger = LoggerFactory.getLogger(WebSSHServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(WebSSHServiceImpl.class);
 
     //线程池
-    private ExecutorService executorService = Executors.newCachedThreadPool();
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     /**
      * @Description: 初始化连接

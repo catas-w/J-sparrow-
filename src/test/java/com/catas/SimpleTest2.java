@@ -7,6 +7,7 @@ import java.lang.reflect.Array;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SimpleTest2 {
 
@@ -22,13 +23,124 @@ public class SimpleTest2 {
     }
 
     @Test
-    void testPal() {
-        System.out.println(minWindow("ADOBECODEBANC", "ABC"));
-        System.out.println(minWindow("a", "a"));
-        System.out.println(minWindow("bbcDMASMOCsbdacCa", "Msa"));
-        System.out.println(minWindow("bbcDMASMOCsbdacCa", "MSA"));
-        System.out.println(minWindow("bbcDMASMOCsbdacCa", "Msaz"));
+    void testLRU() {
 
+        System.out.println(leastInterval(new char[]{'A','A','A','B','B','B'}, 2));
+        System.out.println(leastInterval(new char[]{'A','A','A','B','B','B'}, 0));
+        System.out.println(leastInterval(new char[]{'A','A','A','B','B','B'}, 1));
+        System.out.println(leastInterval(new char[]{'A','A','A','A','A','A','B','C','D','E','F','G'}, 2));
+    }
+
+
+    public int leastInterval(char[] tasks, int n) {
+        int len = tasks.length;
+        if (n == 0)
+            return len;
+
+        Map<Character, Integer> map = new ConcurrentHashMap<>();
+
+
+        for (char chr: tasks) {
+            map.put(chr, map.getOrDefault(chr, 0) + 1);
+        }
+
+        int count = len;
+        while (!map.isEmpty()) {
+            int curSize = n + 1;
+
+            for (Map.Entry<Character, Integer> curItem : map.entrySet()) {
+                Character chr = curItem.getKey();
+                Integer curCount = curItem.getValue();
+                if (curCount == 1)
+                    map.remove(chr);
+                else
+                    map.put(chr, curCount - 1);
+
+                curSize--;
+                if (curSize == 0)
+                    break;
+            }
+            if (!map.isEmpty())
+                count += curSize;
+        }
+
+        return count;
+    }
+
+    @Test
+    void testSubArray() {
+        System.out.println(Arrays.asList(subarraySum(new int[]{1,1,2,-1,1,2,-2,-1,2,1,-1,1}, 3)));
+    }
+
+    public int subarraySum(int[] nums, int k) {
+
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(0, 1);
+
+        int[] sumList = new int[nums.length];
+        int sum = 0;
+
+        for (int i=0; i<nums.length; i++) {
+            sum += nums[i];
+            sumList[i] = sum;
+            map.put(sum, map.getOrDefault(sum, 0) + 1);
+        }
+
+        int res = 0;
+        for (int i=0; i<nums.length; i++) {
+            int curSum = sumList[i];
+            if (map.containsKey(curSum - k))
+                res += map.get(curSum - k);
+        }
+
+        return res;
+    }
+
+
+    @Test
+    void testPal() {
+        System.out.println(maximalRectangle(new char[][]{{'1', '0', '1', '0', '0'}, {'1', '0', '1', '1', '1'}, {'1', '1', '1', '1', '1'}, {'1', '0', '0', '1', '0'}}));
+    }
+
+    public int maximalRectangle(char[][] matrix) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int maxArea = 0;
+        if (row == 0) {
+            return 0;
+        }
+        int[] height = new int[col];
+        for (int i=0; i<row; i++) {
+            for (int j=0; j<col; j++) {
+                height[j] = matrix[i][j] == '0' ? 0 : height[j] + 1;
+            }
+            maxArea = Math.max(maxArea, maxHistgram(height));
+        }
+
+        return maxArea;
+    }
+
+    public int maxHistgram(int[] height) {
+        Deque<Integer> stack = new LinkedList<>();
+        int[] temp = new int[height.length + 2];
+        int res = 0;
+
+        for (int i=1; i<temp.length-1; i++) {
+            temp[i] = height[i-1];
+        }
+
+        for (int i=0; i<temp.length; i++) {
+            int curHeight = temp[i];
+
+            while (!stack.isEmpty() && curHeight < temp[stack.peek()]) {
+                int lastPop = stack.pop();
+                int curArea = temp[lastPop] * (i - stack.peek() - 1);
+                res = Math.max(res, curArea);
+            }
+            stack.push(i);
+        }
+
+        return res;
     }
 
     public String minWindow(String s, String t) {

@@ -23,8 +23,10 @@ public class SSHLogTest {
     void test1() {
         Plan plan = planService.getById(2);
         File log = logUtil.initScheduleLog(plan);
-        logUtil.log("test", log);
-        logUtil.log("What's happening ", log);
+        // logUtil.log('test', log);
+        // logUtil.log('What's happening ', log);
         System.out.println(log);
+
     }
+
 }

@@ -24,6 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Data
 @Component
@@ -43,6 +45,10 @@ public class LogUtil {
     private String scheduleLogPath;
 
     private Integer maxRows;
+
+    private final BlockingQueue<String[]> messageQueue;
+
+
 
     /**
      * @Description: SSH 日志记录
