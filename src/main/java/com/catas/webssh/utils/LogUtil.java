@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Data
@@ -46,8 +48,58 @@ public class LogUtil {
 
     private Integer maxRows;
 
-    private final BlockingQueue<String[]> messageQueue;
+    private static final BlockingQueue<Object[]> messageQueue;
 
+    private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
+
+    static {
+        messageQueue = new LinkedBlockingQueue<>();
+
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        Object[] task = messageQueue.take();
+                        writeToLog(task);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     * write specific message to log file
+     */
+    private static void writeToLog(Object[] task) {
+        String time = (String) task[0];
+        String msg = (String) task[1];
+        File file = (File) task[2];
+        try (PrintStream printStream = new PrintStream(new FileOutputStream(file, true))) {
+            System.setOut(printStream);
+            System.out.printf("[%s]: %s\n", time, msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @Description: 日志写入
+     * @param msg 信息
+     * @param logFile 文件
+     */
+    public void log(String msg, File logFile) {
+        Date now = new Date();
+        String strNow = timeFormat.format(now);
+        try {
+            // 将信息加到 blocking queue
+            messageQueue.put(new Object[]{strNow, msg, logFile});
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     /**
@@ -127,18 +179,18 @@ public class LogUtil {
      * @param msg 信息
      * @param logFile 文件
      */
-    public void log(String msg, File logFile) {
-        PrintStream printStream = null;
-        try {
-            printStream = new PrintStream(new FileOutputStream(logFile, true));
-            System.setOut(printStream);
-            Date now = new Date();
-            String strNow = timeFormat.format(now);
-            System.out.printf("[%s]: %s\n", strNow, msg);
-            printStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+    // public void log(String msg, File logFile) {
+    //     PrintStream printStream = null;
+    //     try {
+    //         printStream = new PrintStream(new FileOutputStream(logFile, true));
+    //         System.setOut(printStream);
+    //         Date now = new Date();
+    //         String strNow = timeFormat.format(now);
+    //         System.out.printf("[%s]: %s\n", strNow, msg);
+    //         printStream.close();
+    //     } catch (FileNotFoundException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
 
 }

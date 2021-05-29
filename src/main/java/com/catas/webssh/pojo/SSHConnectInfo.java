@@ -48,7 +48,7 @@ public class SSHConnectInfo {
         logFile = this.logUtil.init(uuid, bindHostId, userId);
     }
 
-    public void logMsg(String msg) throws IOException {
+    public void logMsg(String msg) {
         this.logUtil.log(msg, this.logFile);
     }
 }

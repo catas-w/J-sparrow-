@@ -82,14 +82,13 @@ public class SchedulePlan implements Job {
         for (Map<String, Object> taskInfo : tasks) {
             // 执行每个Task
             CountDownLatch countDownLatch = new CountDownLatch(bindHosts.size());
-            // new CyclicBarrier()
 
             Integer task_type = (Integer) taskInfo.get("task_type");
             logUtil.log("Running schedule task: " + taskInfo.get("name"), logFile);
             for (Map<String, Object> bindHost : bindHosts) {
                 if (Constant.EXEC_COMMAND_TASK.equals(task_type)) {
                     // 执行命令任务
-                    Thread thread = new Thread(new Runnable() {
+                    executorService.execute(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -101,7 +100,6 @@ public class SchedulePlan implements Job {
                             }
                         }
                     });
-                    executorService.execute(thread);
                 } else {
                     // TODO: 执行文件SCP
                 }
@@ -122,10 +120,8 @@ public class SchedulePlan implements Job {
         String ipAddress = (String) bindHost.get("ipAddress");
         Long port = (Long) bindHost.get("port");
         Map<String, String>  result = sshUtil.execCommand(command, ipAddress, Math.toIntExact(port), userName, password);
-        synchronized (lock) {
-            // 结果写入日志
-            logUtil.log(result.get("msg"), logFile);
-        }
+        // 结果写入日志
+        logUtil.log(result.get("msg"), logFile);
     }
 
     /**

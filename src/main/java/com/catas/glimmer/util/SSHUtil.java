@@ -16,12 +16,14 @@ import java.util.Map;
 @Component
 public class SSHUtil {
 
+    private final int DEFAULT_TIME_OUT = 5 * 1000;
+
     /**
      * @Description: 执行ssh command
      */
     public Map<String, String> execCommand(String cmd, String host, int port, String username, String password) {
         SSHTaskInfo cmdSSHInfo = new SSHTaskInfo(host, port, username, password, cmd);
-        return this.execSSHTask(cmdSSHInfo, 10*1000);
+        return this.execSSHTask(cmdSSHInfo, DEFAULT_TIME_OUT);
     }
 
     /**
@@ -29,7 +31,7 @@ public class SSHUtil {
      */
     public Map<String, String> execSFTP(String host, int port, String username, String password,List<String> files, String remotePath) {
         SSHTaskInfo taskInfo = new SSHTaskInfo(host, port, username, password, files, remotePath);
-        return this.execSSHTask(taskInfo, 10*1000);
+        return this.execSSHTask(taskInfo, DEFAULT_TIME_OUT);
     }
 
     public Map<String, String> execSSHTask(SSHTaskInfo sshInfo, int timeout) {

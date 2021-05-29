@@ -29,4 +29,22 @@ public class SSHLogTest {
 
     }
 
+    @Test
+    void testWriteToFile() {
+        Plan plan = planService.getById(8);
+        File logFile = logUtil.initScheduleLog(plan);
+
+        // System.out.println(logFile.toString());
+
+        logUtil.log("Boston", logFile);
+        logUtil.log("Los Angeles", logFile);
+        try {
+            Thread.sleep(1200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        logUtil.log("Django unchained", logFile);
+
+
+    }
 }
