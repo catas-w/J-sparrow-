@@ -1,6 +1,7 @@
 package com.catas.webssh.service.impl;
 
 import com.catas.audit.service.IBindhostService;
+import com.catas.glimmer.util.ThreadPoolFactory;
 import com.catas.webssh.constant.ConstantPool;
 import com.catas.webssh.pojo.SSHConnectInfo;
 import com.catas.webssh.pojo.WebSSHData;
@@ -46,7 +47,7 @@ public class WebSSHServiceImpl implements WebSSHService {
     private final Logger logger = LoggerFactory.getLogger(WebSSHServiceImpl.class);
 
     //线程池
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final ExecutorService executorService = ThreadPoolFactory.createDefaultThreadPool("ssh-pool");
 
     /**
      * @Description: 初始化连接

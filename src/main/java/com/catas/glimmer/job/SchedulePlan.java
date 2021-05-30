@@ -5,6 +5,7 @@ import com.catas.audit.common.Constant;
 import com.catas.glimmer.entity.Plan;
 import com.catas.glimmer.service.IPlanService;
 import com.catas.glimmer.util.SSHUtil;
+import com.catas.glimmer.util.ThreadPoolFactory;
 import com.catas.webssh.utils.LogUtil;
 import org.quartz.*;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class SchedulePlan implements Job {
     @Autowired
     private IPlanService planService;
 
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final ExecutorService executorService = ThreadPoolFactory.createDefaultThreadPool("schedule-pool");
 
     @Autowired
     private SSHUtil sshUtil;
