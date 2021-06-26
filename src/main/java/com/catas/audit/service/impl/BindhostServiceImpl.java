@@ -9,6 +9,8 @@ import com.catas.audit.service.IBindhostService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.catas.audit.vo.BindHostVo;
 import com.catas.audit.vo.RelatedHostVo;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,11 +60,13 @@ public class BindhostServiceImpl extends ServiceImpl<BindhostMapper, Bindhost> i
     }
 
     @Override
+    @Cacheable(value = "userBHostIds", key = "#userId", unless = "#result eq null")
     public Set<Integer> queryAllRelatedHostIds(Integer userId, Integer groupId) {
         return this.getBaseMapper().queryAllRelatedHostIds(userId, groupId);
     }
 
     @Override
+    @Cacheable(value = "userBHostIds", key = "#userId", unless = "#result eq null")
     public Set<Integer> queryAllRelatedHostIds(Integer userId) {
         return this.queryAllRelatedHostIds(userId, null);
     }
@@ -83,6 +87,7 @@ public class BindhostServiceImpl extends ServiceImpl<BindhostMapper, Bindhost> i
     }
 
     @Override
+    @CacheEvict(value = "userBHostIds", key = "#uId")
     public void updateUserBindHosts(Integer uId, List<Integer> bIds) {
         BindhostMapper baseMapper = this.getBaseMapper();
         baseMapper.deleteRelatedHostByUserId(uId);
