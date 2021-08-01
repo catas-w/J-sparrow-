@@ -174,23 +174,4 @@ public class LogUtil {
         return logFile;
     }
 
-    /**
-     * @Description: 日志写入
-     * @param msg 信息
-     * @param logFile 文件
-     */
-    // public void log(String msg, File logFile) {
-    //     PrintStream printStream = null;
-    //     try {
-    //         printStream = new PrintStream(new FileOutputStream(logFile, true));
-    //         System.setOut(printStream);
-    //         Date now = new Date();
-    //         String strNow = timeFormat.format(now);
-    //         System.out.printf("[%s]: %s\n", strNow, msg);
-    //         printStream.close();
-    //     } catch (FileNotFoundException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
-
 }

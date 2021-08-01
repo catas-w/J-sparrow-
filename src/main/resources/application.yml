@@ -45,9 +45,9 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-#    password:
+    password:
 #    database:
-#    timeout: 0
+    timeout: 0
     # 对应 RedisProperties.Jedis 内部类
     jedis:
       pool:

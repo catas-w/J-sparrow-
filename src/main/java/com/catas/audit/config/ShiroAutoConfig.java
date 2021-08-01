@@ -12,7 +12,12 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -47,8 +52,13 @@ public class ShiroAutoConfig {
     private String loginUrl;
 
     private String[] anonUrls;
+
     private String logOutUrl;
+
     private String[] authcUrls;
+
+    @Autowired
+    private RedisConfig redisConfig;
 
     /**
      * 声明凭证匹配器
@@ -101,13 +111,48 @@ public class ShiroAutoConfig {
      * 配置SecurityManager
      */
     @Bean("securityManager")
-    public SecurityManager securityManager(UserRealm userRealm, @Qualifier("rememberMeManager") CookieRememberMeManager rememberMeManager) {
+    public SecurityManager securityManager(UserRealm userRealm,
+                                           CookieRememberMeManager rememberMeManager,
+                                           @Qualifier("shiroCacheManager") RedisCacheManager cacheManager,
+                                           DefaultWebSessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 注入userRealm
         securityManager.setRealm(userRealm);
         securityManager.setRememberMeManager(rememberMeManager);
+        // 自定义缓存实现 使用redis
+        securityManager.setCacheManager(cacheManager);
+        // 自定义session管理 使用redis
+        securityManager.setSessionManager(sessionManager);
         return securityManager;
     }
+
+    // redis cache manager
+    @Bean("shiroCacheManager")
+    public RedisCacheManager cacheManager(RedisManager redisManager) {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisManager);
+        return redisCacheManager;
+    }
+
+    // Redis manager
+    @Bean
+    public RedisManager redisManager() {
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost(redisConfig.getHost() + ":" + redisConfig.getPort());
+        redisManager.setTimeout(redisConfig.getTimeout());
+        redisManager.setPassword(redisManager.getPassword());
+        return redisManager;
+    }
+
+    @Bean
+    public DefaultWebSessionManager sessionManager(RedisManager redisManager) {
+        DefaultWebSessionManager webSessionManager = new DefaultWebSessionManager();
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        redisSessionDAO.setRedisManager(redisManager);
+        webSessionManager.setSessionDAO(redisSessionDAO);
+        return webSessionManager;
+    }
+
 
     /**
      * 配置shiro的过滤器

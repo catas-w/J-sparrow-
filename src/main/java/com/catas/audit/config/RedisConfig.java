@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -23,6 +24,7 @@ import java.time.Duration;
 
 
 @Configuration
+@Data
 public class RedisConfig {
 
     @Value("${cache.default-exp}")
@@ -34,11 +36,11 @@ public class RedisConfig {
     @Value("${spring.redis.port}")
     private int port;
 
-    //@Value("${spring.redis.timeout}")
-    //private int timeout;
+    @Value("${spring.redis.timeout}")
+    private int timeout;
 
-    //@Value("${spring.redis.password}")
-    //private String password;
+    @Value("${spring.redis.password}")
+    private String password;
 
     @Bean
     public KeyGenerator keyGenerator() {

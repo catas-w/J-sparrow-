@@ -14,8 +14,6 @@ import java.util.List;
 
 /**
 * @Description: ssh连接信息
-* @Author: NoCortY
-* @Date: 2020/3/8
 */
 @Data
 public class SSHConnectInfo {

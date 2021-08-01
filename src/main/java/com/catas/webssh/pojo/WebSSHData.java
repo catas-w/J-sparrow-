@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 
 /**
 * @Description: webssh数据传输
-* @Author: NoCortY
-* @Date: 2020/3/8
 */
 
 @Data

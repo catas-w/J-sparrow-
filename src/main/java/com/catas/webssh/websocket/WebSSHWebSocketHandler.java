@@ -24,10 +24,6 @@ public class WebSSHWebSocketHandler implements WebSocketHandler{
 
     /**
      * @Description: 用户连接上WebSocket的回调
-     * @Param: [webSocketSession]
-     * @return: void
-     * @Author: NoCortY
-     * @Date: 2020/3/8
      */
     @Override
     public void afterConnectionEstablished(WebSocketSession webSocketSession) throws Exception {
@@ -38,10 +34,6 @@ public class WebSSHWebSocketHandler implements WebSocketHandler{
 
     /**
      * @Description: 收到消息的回调
-     * @Param: [webSocketSession, webSocketMessage]
-     * @return: void
-     * @Author: NoCortY
-     * @Date: 2020/3/8
      */
     @Override
     public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage) throws Exception {
@@ -60,10 +52,6 @@ public class WebSSHWebSocketHandler implements WebSocketHandler{
 
     /**
      * @Description: 出现错误的回调
-     * @Param: [webSocketSession, throwable]
-     * @return: void
-     * @Author: NoCortY
-     * @Date: 2020/3/8
      */
     @Override
     public void handleTransportError(WebSocketSession webSocketSession, Throwable throwable) throws Exception {
@@ -72,10 +60,6 @@ public class WebSSHWebSocketHandler implements WebSocketHandler{
 
     /**
      * @Description: 连接关闭的回调
-     * @Param: [webSocketSession, closeStatus]
-     * @return: void
-     * @Author: NoCortY
-     * @Date: 2020/3/8
      */
     @Override
     public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus) throws Exception {
