@@ -18,8 +18,17 @@ public class ActiveUser implements Serializable {
 
     private final static long serialVersionUID = 1L;
 
+    private Integer id;
+
     private UserInfo userInfo;
 
     private List<String> permissions;
 
+    public Integer getId() {
+        return userInfo.getId();
+    }
+
+    public void setId() {
+        this.id = userInfo.getId();
+    }
 }
